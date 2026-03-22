@@ -9,6 +9,14 @@ const CaptionGen = () => {
   const [result, setResult] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    if (!result) return;
+    navigator.clipboard.writeText(result);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   const handleGenerate = async (e) => {
     e.preventDefault();
@@ -77,8 +85,8 @@ const CaptionGen = () => {
             <div className="bg-slate-900 border-b border-slate-700 py-4 px-6 flex justify-between items-center">
               <h2 className="text-xl font-bold text-white">Generated Options</h2>
               {result && (
-                 <button onClick={() => navigator.clipboard.writeText(result)} className="text-slate-400 hover:text-white transition-colors bg-slate-800 hover:bg-slate-700 px-4 py-2 rounded-lg text-sm font-bold border border-slate-700 shadow-sm">
-                   Copy Text
+                 <button onClick={handleCopy} className={`transition-colors px-4 py-2 rounded-lg text-sm font-bold border shadow-sm ${copied ? 'bg-green-500 hover:bg-green-600 text-white border-green-500' : 'text-slate-400 hover:text-white bg-slate-800 hover:bg-slate-700 border-slate-700'}`}>
+                   {copied ? '✓ Copied!' : 'Copy Text'}
                  </button>
               )}
             </div>

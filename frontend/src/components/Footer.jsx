@@ -25,6 +25,7 @@ const Footer = () => {
               <li><Link to="/email-writer" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors">AI Email Writer</Link></li>
               <li><Link to="/instagram-caption-generator" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors">Caption Generator</Link></li>
               <li><Link to="/free-pdf-tools" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors">PDF Toolkit</Link></li>
+              <li><Link to="/blog" className="text-slate-500 dark:text-slate-400 hover:text-primary transition-colors">Blog</Link></li>
             </ul>
           </div>
 
