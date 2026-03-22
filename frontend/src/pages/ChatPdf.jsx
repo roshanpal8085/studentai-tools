@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
-import AdBanner from '../components/AdBanner';
+
 import { UploadCloud, MessageSquare, Send, RefreshCw, Loader2, Bot, User, FileText } from 'lucide-react';
 
 const ChatPdf = () => {
@@ -98,7 +98,7 @@ const ChatPdf = () => {
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Upload any book, paper, or document and instantly talk to it. The AI understands the entire context instantly.</p>
         </div>
 
-        <AdBanner format="horizontal" />
+
 
         <div className="mt-8 bg-white dark:bg-slate-800 rounded-2xl shadow-xl border border-slate-200 dark:border-slate-700 overflow-hidden flex flex-col flex-grow h-[75vh] min-h-[600px] mb-8">
           

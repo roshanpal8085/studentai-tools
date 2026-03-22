@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
-import AdBanner from '../components/AdBanner';
+
 import { Image as ImageIcon, Loader2 } from 'lucide-react';
 
 const CaptionGen = () => {
@@ -50,7 +50,7 @@ const CaptionGen = () => {
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Generate viral, aesthetic, or funny captions and hashtags for your posts.</p>
         </div>
 
-        <AdBanner format="horizontal" />
+
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 mt-10">
           <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-200 dark:border-slate-700 p-8 h-fit">

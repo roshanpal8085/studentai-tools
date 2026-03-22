@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import html2pdf from 'html2pdf.js';
 import ReactMarkdown from 'react-markdown';
-import AdBanner from '../components/AdBanner';
+
 import { LayoutTemplate, Loader2, Download, Briefcase } from 'lucide-react';
 
 const AiResume = () => {
@@ -80,7 +80,7 @@ const AiResume = () => {
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Generate, style, edit, and download a beautiful professional resume in seconds.</p>
         </div>
 
-        <AdBanner format="horizontal" />
+
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-10">
           

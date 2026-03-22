@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { GraduationCap, Heart, Zap, Globe } from 'lucide-react';
-import AdBanner from '../components/AdBanner';
+
 
 const About = () => {
   return (
@@ -18,7 +18,7 @@ const About = () => {
           </p>
         </div>
 
-        <AdBanner format="horizontal" />
+
 
         <div className="bg-white dark:bg-slate-900 rounded-3xl shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-12 my-12 transition-colors duration-300">
           <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-6">Who We Are</h2>

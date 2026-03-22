@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
-import AdBanner from '../components/AdBanner';
+
 import { Mail, Loader2, Copy, RefreshCw, Send } from 'lucide-react';
 
 const EmailWriter = () => {
@@ -49,7 +49,7 @@ const EmailWriter = () => {
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Draft perfectly formatted, highly effective emails for any situation in seconds.</p>
         </div>
 
-        <AdBanner format="horizontal" />
+
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mt-10">
           

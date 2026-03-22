@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
-import AdBanner from '../components/AdBanner';
+
 import { FileText, Download, Loader2, UploadCloud, Scissors, Type, Trash2 } from 'lucide-react';
 
 const PdfTools = () => {
@@ -132,7 +132,7 @@ const PdfTools = () => {
 
         {error && <div className="mb-8 bg-red-50 text-red-600 p-4 rounded-xl text-center max-w-2xl mx-auto">{error}</div>}
 
-        <AdBanner format="horizontal" />
+
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-10">
           

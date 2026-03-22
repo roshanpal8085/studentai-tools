@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import html2pdf from 'html2pdf.js';
-import AdBanner from '../components/AdBanner';
+
 import { MonitorPlay, Loader2, Download, Palette } from 'lucide-react';
 
 const PresentationGen = () => {
@@ -78,7 +78,7 @@ const PresentationGen = () => {
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">Instantly generate a beautifully designed, structurally perfect PowerPoint outline ready to export.</p>
         </div>
 
-        <AdBanner format="horizontal" />
+
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 mt-10">
           

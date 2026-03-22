@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import AdBanner from '../components/AdBanner';
+
 import { FileText, MonitorPlay, Image as ImageIcon, LayoutTemplate, MessageSquare, Mail, Zap, CheckCircle2, TrendingUp, Users, ShieldCheck } from 'lucide-react';
 
 const features = [
@@ -82,7 +82,7 @@ const Home = () => {
       </section>
 
       {/* Top Ad Banner */}
-      <AdBanner format="horizontal" />
+
 
       {/* Features Grid */}
       <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
@@ -178,7 +178,7 @@ const Home = () => {
 
       {/* Another Ad Banner */}
       <div className="w-full py-10 flex justify-center">
-        <AdBanner format="horizontal" />
+
       </div>
       
       {/* Call to action */}
