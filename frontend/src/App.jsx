@@ -14,9 +14,43 @@ const EmailWriter = lazy(() => import('./pages/EmailWriter'));
 const CaptionGen = lazy(() => import('./pages/CaptionGen'));
 const PdfTools = lazy(() => import('./pages/PdfTools'));
 const Privacy = lazy(() => import('./pages/Privacy'));
-const Terms = lazy(() => import('./pages/Terms'));
-const Contact = lazy(() => import('./pages/Contact'));
+
+// New AI Tools
+const HomeworkHelper = lazy(() => import('./pages/tools/HomeworkHelper'));
+const EssayWriter = lazy(() => import('./pages/tools/EssayWriter'));
+const StudyPlanner = lazy(() => import('./pages/tools/StudyPlanner'));
+const NotesGenerator = lazy(() => import('./pages/tools/NotesGenerator'));
+const QuizGenerator = lazy(() => import('./pages/tools/QuizGenerator'));
+const AssignmentGenerator = lazy(() => import('./pages/tools/AssignmentGenerator'));
+const TextSummarizer = lazy(() => import('./pages/tools/TextSummarizer'));
+
 const About = lazy(() => import('./pages/About'));
+const Contact = lazy(() => import('./pages/Contact'));
+const Terms = lazy(() => import('./pages/Terms'));
+const Disclaimer = lazy(() => import('./pages/Disclaimer'));
+
+// SEO Utility Tools Lazy Loads
+const FreeUtilities = lazy(() => import('./pages/FreeUtilities'));
+const WordCounter = lazy(() => import('./pages/tools/WordCounter'));
+const GrammarChecker = lazy(() => import('./pages/tools/GrammarChecker'));
+const QRGenerator = lazy(() => import('./pages/tools/QRGenerator'));
+const PasswordGenerator = lazy(() => import('./pages/tools/PasswordGenerator'));
+const AgeCalculator = lazy(() => import('./pages/tools/AgeCalculator'));
+const ImageCompressor = lazy(() => import('./pages/tools/ImageCompressor'));
+const UnitConverter = lazy(() => import('./pages/tools/UnitConverter'));
+const PercentageCalculator = lazy(() => import('./pages/tools/PercentageCalculator'));
+const RandomNameGenerator = lazy(() => import('./pages/tools/RandomNameGenerator'));
+const EssayTopicGenerator = lazy(() => import('./pages/tools/EssayTopicGenerator'));
+const AiPromptGenerator = lazy(() => import('./pages/tools/AiPromptGenerator'));
+const ExamCountdown = lazy(() => import('./pages/tools/ExamCountdown'));
+const StudyTimer = lazy(() => import('./pages/tools/StudyTimer'));
+const ImageToPdf = lazy(() => import('./pages/tools/ImageToPdf'));
+const PdfToWord = lazy(() => import('./pages/tools/PdfToWord'));
+const RandomQuestionGenerator = lazy(() => import('./pages/tools/RandomQuestionGenerator'));
+const HomeworkPlanner = lazy(() => import('./pages/tools/HomeworkPlanner'));
+const StudyTimetableGenerator = lazy(() => import('./pages/tools/StudyTimetableGenerator'));
+const CitationGenerator = lazy(() => import('./pages/tools/CitationGenerator'));
+const GpaCalculator = lazy(() => import('./pages/tools/GpaCalculator'));
 
 // Blog System Lazy Loads
 const Blog = lazy(() => import('./pages/Blog'));
@@ -46,10 +80,44 @@ function App() {
                 <Route path="/email-writer" element={<EmailWriter />} />
                 <Route path="/instagram-caption-generator" element={<CaptionGen />} />
                 <Route path="/free-pdf-tools" element={<PdfTools />} />
+                
+                {/* AI Tools Expansion */}
+                <Route path="/ai-homework-helper" element={<HomeworkHelper />} />
+                <Route path="/ai-essay-writer" element={<EssayWriter />} />
+                <Route path="/ai-study-planner" element={<StudyPlanner />} />
+                <Route path="/ai-notes-generator" element={<NotesGenerator />} />
+                <Route path="/ai-quiz-generator" element={<QuizGenerator />} />
+                <Route path="/ai-assignment-generator" element={<AssignmentGenerator />} />
+                <Route path="/ai-text-summarizer" element={<TextSummarizer />} />
+
                 <Route path="/about" element={<About />} />
                 <Route path="/privacy-policy" element={<Privacy />} />
                 <Route path="/terms-conditions" element={<Terms />} />
+                <Route path="/disclaimer" element={<Disclaimer />} />
                 <Route path="/contact" element={<Contact />} />
+                
+                {/* Utilities Hub & Batch A */}
+                <Route path="/free-tools" element={<FreeUtilities />} />
+                <Route path="/tools/word-counter" element={<WordCounter />} />
+                <Route path="/tools/grammar-checker" element={<GrammarChecker />} />
+                <Route path="/tools/qr-generator" element={<QRGenerator />} />
+                <Route path="/tools/password-generator" element={<PasswordGenerator />} />
+                <Route path="/tools/age-calculator" element={<AgeCalculator />} />
+                <Route path="/tools/image-compressor" element={<ImageCompressor />} />
+                <Route path="/total-unit-converter" element={<UnitConverter />} />
+                <Route path="/tools/percentage-calculator" element={<PercentageCalculator />} />
+                <Route path="/tools/random-name-generator" element={<RandomNameGenerator />} />
+                <Route path="/tools/essay-topic-generator" element={<EssayTopicGenerator />} />
+                <Route path="/tools/ai-prompt-generator" element={<AiPromptGenerator />} />
+                <Route path="/tools/exam-countdown" element={<ExamCountdown />} />
+                <Route path="/tools/study-timer" element={<StudyTimer />} />
+                <Route path="/tools/image-to-pdf" element={<ImageToPdf />} />
+                <Route path="/tools/pdf-to-word" element={<PdfToWord />} />
+                <Route path="/tools/random-question-generator" element={<RandomQuestionGenerator />} />
+                <Route path="/tools/homework-planner" element={<HomeworkPlanner />} />
+                <Route path="/tools/study-timetable-generator" element={<StudyTimetableGenerator />} />
+                <Route path="/tools/citation-generator" element={<CitationGenerator />} />
+                <Route path="/tools/gpa-calculator" element={<GpaCalculator />} />
                 
                 {/* Blog Routes */}
                 <Route path="/blog" element={<Blog />} />

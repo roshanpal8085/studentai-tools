@@ -240,4 +240,175 @@ Subject: [Your Subject Here]
   }
 });
 
+router.post('/homework-helper', aiLimiter, async (req, res) => {
+  try {
+    const { question, subject, level } = req.body;
+    const prompt = `You are a brilliant, patient tutor. Help the student with their homework question.
+Subject: ${subject}
+Level: ${level}
+Question: ${question}
+
+Instructions:
+1. Provide a clear, step-by-step explanation of the concept.
+2. Don't just give the answer; explain "why" and "how".
+3. Use simple, engaging language.
+4. Format with bold headings, bullet points, and LaTeX for math where applicable.
+5. If the question is multi-part, address each part clearly.`;
+
+    const response = await generateWithRotation(prompt, false);
+    res.json({ content: response.text });
+  } catch (error) {
+    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
+      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/essay-writer', aiLimiter, async (req, res) => {
+  try {
+    const { topic, type, length, keywords } = req.body;
+    const prompt = `Write a high-quality ${type} essay on the topic: "${topic}".
+Target Length: Approximately ${length} words.
+Keywords to include: ${keywords}
+
+Formatting:
+- Use H1 for title, H2 for subheadings.
+- Include an introduction, body paragraphs with evidence, and a strong conclusion.
+- Use academic but accessible tone.
+- Ensure logical flow and transitions.`;
+
+    const response = await generateWithRotation(prompt, false);
+    res.json({ content: response.text });
+  } catch (error) {
+    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
+      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/study-planner', aiLimiter, async (req, res) => {
+  try {
+    const { exam, timeframe, subjects, goal } = req.body;
+    const prompt = `Generate a comprehensive study plan for the ${exam} exam.
+Timeframe: ${timeframe}
+Subjects: ${subjects}
+Primary Goal: ${goal}
+
+Requirements:
+- Create a day-by-day or week-by-week schedule.
+- Include specific topics to cover each day.
+- Add tips for active recall and spaced repetition.
+- Include scheduled breaks and review sessions.`;
+
+    const response = await generateWithRotation(prompt, false);
+    res.json({ content: response.text });
+  } catch (error) {
+    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
+      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/notes-generator', aiLimiter, async (req, res) => {
+  try {
+    const { content, format } = req.body;
+    const prompt = `Transform the following raw content into structured, high-quality notes.
+Format: ${format} (e.g., Cornell Method, Outline, Mind Map style list)
+
+Content:
+${content}
+
+Requirements:
+- Identify key concepts, terms, and definitions.
+- Organize logically with headings and sub-headings.
+- Keep it concise but comprehensive.
+- Add a "Summary" section at the end.`;
+
+    const response = await generateWithRotation(prompt, false);
+    res.json({ content: response.text });
+  } catch (error) {
+    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
+      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/quiz-generator', aiLimiter, async (req, res) => {
+  try {
+    const { content, numQuestions, type } = req.body;
+    const prompt = `Generate a practice quiz based on the following content.
+Number of Questions: ${numQuestions}
+Quiz Type: ${type} (e.g., Multiple Choice, True/False, Short Answer)
+
+Content:
+${content}
+
+Requirements:
+- Provide the questions first.
+- Provide the Answer Key at the very bottom.
+- For Multiple Choice, provide 4 options (A-D).
+- Ensure questions cover key concepts accurately.`;
+
+    const response = await generateWithRotation(prompt, false);
+    res.json({ content: response.text });
+  } catch (error) {
+    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
+      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/assignment-generator', aiLimiter, async (req, res) => {
+  try {
+    const { topic, level, instructions } = req.body;
+    const prompt = `Create a complete academic assignment for:
+Topic: ${topic}
+Grade Level: ${level}
+Specific instructions: ${instructions}
+
+Include:
+- Assignment Title
+- Learning Objectives
+- Detailed Instructions
+- Grading Rubric
+- 2-3 starting research questions or resources.`;
+
+    const response = await generateWithRotation(prompt, false);
+    res.json({ content: response.text });
+  } catch (error) {
+    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
+      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
+router.post('/summarize', aiLimiter, async (req, res) => {
+  try {
+    const { text } = req.body;
+    const prompt = `Act as a highly intelligent student assistant.
+Summarize the following long form text into:
+1. A concise, one-paragraph abstract.
+2. A detailed bullet-point list of the core arguments and key data.
+3. A "Definition of Terms" section if applicable.
+
+Do not include any polite intros or fluff. Only the structured summary.
+
+Text: "${text}"`;
+
+    const response = await generateWithRotation(prompt, false);
+    res.json({ content: response.text });
+  } catch (error) {
+    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
+      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;

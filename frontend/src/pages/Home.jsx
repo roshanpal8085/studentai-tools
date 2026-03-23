@@ -1,58 +1,77 @@
+import SEO from '../components/SEO';
+
+import { 
+  FileText, MonitorPlay, Image as ImageIcon, LayoutTemplate, MessageSquare, 
+  Mail, Zap, CheckCircle2, TrendingUp, Users, ShieldCheck, Search, 
+  Calendar, Clock, Hash, Type, QrCode, Lock, Ruler, Percent, Flame,
+  User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator
+} from 'lucide-react';
+
 import { Link } from 'react-router-dom';
-import { Helmet } from 'react-helmet-async';
+import { useState, useMemo } from 'react';
 
-import { FileText, MonitorPlay, Image as ImageIcon, LayoutTemplate, MessageSquare, Mail, Zap, CheckCircle2, TrendingUp, Users, ShieldCheck } from 'lucide-react';
+const allTools = [
+  // Core AI Tools
+  { name: 'AI Text Summarizer', description: 'Turn long articles and documents into concise, readable summaries.', icon: BookOpen, to: '/ai-text-summarizer', category: 'AI Tools' },
+  { name: 'AI Resume Builder', description: 'Create professional, ATS-friendly resumes in seconds with AI.', icon: LayoutTemplate, to: '/ai-resume-generator', category: 'AI Tools' },
+  { name: 'AI Homework Helper', description: 'Get instant help and explanations for any homework problem.', icon: Zap, to: '/ai-homework-helper', category: 'AI Tools' },
+  { name: 'AI Essay Writer', description: 'Draft high-quality essays with proper citations and structure.', icon: FileText, to: '/ai-essay-writer', category: 'AI Tools' },
+  { name: 'AI Study Planner', description: 'Generate personalized study schedules based on your exams.', icon: Calendar, to: '/ai-study-planner', category: 'AI Tools' },
+  { name: 'AI Notes Generator', description: 'Turn your lecture recordings or text into concise notes.', icon: MessageSquare, to: '/ai-notes-generator', category: 'AI Tools' },
+  { name: 'AI Quiz Generator', description: 'Create practice quizzes from your study material instantly.', icon: CheckCircle2, to: '/ai-quiz-generator', category: 'AI Tools' },
+  { name: 'AI Assignment Generator', description: 'Generate structured assignments and rubrics for any topic.', icon: ListChecks, to: '/ai-assignment-generator', category: 'AI Tools' },
+  { name: 'Chat with PDF', description: 'Upload books or papers and ask the AI questions about them.', icon: MessageSquare, to: '/chat-pdf', category: 'AI Tools' },
+  { name: 'Presentation Builder', description: 'Generate complete, beautifully structured PowerPoint outlines.', icon: MonitorPlay, to: '/presentation-generator', category: 'AI Tools' },
+  { name: 'AI Email Writer', description: 'Draft professional, perfectly toned emails for any situation.', icon: Mail, to: '/email-writer', category: 'AI Tools' },
 
-const features = [
-  { name: 'Free PDF Utilities', description: 'Merge, compress, and convert PDFs instantly without watermarks.', icon: FileText, to: '/free-pdf-tools' },
-  { name: 'AI Resume Generator', description: 'Create professional resumes in seconds. Ready for your dream job.', icon: LayoutTemplate, to: '/ai-resume-generator' },
-  { name: 'Chat with PDF', description: 'Upload massive books or papers and instantly ask the AI questions about them.', icon: MessageSquare, to: '/chat-pdf' },
-  { name: 'Presentation Builder', description: 'Generate complete, beautifully structured PowerPoint outlines in seconds.', icon: MonitorPlay, to: '/presentation-generator' },
-  { name: 'AI Email Writer', description: 'Draft professional, perfectly toned emails for any situation instantly.', icon: Mail, to: '/email-writer' },
-  { name: 'Instagram Captions', description: 'Generate engaging hashtags and captions for your social media posts.', icon: ImageIcon, to: '/instagram-caption-generator' }
+  // Text & Writing Tools
+  { name: 'Grammar Checker', description: 'Ensure your writing is flawless with our AI checker.', icon: ShieldCheck, to: '/tools/grammar-checker', category: 'Writing' },
+  { name: 'Word Counter', description: 'Fast and accurate word and character counting tool.', icon: Type, to: '/tools/word-counter', category: 'Writing' },
+  { name: 'Citation Generator', description: 'Perfect APA, MLA, and Chicago style citations instantly.', icon: Quote, to: '/tools/citation-generator', category: 'Writing' },
+  { name: 'Essay Topic Generator', description: 'Beat writer\'s block with 10 fresh ideas for your topic.', icon: Lightbulb, to: '/tools/essay-topic-generator', category: 'Writing' },
+  
+  // Study & Productivity
+  { name: 'Pomodoro Timer', description: 'Boost focus with 25-minute study sprints and breaks.', icon: BookOpen, to: '/tools/study-timer', category: 'Study' },
+  { name: 'Exam Countdown', description: 'Track your deadlines in real-time. Never miss an exam.', icon: Timer, to: '/tools/exam-countdown', category: 'Study' },
+  { name: 'Homework Planner', description: 'Organize your assignments and set priorities efficiently.', icon: ListChecks, to: '/tools/homework-planner', category: 'Study' },
+  { name: 'Study Timetable', description: 'AI-generated personalized weekly study schedules.', icon: Calendar, to: '/tools/study-timetable-generator', category: 'Study' },
+  { name: 'GPA Calculator', description: 'Calculate your semester and cumulative GPA accurately.', icon: Calculator, to: '/tools/gpa-calculator', category: 'Study' },
+  { name: 'Practice Questions', description: 'Generate random practice questions to test your knowledge.', icon: Brain, to: '/tools/random-question-generator', category: 'Study' },
+  
+  // Free Utilities
+  { name: 'QR Code Generator', description: 'Create free QR codes for links, text, and documents.', icon: QrCode, to: '/tools/qr-generator', category: 'Utilities' },
+  { name: 'Image to PDF', description: 'Convert your photos into high-quality PDF documents.', icon: FileText, to: '/tools/image-to-pdf', category: 'Utilities' },
+  { name: 'Image Compressor', description: 'Reduce image file size without losing quality.', icon: ImageIcon, to: '/tools/image-compressor', category: 'Utilities' },
+  { name: 'Unit Converter', description: 'Switch between metric and imperial units with ease.', icon: Ruler, to: '/total-unit-converter', category: 'Utilities' },
+  { name: 'Password Generator', description: 'Generate secure, random passwords for your accounts.', icon: Lock, to: '/tools/password-generator', category: 'Utilities' },
+  { name: 'Age Calculator', description: 'Find out exactly how old you are in days and months.', icon: Clock, to: '/tools/age-calculator', category: 'Utilities' },
+  { name: 'Percent Calculator', description: 'Quickly find percentages for math and grades.', icon: Percent, to: '/tools/percentage-calculator', category: 'Utilities' },
+  { name: 'Name Generator', description: 'Random names for creative projects and personas.', icon: User, to: '/tools/random-name-generator', category: 'Utilities' },
+  { name: 'AI Prompt Gen', description: 'Master AI tools with perfectly engineered prompts.', icon: Terminal, to: '/tools/ai-prompt-generator', category: 'Utilities' },
+  { name: 'Instagram Captions', description: 'Generate engaging hashtags and captions for social media.', icon: Hash, to: '/instagram-caption-generator', category: 'Utilities' },
 ];
 
-const stats = [
-  { name: 'Active Students', value: '10,000+', icon: Users },
-  { name: 'Documents Processed', value: '500k+', icon: FileText },
-  { name: 'Hours Saved', value: '2.5M+', icon: Zap },
-  { name: 'Data Privacy', value: '100%', icon: ShieldCheck },
-];
-
-const testimonials = [
-  {
-    content: "The Chat with PDF tool is a lifesaver! I upload my 500-page textbooks and get direct answers for my assignments in seconds.",
-    author: "Sarah Jenkins",
-    role: "Computer Science Major",
-    image: "https://i.pravatar.cc/150?u=sarah"
-  },
-  {
-    content: "I used the AI Resume Generator for my internship applications. It formatted everything perfectly and I landed 3 interviews!",
-    author: "David Chen",
-    role: "Business Student",
-    image: "https://i.pravatar.cc/150?u=david"
-  },
-  {
-    content: "As someone who struggles with writing professional emails to professors, the Email Writer tool has completely removed my anxiety.",
-    author: "Emily Thompson",
-    role: "Literature Major",
-    image: "https://i.pravatar.cc/150?u=emily"
-  }
-];
-
-const steps = [
-  { title: "Select a Tool", description: "Choose from our suite of AI-powered utilities designed specifically for student needs." },
-  { title: "Input your Request", description: "Upload your document, enter your prompt, or provide the basic details required." },
-  { title: "Get Instant Results", description: "Our AI processes your request in seconds, delivering high-quality, formatted results ready to use." }
-];
+const categories = ['All', 'AI Tools', 'Utilities', 'Writing', 'Study'];
 
 const Home = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activeCategory, setActiveCategory] = useState('All');
+
+  const filteredTools = useMemo(() => {
+    return allTools.filter(tool => {
+      const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                           tool.description.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesCategory = activeCategory === 'All' || tool.category === activeCategory;
+      return matchesSearch && matchesCategory;
+    });
+  }, [searchQuery, activeCategory]);
+
   return (
     <div className="min-h-screen pt-20 pb-12 flex flex-col items-center overflow-hidden">
-      <Helmet>
-        <title>StudentAI Tools | Free AI Productivity Platform for Students</title>
-        <meta name="description" content="Access free AI tools for students: resume generator, presentation builder, Instagram captions, PDF utilities, and AI document chat to boost your productivity." />
-      </Helmet>
+      <SEO 
+        title="Home" 
+        description="Access free AI tools for students: resume generator, homework helper, essay writer, presentation builder, and PDF utilities to boost your productivity." 
+      />
 
       {/* Hero Section */}
       <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-16 mb-24">
@@ -64,46 +83,134 @@ const Home = () => {
         <p className="mt-6 max-w-2xl text-xl text-slate-600 dark:text-slate-300 mx-auto mb-12 leading-relaxed font-medium">
           The all-in-one platform integrating AI to generate stunning resumes, build presentations, craft clever captions, and master your PDFs.
         </p>
+        
+        {/* Search Bar */}
+        <div className="max-w-2xl mx-auto mb-12 relative group">
+          <div className="absolute inset-y-0 left-0 pl-5 flex items-center pointer-events-none">
+            <Search className="h-6 w-6 text-slate-400 group-focus-within:text-primary transition-colors" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search for AI tools (e.g. Resume, Essay, PDF...)"
+            className="block w-full pl-14 pr-4 py-5 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl text-lg text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-primary/10 focus:border-primary transition-all shadow-xl shadow-indigo-500/5 group-hover:shadow-indigo-500/10"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <div className="absolute inset-y-0 right-4 flex items-center">
+            <kbd className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-lg border border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-700 text-xs text-slate-400 font-medium">
+              ⌘K
+            </kbd>
+          </div>
+        </div>
+
         <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6">
-          <Link to="/free-pdf-tools" className="w-full sm:w-auto bg-primary text-white hover:bg-indigo-700 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-[0_8px_30px_rgb(79,70,229,0.3)] hover:-translate-y-1 hover:shadow-[0_8px_40px_rgb(79,70,229,0.4)]">
-            Explore AI Tools
+          <Link to="/free-tools" className="w-full sm:w-auto bg-primary text-white hover:bg-indigo-700 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-[0_8px_30px_rgb(79,70,229,0.3)] hover:-translate-y-1 hover:shadow-[0_8px_40px_rgb(79,70,229,0.4)]">
+            Explore 50+ Tools
           </Link>
-          <Link to="/ai-resume-generator" className="w-full sm:w-auto bg-white text-slate-700 dark:bg-slate-800 dark:text-slate-200 border-2 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-sm flex items-center justify-center gap-2">
-            Try Resume Builder <TrendingUp className="w-5 h-5" />
+          <Link to="/blog" className="w-full sm:w-auto bg-white text-slate-700 dark:bg-slate-800 dark:text-slate-200 border-2 border-slate-200 dark:border-slate-700 hover:border-slate-300 dark:hover:border-slate-600 px-8 py-4 rounded-xl font-bold text-lg transition-all shadow-sm flex items-center justify-center gap-2">
+            Read AI Blog <TrendingUp className="w-5 h-5" />
           </Link>
         </div>
         
         {/* Quick Stats below hero */}
         <div className="mt-16 flex flex-wrap justify-center gap-8 text-sm font-semibold text-slate-500 dark:text-slate-400">
-          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800/50 px-4 py-2 rounded-full"><CheckCircle2 className="w-4 h-4 text-green-500" /> Free to use</div>
-          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800/50 px-4 py-2 rounded-full"><CheckCircle2 className="w-4 h-4 text-green-500" /> No credit card</div>
-          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800/50 px-4 py-2 rounded-full"><CheckCircle2 className="w-4 h-4 text-green-500" /> Instant results</div>
+          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800/50 px-4 py-2 rounded-full"><CheckCircle2 className="w-4 h-4 text-green-500" /> 100% Free</div>
+          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800/50 px-4 py-2 rounded-full"><CheckCircle2 className="w-4 h-4 text-green-500" /> No Registration</div>
+          <div className="flex items-center gap-2 bg-slate-100 dark:bg-slate-800/50 px-4 py-2 rounded-full"><CheckCircle2 className="w-4 h-4 text-green-500" /> Student Optimized</div>
         </div>
       </section>
 
-      {/* Top Ad Banner */}
+      {/* Ad Space Placeholder */}
+      <div className="w-full max-w-4xl mx-auto h-24 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-400 text-sm mb-12">
+        Ad Placement - Header
+      </div>
 
+      {/* Trending Tools Section */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="p-3 bg-rose-100 dark:bg-rose-900/30 rounded-xl text-rose-500">
+            <Flame className="w-6 h-6 animate-pulse" />
+          </div>
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white">Trending Now</h2>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { name: 'AI Essay Writer', desc: 'Draft high-quality essays fast.', icon: FileText, to: '/ai-essay-writer', color: 'from-blue-500 to-indigo-500' },
+            { name: 'Homework Helper', desc: 'Instant help for any subject.', icon: Zap, to: '/ai-homework-helper', color: 'from-indigo-500 to-purple-500' },
+            { name: 'Chat with PDF', desc: 'Ask your textbooks questions.', icon: MessageSquare, to: '/chat-pdf', color: 'from-purple-500 to-pink-500' },
+            { name: 'Grammar Checker', desc: 'Flawless writing instantly.', icon: ShieldCheck, to: '/tools/grammar-checker', color: 'from-emerald-400 to-teal-500' }
+          ].map((tool, idx) => (
+            <Link key={idx} to={tool.to} className="group glass-card rounded-3xl p-6 border border-slate-200 dark:border-slate-800 hover:shadow-xl hover:-translate-y-2 transition-all overflow-hidden relative">
+              <div className={`absolute -right-10 -top-10 w-32 h-32 bg-gradient-to-br ${tool.color} opacity-10 group-hover:opacity-20 rounded-full blur-2xl transition-all`}></div>
+              <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${tool.color} text-white flex items-center justify-center mb-6 shadow-lg shadow-indigo-500/20`}>
+                <tool.icon className="w-6 h-6" />
+              </div>
+              <h3 className="font-bold text-xl text-slate-900 dark:text-white mb-2 relative z-10">{tool.name}</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm font-medium relative z-10">{tool.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       {/* Features Grid */}
       <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">Powerful Tools at Your Fingertips</h2>
-          <p className="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto">Everything you need to study faster, write better, and succeed—all in one place.</p>
+          <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">Tools for Academic Success</h2>
+          <p className="text-xl text-slate-500 dark:text-slate-400 max-w-2xl mx-auto mb-12">Everything you need to study faster, write better, and succeed—all in one place.</p>
+          
+          {/* Category Tabs */}
+          <div className="flex flex-wrap justify-center gap-3 mb-10">
+            {categories.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all ${
+                  activeCategory === cat 
+                  ? 'bg-primary text-white shadow-lg shadow-indigo-500/25 scale-105' 
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-primary/50'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
         </div>
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature) => (
-            <Link key={feature.name} to={feature.to} className="group relative bg-white dark:bg-slate-800/50 p-8 rounded-[2rem] shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 border border-slate-100 dark:border-slate-700/50 transition-all duration-300 hover:-translate-y-2 cursor-pointer flex flex-col h-full backdrop-blur-sm overflow-hidden">
-              <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-4 group-hover:translate-x-0">
-                 <feature.icon className="h-24 w-24 text-indigo-50/50 dark:text-indigo-900/10" />
+          {filteredTools.length > 0 ? (
+            filteredTools.map((tool) => (
+              <Link key={tool.name} to={tool.to} className="group relative bg-white dark:bg-slate-800/50 p-8 rounded-[2rem] shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 border border-slate-100 dark:border-slate-700/50 transition-all duration-300 hover:-translate-y-2 cursor-pointer flex flex-col h-full backdrop-blur-sm overflow-hidden">
+                <div className="absolute top-0 right-0 p-8 opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-4 group-hover:translate-x-0">
+                   <tool.icon className="h-24 w-24 text-indigo-50/50 dark:text-indigo-900/10" />
+                </div>
+                <div className="w-16 h-16 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
+                  <tool.icon className="h-8 w-8 text-primary group-hover:text-white transition-colors" />
+                </div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="text-xs font-bold uppercase tracking-wider text-indigo-500 dark:text-indigo-400 px-2 py-0.5 bg-indigo-50 dark:bg-indigo-900/30 rounded-md">
+                    {tool.category}
+                  </span>
+                </div>
+                <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 relative z-10">{tool.name}</h3>
+                <p className="text-slate-500 dark:text-slate-400 leading-relaxed flex-grow text-lg relative z-10">{tool.description}</p>
+              </Link>
+            ))
+          ) : (
+            <div className="col-span-full py-20 text-center">
+              <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-400">
+                <Search className="w-10 h-10" />
               </div>
-              <div className="w-16 h-16 bg-indigo-50 dark:bg-indigo-500/10 rounded-2xl flex items-center justify-center mb-8 group-hover:bg-primary group-hover:scale-110 transition-all duration-300">
-                <feature.icon className="h-8 w-8 text-primary group-hover:text-white transition-colors" />
-              </div>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-4 relative z-10">{feature.name}</h3>
-              <p className="text-slate-500 dark:text-slate-400 leading-relaxed flex-grow text-lg relative z-10">{feature.description}</p>
-            </Link>
-          ))}
+              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">No tools found</h3>
+              <p className="text-slate-500 dark:text-slate-400">Try adjusting your search or category filters.</p>
+              <button 
+                onClick={() => { setSearchQuery(''); setActiveCategory('All'); }}
+                className="mt-6 text-primary font-bold hover:underline"
+              >
+                Clear all filters
+              </button>
+            </div>
+          )}
         </div>
       </section>
 
