@@ -53,6 +53,25 @@ const allTools = [
 
 const categories = ['All', 'AI Tools', 'Utilities', 'Writing', 'Study'];
 
+const steps = [
+  { title: 'Choose Your Tool', description: 'Browse our suite of 50+ free AI and utility tools. From resume builders to PDF converters, find exactly what you need.' },
+  { title: 'Enter Your Input', description: 'Provide your topic, text, or file. Our tools are designed to work with just a few clicks—no complex setup required.' },
+  { title: 'Download & Use', description: 'Get instant, high-quality AI-generated output. Copy, download, or share your results in seconds.' },
+];
+
+const stats = [
+  { value: '50+', name: 'Free Tools', icon: Zap },
+  { value: '100K+', name: 'Students Helped', icon: Users },
+  { value: '0', name: 'Registration Required', icon: ShieldCheck },
+  { value: '24/7', name: 'Always Available', icon: TrendingUp },
+];
+
+const testimonials = [
+  { content: 'StudentAI saved my semester. I used the AI Essay Writer to structure my 3000-word paper in 20 minutes. Absolute lifesaver.', author: 'Priya S.', role: 'Engineering Student', image: 'https://i.pravatar.cc/100?img=47' },
+  { content: 'The AI Resume Builder is incredible. Got 3 interview calls in a week after updating my resume using this tool.', author: 'Marcus J.', role: 'MBA Graduate', image: 'https://i.pravatar.cc/100?img=68' },
+  { content: 'Chat with PDF is the best study tool I have found. I asked my 400-page textbook questions and got instant answers.', author: 'Aisha K.', role: 'Pre-Med Student', image: 'https://i.pravatar.cc/100?img=32' },
+];
+
 const Home = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
