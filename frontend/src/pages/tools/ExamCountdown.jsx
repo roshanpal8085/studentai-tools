@@ -91,7 +91,7 @@ const ExamCountdown = () => {
                       type="text" 
                       value={exam.name}
                       onChange={(e) => updateExam(exam.id, 'name', e.target.value)}
-                      className={\`w-full bg-transparent border-none text-2xl md:text-3xl font-black focus:ring-0 outline-none p-0 focus:text-rose-500 transition-colors \${countdownInfo.status === 'done' ? 'text-slate-400 line-through' : 'text-slate-900 dark:text-white'}\`}
+                      className={`w-full bg-transparent border-none text-2xl md:text-3xl font-black focus:ring-0 outline-none p-0 focus:text-rose-500 transition-colors ${countdownInfo.status === 'done' ? 'text-slate-400 line-through' : 'text-slate-900 dark:text-white'}`}
                       placeholder="e.g. History Midterm"
                     />
                     <div className="flex flex-wrap gap-4 mt-4">
@@ -117,7 +117,7 @@ const ExamCountdown = () => {
                   </div>
 
                   {/* Countdown Readout */}
-                  <div className={\`flex flex-col items-center justify-center px-10 py-6 rounded-2xl min-w-[280px] w-full lg:w-auto border-2 \${statusColors} \${badgeColors} relative z-10\`}>
+                  <div className={`flex flex-col items-center justify-center px-10 py-6 rounded-2xl min-w-[280px] w-full lg:w-auto border-2 \${statusColors} \${badgeColors} relative z-10`}>
                     <span className="block text-3xl font-black uppercase tracking-tight">
                       {countdownInfo.text}
                     </span>
@@ -176,7 +176,7 @@ const ExamCountdown = () => {
                 <div className="space-y-4">
                     <div>
                         <h3 className="font-bold text-sm tracking-wide text-rose-600 dark:text-rose-400 mb-1 flex items-center gap-2"><HelpCircle className="w-4 h-4"/> Color changing?</h3>
-                        <p className="text-sm text-slate-600 dark:text-slate-400">Yes! The countdown box will change from Blue (Safe/>7 Days) to Yellow (Warning/<7 Days) to flashing Red (Urgent/<48 Hours).</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-400">Yes! The countdown box will change from Blue (Safe / over 7 Days) to Yellow (Warning / under 7 Days) to flashing Red (Urgent / under 48 Hours).</p>
                     </div>
                     <div>
                         <h3 className="font-bold text-sm tracking-wide text-rose-600 dark:text-rose-400 mb-1 flex items-center gap-2"><HelpCircle className="w-4 h-4"/> Multi-device view?</h3>

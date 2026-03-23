@@ -73,7 +73,7 @@ const HomeworkPlanner = () => {
                                 <span>{progressPercentage}%</span>
                             </div>
                             <div className="w-48 h-2.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
-                                <div className="h-full bg-emerald-500 transition-all duration-1000 ease-out" style={{ width: \`\${progressPercentage}%\` }}></div>
+                                <div className="h-full bg-emerald-500 transition-all duration-1000 ease-out" style={{ width: `${progressPercentage}%` }}></div>
                             </div>
                         </div>
                         <button 
@@ -89,7 +89,7 @@ const HomeworkPlanner = () => {
                 {tasks.length > 0 ? (
                     <div className="space-y-4">
                         {tasks.map((task) => (
-                            <div key={task.id} className={\`flex flex-col sm:flex-row items-start sm:items-center gap-4 p-5 md:p-6 rounded-2xl border transition-all duration-300 group \${task.completed ? 'bg-slate-50/50 dark:bg-slate-900/30 opacity-70 border-slate-100 dark:border-slate-800/50' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-emerald-300 dark:hover:border-emerald-500/50'}\`}>
+                            <div key={task.id} className={`flex flex-col sm:flex-row items-start sm:items-center gap-4 p-5 md:p-6 rounded-2xl border transition-all duration-300 group \${task.completed ? 'bg-slate-50/50 dark:bg-slate-900/30 opacity-70 border-slate-100 dark:border-slate-800/50' : 'bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:border-emerald-300 dark:hover:border-emerald-500/50'}`}>
                                 
                                 <button onClick={() => toggleTask(task.id)} className="shrink-0 mt-1 sm:mt-0 transition-transform active:scale-90 duration-200">
                                     {task.completed ? <CheckCircle2 className="w-7 h-7 text-emerald-500" /> : <Circle className="w-7 h-7 text-slate-300 dark:text-slate-600 hover:text-emerald-400 transition-colors" />}
@@ -100,7 +100,7 @@ const HomeworkPlanner = () => {
                                         type="text" 
                                         value={task.text}
                                         onChange={(e) => updateTask(task.id, 'text', e.target.value)}
-                                        className={\`w-full bg-transparent border-none p-0 focus:ring-0 font-bold text-lg \${task.completed ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-900 dark:text-white'}\`}
+                                        className={`w-full bg-transparent border-none p-0 focus:ring-0 font-bold text-lg \${task.completed ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-900 dark:text-white'}`}
                                         placeholder="What needs to be done?"
                                     />
                                     
@@ -116,11 +116,11 @@ const HomeworkPlanner = () => {
                                         </div>
 
                                         <div className="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-900/50 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-800">
-                                            <Flag className={\`w-3.5 h-3.5 \${task.priority === 'High' ? 'text-red-500' : task.priority === 'Medium' ? 'text-amber-500' : 'text-sky-500'}\`} />
+                                            <Flag className={`w-3.5 h-3.5 \${task.priority === 'High' ? 'text-red-500' : task.priority === 'Medium' ? 'text-amber-500' : 'text-sky-500'}`} />
                                             <select 
                                                 value={task.priority}
                                                 onChange={(e) => updateTask(task.id, 'priority', e.target.value)}
-                                                className={\`bg-transparent border-none p-0 text-xs font-bold uppercase tracking-wider cursor-pointer focus:ring-0 \${task.priority === 'High' ? 'text-red-600 dark:text-red-400' : task.priority === 'Medium' ? 'text-amber-600 dark:text-amber-400' : 'text-sky-600 dark:text-sky-400'}\`}
+                                                className={`bg-transparent border-none p-0 text-xs font-bold uppercase tracking-wider cursor-pointer focus:ring-0 \${task.priority === 'High' ? 'text-red-600 dark:text-red-400' : task.priority === 'Medium' ? 'text-amber-600 dark:text-amber-400' : 'text-sky-600 dark:text-sky-400'}`}
                                             >
                                                 <option className="text-slate-900">High</option>
                                                 <option className="text-slate-900">Medium</option>
