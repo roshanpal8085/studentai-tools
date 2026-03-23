@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop';
 
 // Lazy loading Pages for performance optimization
 const Home = lazy(() => import('./pages/Home'));
@@ -32,6 +33,7 @@ function App() {
   return (
     <HelmetProvider>
       <Router>
+        <ScrollToTop />
         <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900">
           <Navbar />
           <main className="flex-grow">
