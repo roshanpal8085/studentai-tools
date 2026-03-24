@@ -51,6 +51,7 @@ const HomeworkPlanner = lazy(() => import('./pages/tools/HomeworkPlanner'));
 const StudyTimetableGenerator = lazy(() => import('./pages/tools/StudyTimetableGenerator'));
 const CitationGenerator = lazy(() => import('./pages/tools/CitationGenerator'));
 const GpaCalculator = lazy(() => import('./pages/tools/GpaCalculator'));
+const PdfFooterEditor = lazy(() => import('./pages/tools/PdfFooterEditor'));
 
 // Blog System Lazy Loads
 const Blog = lazy(() => import('./pages/Blog'));
@@ -118,6 +119,7 @@ function App() {
                 <Route path="/tools/study-timetable-generator" element={<StudyTimetableGenerator />} />
                 <Route path="/tools/citation-generator" element={<CitationGenerator />} />
                 <Route path="/tools/gpa-calculator" element={<GpaCalculator />} />
+                <Route path="/tools/pdf-footer-editor" element={<PdfFooterEditor />} />
                 
                 {/* Blog Routes */}
                 <Route path="/blog" element={<Blog />} />
