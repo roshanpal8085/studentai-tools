@@ -4,7 +4,7 @@ import {
   FileText, MonitorPlay, Image as ImageIcon, LayoutTemplate, MessageSquare, 
   Mail, Zap, CheckCircle2, TrendingUp, Users, ShieldCheck, Search, 
   Calendar, Clock, Hash, Type, QrCode, Lock, Ruler, Percent, Flame,
-  User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator
+  User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator, FileEdit
 } from 'lucide-react';
 
 import { Link } from 'react-router-dom';
@@ -41,6 +41,7 @@ const allTools = [
   // Free Utilities
   { name: 'QR Code Generator', description: 'Create free QR codes for links, text, and documents.', icon: QrCode, to: '/tools/qr-generator', category: 'Utilities' },
   { name: 'Image to PDF', description: 'Convert your photos into high-quality PDF documents.', icon: FileText, to: '/tools/image-to-pdf', category: 'Utilities' },
+  { name: 'PDF Footer Editor', description: 'Stamp your name & enrollment number on every PDF page footer.', icon: FileEdit, to: '/tools/pdf-footer-editor', category: 'Utilities' },
   { name: 'Image Compressor', description: 'Reduce image file size without losing quality.', icon: ImageIcon, to: '/tools/image-compressor', category: 'Utilities' },
   { name: 'Unit Converter', description: 'Switch between metric and imperial units with ease.', icon: Ruler, to: '/total-unit-converter', category: 'Utilities' },
   { name: 'Password Generator', description: 'Generate secure, random passwords for your accounts.', icon: Lock, to: '/tools/password-generator', category: 'Utilities' },

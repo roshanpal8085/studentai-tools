@@ -46,6 +46,7 @@ const utilityCategories = [
     tools: [
       { name: 'QR Code Generator', path: '/tools/qr-generator', desc: 'Create free QR codes for links and documents.' },
       { name: 'Image to PDF', path: '/tools/image-to-pdf', desc: 'Convert your photos into high-quality PDF documents.' },
+      { name: 'PDF Footer Editor', path: '/tools/pdf-footer-editor', desc: 'Add your name & enrollment number to every PDF page footer.' },
       { name: 'PDF to Word', path: '/tools/pdf-to-word', desc: 'Extract text from PDFs to editable documents instantly.' },
       { name: 'Image Compressor', path: '/tools/image-compressor', desc: 'Reduce image file size without losing quality.' },
       { name: 'Password Generator', path: '/tools/password-generator', desc: 'Generate secure, random passwords for your accounts.' },
