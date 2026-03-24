@@ -3,7 +3,7 @@ import SEO from '../../components/SEO';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import {
     FileText, Download, Loader2, Upload, CheckCircle,
-    Shield, Sliders, User, Hash, AlignLeft, AlignCenter, AlignRight, Eye, HelpCircle
+    Shield, Sliders, User, Hash, AlignLeft, AlignCenter, AlignRight, Eye, HelpCircle, PaintBucket
 } from 'lucide-react';
 
 const POSITIONS = [
@@ -24,8 +24,11 @@ const PdfFooterEditor = () => {
     const [position,     setPosition]     = useState('center');
     const [fontSize,     setFontSize]     = useState(11);
     const [bottomMargin, setBottomMargin] = useState(20);
-    const [addPageNum,   setAddPageNum]   = useState(true);
-    const [textColor,    setTextColor]    = useState('#6366f1');
+    const [addPageNum,     setAddPageNum]     = useState(true);
+    const [textColor,      setTextColor]      = useState('#6366f1');
+    // Cover existing footer
+    const [coverOldFooter, setCoverOldFooter] = useState(false);
+    const [coverHeight,    setCoverHeight]    = useState(40);
 
     const fileInputRef = useRef(null);
 
@@ -74,7 +77,21 @@ const PdfFooterEditor = () => {
 
             pages.forEach((page, i) => {
                 const { width } = page.getSize();
-                const text     = buildFooterLine(i + 1, total);
+
+                // Step 1: Cover old footer with a white rectangle
+                if (coverOldFooter) {
+                    page.drawRectangle({
+                        x:      0,
+                        y:      0,
+                        width:  width,
+                        height: coverHeight,
+                        color:  rgb(1, 1, 1),   // white
+                        opacity: 1,
+                    });
+                }
+
+                // Step 2: Draw new footer text
+                const text      = buildFooterLine(i + 1, total);
                 const textWidth = font.widthOfTextAtSize(text, fontSize);
 
                 let x;
@@ -276,6 +293,46 @@ const PdfFooterEditor = () => {
                                         className="w-9 h-9 rounded-xl border-2 border-slate-200 dark:border-slate-700 cursor-pointer p-0.5 bg-white dark:bg-slate-800"
                                     />
                                 </label>
+                            </div>
+
+                            {/* Cover old footer */}
+                            <div className={`rounded-2xl border-2 p-4 transition-all ${
+                                coverOldFooter
+                                    ? 'border-amber-400 bg-amber-50 dark:bg-amber-900/10'
+                                    : 'border-slate-200 dark:border-slate-700'
+                            }`}>
+                                <label className="flex items-center gap-3 cursor-pointer group mb-3">
+                                    <div
+                                        onClick={() => setCoverOldFooter(!coverOldFooter)}
+                                        className={`w-11 h-6 rounded-full transition-all flex items-center px-0.5 flex-shrink-0 ${
+                                            coverOldFooter ? 'bg-amber-500' : 'bg-slate-300 dark:bg-slate-600'
+                                        }`}
+                                    >
+                                        <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${
+                                            coverOldFooter ? 'translate-x-5' : 'translate-x-0'
+                                        }`} />
+                                    </div>
+                                    <div>
+                                        <span className="text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                                            <PaintBucket className="w-3.5 h-3.5 text-amber-500" />
+                                            Cover existing footer
+                                        </span>
+                                        <p className="text-xs text-slate-500 dark:text-slate-400">Paints a white strip over the old footer before adding new one</p>
+                                    </div>
+                                </label>
+                                {coverOldFooter && (
+                                    <label className="block">
+                                        <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 block">
+                                            Cover height ({coverHeight}px) — increase if old footer was tall
+                                        </span>
+                                        <input
+                                            type="range" min={20} max={120} step={4}
+                                            value={coverHeight}
+                                            onChange={(e) => setCoverHeight(+e.target.value)}
+                                            className="w-full accent-amber-500"
+                                        />
+                                    </label>
+                                )}
                             </div>
                         </div>
 
