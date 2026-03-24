@@ -1,9 +1,10 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
 import axios from 'axios';
 import { 
   FileText, Download, Loader2, UploadCloud, Scissors, 
-  Type, Trash2, CheckCircle, HelpCircle, Zap, ShieldCheck 
+  Type, Trash2, CheckCircle, HelpCircle, Zap, ShieldCheck, FileEdit
 } from 'lucide-react';
 
 const PdfTools = () => {
@@ -205,7 +206,27 @@ const PdfTools = () => {
             </form>
           </div>
 
-          {/* Compress PDFs */}
+          {/* PDF Footer Editor */}
+          <div className="glass-card rounded-[2rem] p-8 flex flex-col group transition-all duration-300 hover:-translate-y-2">
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+              <FileEdit className="w-5 h-5 text-indigo-500" /> PDF Footer Editor
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Add your name &amp; enrollment number to every page footer. Replace existing footers too.</p>
+            <div className="flex-grow flex flex-col justify-end">
+              <div className="p-4 bg-indigo-50 dark:bg-indigo-900/10 rounded-xl border border-indigo-100 dark:border-indigo-900/30 mb-4">
+                <p className="text-sm text-indigo-700 dark:text-indigo-400 font-medium leading-relaxed">100% browser-based — your PDF never leaves your device. Supports cover &amp; replace of old footers.</p>
+              </div>
+              <Link
+                to="/tools/pdf-footer-editor"
+                className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold py-4 rounded-xl flex justify-center items-center gap-2 shadow-lg shadow-indigo-500/20 transition-all"
+              >
+                <FileEdit className="w-5 h-5" />
+                <span>Open Footer Editor</span>
+              </Link>
+            </div>
+          </div>
+
+
           <div className="glass-card rounded-[2rem] p-8 flex flex-col lg:col-span-2 group transition-all duration-300 hover:-translate-y-2">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-6">
               <div>
