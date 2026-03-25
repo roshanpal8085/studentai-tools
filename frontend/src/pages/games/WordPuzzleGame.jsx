@@ -50,6 +50,10 @@ export default function WordPuzzleGame() {
   const [hintUsed, setHintUsed] = useState(false);
   const [showHint, setShowHint] = useState(false);
   const [solved, setSolved] = useState(0);
+  const [status, setStatus] = useState('idle'); // idle, playing
+
+  const start = () => setStatus('playing');
+  const exit = () => setStatus('idle');
 
   const cat = CATEGORIES[catIdx];
   const word = cat.words[wordIdx];
@@ -105,48 +109,62 @@ export default function WordPuzzleGame() {
             <p className="text-slate-400">Unscramble the letters to form the hidden word!</p>
           </div>
 
-          {/* Category selector */}
-          <div className="flex gap-2 flex-wrap justify-center mb-4">
-            {CATEGORIES.map((c, i) => (
-              <button key={i} onClick={() => { setCatIdx(i); setWordIdx(0); setInput(''); setFeedback(null); setHintUsed(false); setShowHint(false); }}
-                className={`px-3 py-1.5 rounded-xl text-sm font-bold transition-colors ${catIdx === i ? 'bg-teal-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>
-                {c.name}
-              </button>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 mb-6">
-            {[{ l: 'Score', v: score, c: 'text-teal-400' }, { l: '🔥 Streak', v: streak, c: 'text-yellow-400' }, { l: 'Solved', v: solved, c: 'text-green-400' }].map((s, i) => (
-              <div key={i} className="bg-slate-800 rounded-xl p-3 text-center border border-slate-700">
-                <div className="text-slate-400 text-xs uppercase mb-1">{s.l}</div>
-                <div className={`text-xl font-bold ${s.c}`}>{s.v}</div>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+              {/* Category selector */}
+              <div className="flex gap-2 flex-wrap justify-center mb-4">
+                {CATEGORIES.map((c, i) => (
+                  <button key={i} onClick={() => { setCatIdx(i); setWordIdx(0); setInput(''); setFeedback(null); setHintUsed(false); setShowHint(false); }}
+                    className={`px-3 py-1.5 rounded-xl text-sm font-bold transition-colors ${catIdx === i ? 'bg-teal-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>
+                    {c.name}
+                  </button>
+                ))}
               </div>
-            ))}
-          </div>
 
-          <div className={`bg-slate-800 border-2 rounded-2xl p-8 text-center mb-5 transition-colors ${feedback === 'correct' ? 'border-green-500' : feedback === 'wrong' ? 'border-red-500' : 'border-slate-700'}`}>
-            <div className="text-slate-400 text-sm mb-2 uppercase tracking-wider">{cat.name}</div>
-            <div className="text-5xl font-extrabold tracking-widest text-white mb-2 flex justify-center gap-2">
-              {currentScrambled.split('').map((ch, i) => (
-                <span key={i} className="bg-teal-500/20 border border-teal-400/30 rounded-xl w-12 h-14 inline-flex items-center justify-center">{ch}</span>
-              ))}
+              <div className="grid grid-cols-3 gap-2 mb-6">
+                {[{ l: 'Score', v: score, c: 'text-teal-400' }, { l: '🔥 Streak', v: streak, c: 'text-yellow-400' }, { l: 'Solved', v: solved, c: 'text-green-400' }].map((s, i) => (
+                  <div key={i} className="bg-slate-800 rounded-xl p-3 text-center border border-slate-700">
+                    <div className="text-slate-400 text-xs uppercase mb-1">{s.l}</div>
+                    <div className={`text-xl font-bold ${s.c}`}>{s.v}</div>
+                  </div>
+                ))}
+              </div>
+
+              <div className={`bg-slate-800 border-2 rounded-2xl p-8 text-center mb-5 transition-colors relative overflow-hidden ${feedback === 'correct' ? 'border-green-500' : feedback === 'wrong' ? 'border-red-500' : 'border-slate-700'}`}>
+                <div className="text-slate-400 text-sm mb-2 uppercase tracking-wider">{cat.name}</div>
+                <div className="text-5xl font-extrabold tracking-widest text-white mb-2 flex justify-center gap-2 flex-wrap">
+                  {currentScrambled.split('').map((ch, i) => (
+                    <span key={i} className="bg-teal-500/20 border border-teal-400/30 rounded-xl w-12 h-14 inline-flex items-center justify-center">{ch}</span>
+                  ))}
+                </div>
+                {showHint && <p className="text-yellow-400 text-sm mt-3">💡 Hint: Starts with <strong>{word[0]}</strong>, has <strong>{word.length}</strong> letters</p>}
+                {status === 'idle' && (
+                  <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
+                    <button onClick={start} className="bg-teal-500 hover:bg-teal-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Start Puzzle</button>
+                  </div>
+                )}
+              </div>
+
+              <input
+                value={input}
+                onChange={e => setInput(e.target.value.toUpperCase())}
+                onFocus={() => { if (status === 'idle') setStatus('playing'); }}
+                onKeyDown={e => e.key === 'Enter' && check()}
+                placeholder="Type your answer..."
+                maxLength={word.length + 2}
+                className="w-full bg-slate-800 border-2 border-slate-600 focus:border-teal-500 rounded-xl px-5 py-4 text-white text-xl font-bold text-center uppercase tracking-widest outline-none mb-3 transition-colors"
+              />
+
+              <div className="flex gap-3 mb-6">
+                <button onClick={check} className="flex-1 bg-teal-500 hover:bg-teal-400 text-white font-bold py-3 rounded-xl transition-colors">✓ Check</button>
+                <button onClick={hint} disabled={hintUsed} className="bg-yellow-600 hover:bg-yellow-500 disabled:opacity-40 text-white font-bold px-4 py-3 rounded-xl transition-colors">💡 Hint</button>
+                <button onClick={skip} className="bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold px-4 py-3 rounded-xl transition-colors">Skip</button>
+              </div>
+
+              {status !== 'idle' && (
+                <button onClick={exit} className="mx-auto block text-slate-400 hover:text-white font-semibold underline">Exit Fullscreen</button>
+              )}
             </div>
-            {showHint && <p className="text-yellow-400 text-sm mt-3">💡 Hint: Starts with <strong>{word[0]}</strong>, has <strong>{word.length}</strong> letters</p>}
-          </div>
-
-          <input
-            value={input}
-            onChange={e => setInput(e.target.value.toUpperCase())}
-            onKeyDown={e => e.key === 'Enter' && check()}
-            placeholder="Type your answer..."
-            maxLength={word.length + 2}
-            className="w-full bg-slate-800 border-2 border-slate-600 focus:border-teal-500 rounded-xl px-5 py-4 text-white text-xl font-bold text-center uppercase tracking-widest outline-none mb-3 transition-colors"
-          />
-
-          <div className="flex gap-3">
-            <button onClick={check} className="flex-1 bg-teal-500 hover:bg-teal-400 text-white font-bold py-3 rounded-xl transition-colors">✓ Check</button>
-            <button onClick={hint} disabled={hintUsed} className="bg-yellow-600 hover:bg-yellow-500 disabled:opacity-40 text-white font-bold px-4 py-3 rounded-xl transition-colors">💡 Hint</button>
-            <button onClick={skip} className="bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold px-4 py-3 rounded-xl transition-colors">Skip</button>
           </div>
 
           <div className="space-y-6 text-slate-300 mt-10">

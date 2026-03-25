@@ -51,8 +51,11 @@ export default function TicTacToe() {
   const [xIsHuman, setXIsHuman] = useState(true);
   const [mode, setMode] = useState('pvai'); // pvc | pvp
   const [scores, setScores] = useState({ X: 0, O: 0, D: 0 });
-  const [history, setHistory] = useState([Array(9).fill(null)]);
   const [step, setStep] = useState(0);
+  const [status, setStatus] = useState('idle'); // idle, playing, over
+
+  const start = () => setStatus('playing');
+  const exit = () => setStatus('idle');
 
   const current = history[step];
   const result = checkWinner(current);
@@ -99,7 +102,7 @@ export default function TicTacToe() {
     return base + 'bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer text-transparent';
   };
 
-  const status = result ? (result.winner === 'draw' ? "It's a draw! 🤝" : `${result.winner} wins! 🎉`) : `${xIsNext ? 'X' : 'O'}'s turn`;
+  const status_text = result ? (result.winner === 'draw' ? "It's a draw! 🤝" : `${result.winner} wins! 🎉`) : `${xIsNext ? 'X' : 'O'}'s turn`;
 
   return (
     <>
@@ -118,42 +121,54 @@ export default function TicTacToe() {
             <p className="text-slate-400">Challenge the AI or play with a friend!</p>
           </div>
 
-          {/* Mode & Score */}
-          <div className="flex gap-2 mb-4 justify-center">
-            <button onClick={() => { setMode('pvai'); reset(); }} className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${mode === 'pvai' ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>🤖 vs AI</button>
-            <button onClick={() => { setMode('pvp'); reset(); }} className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${mode === 'pvp' ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>👥 2 Players</button>
-          </div>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+              {/* Mode & Score */}
+              <div className="flex gap-2 mb-4 justify-center">
+                <button onClick={() => { setMode('pvai'); reset(); }} className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${mode === 'pvai' ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>🤖 vs AI</button>
+                <button onClick={() => { setMode('pvp'); reset(); }} className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${mode === 'pvp' ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>👥 2 Players</button>
+              </div>
 
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex gap-3">
-              <div className="bg-blue-900/50 border border-blue-400/20 rounded-xl px-4 py-2 text-center">
-                <div className="text-blue-300 text-xs">X (You)</div>
-                <div className="text-white font-bold text-lg">{scores.X}</div>
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex gap-3">
+                  <div className="bg-blue-900/50 border border-blue-400/20 rounded-xl px-4 py-2 text-center">
+                    <div className="text-blue-300 text-xs">X (You)</div>
+                    <div className="text-white font-bold text-lg">{scores.X}</div>
+                  </div>
+                  <div className="bg-slate-700 rounded-xl px-4 py-2 text-center">
+                    <div className="text-slate-400 text-xs">Draw</div>
+                    <div className="text-white font-bold text-lg">{scores.D}</div>
+                  </div>
+                  <div className="bg-rose-900/50 border border-rose-400/20 rounded-xl px-4 py-2 text-center">
+                    <div className="text-rose-300 text-xs">{mode === 'pvai' ? '🤖 AI' : 'O'}</div>
+                    <div className="text-white font-bold text-lg">{scores.O}</div>
+                  </div>
+                </div>
+                <button onClick={reset} className="bg-blue-500 hover:bg-blue-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">New Game</button>
               </div>
-              <div className="bg-slate-700 rounded-xl px-4 py-2 text-center">
-                <div className="text-slate-400 text-xs">Draw</div>
-                <div className="text-white font-bold text-lg">{scores.D}</div>
+
+              <div className="text-center text-white font-bold mb-4 text-lg">{status === 'idle' ? 'Ready to play?' : status_text}</div>
+
+              <div className="grid grid-cols-3 gap-3 mb-6 relative overflow-hidden rounded-2xl">
+                {Array(9).fill(null).map((_, i) => (
+                  <button key={i} className={cellStyle(i)} onClick={() => { if (status === 'idle') setStatus('playing'); handleClick(i); }}>
+                    {current[i] || '·'}
+                  </button>
+                ))}
+                {status === 'idle' && (
+                  <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
+                    <button onClick={start} className="bg-blue-500 hover:bg-blue-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Start Game</button>
+                  </div>
+                )}
               </div>
-              <div className="bg-rose-900/50 border border-rose-400/20 rounded-xl px-4 py-2 text-center">
-                <div className="text-rose-300 text-xs">{mode === 'pvai' ? '🤖 AI' : 'O'}</div>
-                <div className="text-white font-bold text-lg">{scores.O}</div>
-              </div>
+
+              {status !== 'idle' && (
+                <button onClick={exit} className="mx-auto block text-slate-400 hover:text-white font-semibold underline">Exit Fullscreen</button>
+              )}
             </div>
-            <button onClick={reset} className="bg-blue-500 hover:bg-blue-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">New Game</button>
           </div>
 
-          <div className="text-center text-white font-bold mb-4 text-lg">{status}</div>
-
-          <div className="grid grid-cols-3 gap-3 mb-6">
-            {Array(9).fill(null).map((_, i) => (
-              <button key={i} className={cellStyle(i)} onClick={() => handleClick(i)}>
-                {current[i] || '·'}
-              </button>
-            ))}
-          </div>
-
-          {/* SEO Content */}
-          <div className="space-y-6 text-slate-300">
+          <div className="space-y-6 text-slate-300 mt-8">
             <section>
               <h2 className="text-xl font-bold text-white mb-3">What is Tic Tac Toe?</h2>
               <p><strong>Tic Tac Toe</strong> (also called Noughts and Crosses) is a timeless two-player strategy game played on a 3×3 grid. Players alternate placing X or O, and the first to align three of their marks horizontally, vertically, or diagonally wins. It is one of the most beloved <strong>classic browser games for students</strong>.</p>

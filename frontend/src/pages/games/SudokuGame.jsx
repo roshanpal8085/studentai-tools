@@ -46,9 +46,11 @@ export default function SudokuGame() {
   const [board, setBoard] = useState(() => puzzle.map(r => [...r]));
   const [selected, setSelected] = useState(null);
   const [errors, setErrors] = useState(new Set());
-  const [solved, setSolved] = useState(false);
-  const [autoCheck, setAutoCheck] = useState(true);
+  const [status, setStatus] = useState('idle'); // idle, playing, solved
   const [moves, setMoves] = useState(0);
+
+  const start = () => setStatus('playing');
+  const exit = () => setStatus('idle');
 
   const newGame = () => {
     const g = generateSudoku();
@@ -73,7 +75,10 @@ export default function SudokuGame() {
       }
       setErrors(errs);
     }
-    if (nb.flat().every((v, i) => v === solution[Math.floor(i / 9)][i % 9])) setSolved(true);
+    if (nb.flat().every((v, i) => v === solution[Math.floor(i / 9)][i % 9])) {
+      setSolved(true);
+      setStatus('solved');
+    }
   };
 
   useEffect(() => {
@@ -129,55 +134,64 @@ export default function SudokuGame() {
             <p className="text-slate-400">Fill every row, column, and 3×3 box with digits 1–9.</p>
           </div>
 
-          {/* Controls */}
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <label className="text-slate-400 text-sm">Auto-Check</label>
-              <button onClick={() => setAutoCheck(a => !a)} className={`w-10 h-5 rounded-full transition-colors ${autoCheck ? 'bg-indigo-500' : 'bg-slate-600'} relative`}>
-                <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${autoCheck ? 'left-5' : 'left-0.5'}`} />
-              </button>
-            </div>
-            <div className="text-slate-400 text-sm">Moves: <span className="text-white font-bold">{moves}</span></div>
-            <button onClick={newGame} className="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">New Game</button>
-          </div>
-
-          {/* Board */}
-          <div className="bg-slate-700 rounded-2xl p-2 border-2 border-slate-500 mb-4">
-            <div className="grid grid-cols-9 border-2 border-slate-400">
-              {board.map((row, r) => row.map((val, c) => (
-                <div
-                  key={`${r}-${c}`}
-                  onClick={() => { if (!isFixed(r, c) && !solved) setSelected([r, c]); }}
-                  className={`aspect-square flex items-center justify-center text-sm md:text-base font-semibold border border-slate-600 transition-colors select-none ${cellColor(r, c)} ${borderClass(r, c)}`}
-                >
-                  {val || ''}
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex items-center gap-2">
+                  <label className="text-slate-400 text-sm">Auto-Check</label>
+                  <button onClick={() => setAutoCheck(a => !a)} className={`w-10 h-5 rounded-full transition-colors ${autoCheck ? 'bg-indigo-500' : 'bg-slate-600'} relative`}>
+                    <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${autoCheck ? 'left-5' : 'left-0.5'}`} />
+                  </button>
                 </div>
-              )))}
+                <div className="text-slate-400 text-sm">Moves: <span className="text-white font-bold">{moves}</span></div>
+                <button onClick={newGame} className="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">New Game</button>
+              </div>
+
+              <div className="bg-slate-700 rounded-2xl p-2 border-2 border-slate-500 mb-4 relative overflow-hidden">
+                <div className="grid grid-cols-9 border-2 border-slate-400">
+                  {board.map((row, r) => row.map((val, c) => (
+                    <div
+                      key={`${r}-${c}`}
+                      onClick={() => { if (!isFixed(r, c) && status !== 'solved') { setSelected([r, c]); if (status === 'idle') setStatus('playing'); } }}
+                      className={`aspect-square flex items-center justify-center text-sm md:text-base font-semibold border border-slate-600 transition-colors select-none ${cellColor(r, c)} ${borderClass(r, c)}`}
+                    >
+                      {val || ''}
+                    </div>
+                  )))}
+                </div>
+                {status === 'idle' && (
+                  <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
+                    <button onClick={start} className="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Play Sudoku</button>
+                  </div>
+                )}
+              </div>
+
+              <div className="grid grid-cols-9 gap-1 mb-4">
+                {[1,2,3,4,5,6,7,8,9].map(n => (
+                  <button key={n} onClick={() => fill(n)} className="aspect-square bg-slate-700 hover:bg-indigo-500 text-white font-bold rounded-lg transition-colors text-sm md:text-base">{n}</button>
+                ))}
+              </div>
+              <div className="flex gap-2 justify-center mb-6">
+                <button onClick={() => fill(0)} className="bg-red-700/50 hover:bg-red-700 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">✕ Erase</button>
+                <button onClick={() => { const nb = solution.map(r=>[...r]); setBoard(nb); setSolved(true); setStatus('solved'); }} className="bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm font-bold px-4 py-2 rounded-xl transition-colors">Solve</button>
+              </div>
+
+              {status === 'solved' && (
+                <div className="bg-green-900/50 border border-green-500/30 rounded-2xl p-6 text-center mb-6">
+                  <div className="text-5xl mb-2">🎉</div>
+                  <h2 className="text-2xl font-bold text-white mb-1">Puzzle Solved!</h2>
+                  <p className="text-slate-400 mb-3">Completed in <span className="text-green-400 font-bold">{moves} moves</span></p>
+                  <button onClick={newGame} className="bg-green-500 text-white font-bold px-5 py-2.5 rounded-xl">New Puzzle</button>
+                </div>
+              )}
+
+              {status !== 'idle' && (
+                <button onClick={exit} className="mx-auto block text-slate-400 hover:text-white font-semibold underline">Exit Fullscreen</button>
+              )}
             </div>
           </div>
 
-          {/* Number pad */}
-          <div className="grid grid-cols-9 gap-1 mb-4">
-            {[1,2,3,4,5,6,7,8,9].map(n => (
-              <button key={n} onClick={() => fill(n)} className="aspect-square bg-slate-700 hover:bg-indigo-500 text-white font-bold rounded-lg transition-colors text-sm md:text-base">{n}</button>
-            ))}
-          </div>
-          <div className="flex gap-2 justify-center mb-6">
-            <button onClick={() => fill(0)} className="bg-red-700/50 hover:bg-red-700 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">✕ Erase</button>
-            <button onClick={() => { const nb = solution.map(r=>[...r]); setBoard(nb); setSolved(true); }} className="bg-slate-700 hover:bg-slate-600 text-slate-300 text-sm font-bold px-4 py-2 rounded-xl transition-colors">Solve</button>
-          </div>
-
-          {solved && (
-            <div className="bg-green-900/50 border border-green-500/30 rounded-2xl p-6 text-center mb-6">
-              <div className="text-5xl mb-2">🎉</div>
-              <h2 className="text-2xl font-bold text-white mb-1">Puzzle Solved!</h2>
-              <p className="text-slate-400 mb-3">Completed in <span className="text-green-400 font-bold">{moves} moves</span></p>
-              <button onClick={newGame} className="bg-green-500 text-white font-bold px-5 py-2.5 rounded-xl">New Puzzle</button>
-            </div>
-          )}
-
-          {/* SEO Content */}
-          <div className="space-y-6 text-slate-300">
+          <div className="space-y-6 text-slate-300 mt-8">
             <section>
               <h2 className="text-xl font-bold text-white mb-3">What is Sudoku?</h2>
               <p><strong>Sudoku</strong> is the world's most popular number-placement puzzle. Played on a 9×9 grid divided into nine 3×3 boxes, the goal is to fill every row, column, and box with the numbers 1 to 9 — each appearing exactly once. It is considered one of the best <strong>brain training games for students</strong> due to its pure reliance on logic.</p>

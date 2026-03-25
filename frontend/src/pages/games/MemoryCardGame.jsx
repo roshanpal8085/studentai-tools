@@ -33,8 +33,11 @@ export default function MemoryCardGame() {
   const [matched, setMatched] = useState(0);
   const [locked, setLocked] = useState(false);
   const [time, setTime] = useState(0);
-  const [running, setRunning] = useState(false);
   const [best, setBest] = useState(() => parseInt(localStorage.getItem('memorybest') || '9999'));
+  const [status, setStatus] = useState('idle'); // idle, playing, won
+
+  const start = () => setStatus('playing');
+  const exit = () => setStatus('idle');
 
   useEffect(() => {
     if (!running) return;
@@ -61,6 +64,7 @@ export default function MemoryCardGame() {
           setRunning(false);
           const total = moves + 1;
           if (total < best) { setBest(total); localStorage.setItem('memorybest', total); }
+          setStatus('won');
         }
       } else {
         setTimeout(() => {
@@ -96,54 +100,67 @@ export default function MemoryCardGame() {
             <p className="text-slate-400">Find all matching pairs to win! Test your memory.</p>
           </div>
 
-          <div className="flex justify-between items-center mb-4 gap-2">
-            <div className="flex gap-2">
-              <div className="bg-pink-900/50 border border-pink-400/20 rounded-xl px-3 py-2 text-center">
-                <div className="text-pink-300 text-xs">Moves</div>
-                <div className="text-white font-bold">{moves}</div>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-xl" : ""}>
+              <div className="flex justify-between items-center mb-4 gap-2">
+                <div className="flex gap-2">
+                  <div className="bg-pink-900/50 border border-pink-400/20 rounded-xl px-3 py-2 text-center">
+                    <div className="text-pink-300 text-xs">Moves</div>
+                    <div className="text-white font-bold">{moves}</div>
+                  </div>
+                  <div className="bg-slate-700 rounded-xl px-3 py-2 text-center">
+                    <div className="text-slate-400 text-xs">Time</div>
+                    <div className="text-white font-bold font-mono">{fmt(time)}</div>
+                  </div>
+                  <div className="bg-slate-700 rounded-xl px-3 py-2 text-center">
+                    <div className="text-slate-400 text-xs">Pairs</div>
+                    <div className="text-white font-bold">{matched}/8</div>
+                  </div>
+                  <div className="bg-slate-700 rounded-xl px-3 py-2 text-center">
+                    <div className="text-slate-400 text-xs">Best</div>
+                    <div className="text-white font-bold">{best === 9999 ? '--' : best}</div>
+                  </div>
+                </div>
+                <button onClick={restart} className="bg-pink-500 hover:bg-pink-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">Restart</button>
               </div>
-              <div className="bg-slate-700 rounded-xl px-3 py-2 text-center">
-                <div className="text-slate-400 text-xs">Time</div>
-                <div className="text-white font-bold font-mono">{fmt(time)}</div>
+
+              <div className="grid grid-cols-4 gap-2 md:gap-3 mb-6 relative overflow-hidden rounded-2xl">
+                {cards.map(card => (
+                  <button
+                    key={card.id}
+                    onClick={() => { if (status === 'idle') setStatus('playing'); handleFlip(card.id); }}
+                    className={`aspect-square rounded-xl md:rounded-2xl text-3xl md:text-4xl font-bold transition-all duration-300 flex items-center justify-center ${
+                      card.flipped || card.matched
+                        ? card.matched ? 'bg-green-500/30 border-2 border-green-400/50 scale-95' : 'bg-pink-500/20 border-2 border-pink-400/50'
+                        : 'bg-slate-700 hover:bg-slate-600 border border-slate-600 hover:-translate-y-0.5 cursor-pointer'
+                    }`}
+                  >
+                    {card.flipped || card.matched ? card.emoji : '?'}
+                  </button>
+                ))}
+                {status === 'idle' && (
+                  <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
+                    <button onClick={start} className="bg-pink-500 hover:bg-pink-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Start Game</button>
+                  </div>
+                )}
               </div>
-              <div className="bg-slate-700 rounded-xl px-3 py-2 text-center">
-                <div className="text-slate-400 text-xs">Pairs</div>
-                <div className="text-white font-bold">{matched}/8</div>
-              </div>
-              <div className="bg-slate-700 rounded-xl px-3 py-2 text-center">
-                <div className="text-slate-400 text-xs">Best</div>
-                <div className="text-white font-bold">{best === 9999 ? '--' : best}</div>
-              </div>
+
+              {status === 'won' && (
+                <div className="bg-green-900/50 border border-green-500/30 rounded-2xl p-6 text-center mb-6">
+                  <div className="text-5xl mb-2">🎉</div>
+                  <h2 className="text-2xl font-bold text-white mb-1">You Win!</h2>
+                  <p className="text-slate-400 mb-3">{moves} moves in {fmt(time)}</p>
+                  <button onClick={restart} className="bg-green-500 text-white font-bold px-5 py-2.5 rounded-xl">Play Again</button>
+                </div>
+              )}
+
+              {status !== 'idle' && (
+                <button onClick={exit} className="mx-auto block text-slate-400 hover:text-white font-semibold underline">Exit Fullscreen</button>
+              )}
             </div>
-            <button onClick={restart} className="bg-pink-500 hover:bg-pink-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">Restart</button>
           </div>
 
-          <div className="grid grid-cols-4 gap-2 md:gap-3 mb-6">
-            {cards.map(card => (
-              <button
-                key={card.id}
-                onClick={() => handleFlip(card.id)}
-                className={`aspect-square rounded-xl md:rounded-2xl text-3xl md:text-4xl font-bold transition-all duration-300 flex items-center justify-center ${
-                  card.flipped || card.matched
-                    ? card.matched ? 'bg-green-500/30 border-2 border-green-400/50 scale-95' : 'bg-pink-500/20 border-2 border-pink-400/50'
-                    : 'bg-slate-700 hover:bg-slate-600 border border-slate-600 hover:-translate-y-0.5 cursor-pointer'
-                }`}
-              >
-                {card.flipped || card.matched ? card.emoji : '?'}
-              </button>
-            ))}
-          </div>
-
-          {won && (
-            <div className="bg-green-900/50 border border-green-500/30 rounded-2xl p-6 text-center mb-6">
-              <div className="text-5xl mb-2">🎉</div>
-              <h2 className="text-2xl font-bold text-white mb-1">You Win!</h2>
-              <p className="text-slate-400 mb-3">{moves} moves in {fmt(time)}</p>
-              <button onClick={restart} className="bg-green-500 text-white font-bold px-5 py-2.5 rounded-xl">Play Again</button>
-            </div>
-          )}
-
-          <div className="space-y-6 text-slate-300">
+          <div className="space-y-6 text-slate-300 mt-8">
             <section>
               <h2 className="text-xl font-bold text-white mb-3">What is the Memory Card Game?</h2>
               <p>The <strong>Memory Card Game</strong> (also called Concentration or Matching) is a classic brain training game where you flip cards face-down and must remember the location of pairs. With 16 emoji cards (8 pairs), the challenge is to match all pairs using the fewest moves. It is one of the most effective <strong>free online games for students</strong> to improve memory.</p>

@@ -31,8 +31,11 @@ export default function LogicPuzzleGame() {
   const [selected, setSelected] = useState(null);
   const [showExp, setShowExp] = useState(false);
   const [score, setScore] = useState(0);
-  const [done, setDone] = useState(false);
   const [answers, setAnswers] = useState([]);
+  const [status, setStatus] = useState('idle'); // idle, playing
+
+  const start = () => setStatus('playing');
+  const exit = () => setStatus('idle');
 
   const current = PUZZLES[idx];
 
@@ -94,57 +97,70 @@ export default function LogicPuzzleGame() {
             <p className="text-slate-400">10 mind-bending logic challenges. Think carefully!</p>
           </div>
 
-          {!done ? (
-            <>
-              <div className="flex justify-between items-center mb-4">
-                <div className="text-slate-400 text-sm">Question <span className="text-white font-bold">{idx + 1}</span> / {PUZZLES.length}</div>
-                <div className="text-purple-400 font-bold">Score: {score}</div>
-              </div>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-2xl" : ""}>
+              {!done ? (
+                <>
+                  <div className="flex justify-between items-center mb-4">
+                    <div className="text-slate-400 text-sm">Question <span className="text-white font-bold">{idx + 1}</span> / {PUZZLES.length}</div>
+                    <div className="text-purple-400 font-bold">Score: {score}</div>
+                  </div>
 
-              <div className="h-1.5 bg-slate-700 rounded-full mb-6 overflow-hidden">
-                <div className="h-full bg-purple-500 rounded-full transition-all" style={{ width: `${((idx) / PUZZLES.length) * 100}%` }} />
-              </div>
+                  <div className="h-1.5 bg-slate-700 rounded-full mb-6 overflow-hidden">
+                    <div className="h-full bg-purple-500 rounded-full transition-all" style={{ width: `${((idx) / PUZZLES.length) * 100}%` }} />
+                  </div>
 
-              <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-5">
-                <div className="text-slate-400 text-sm mb-3 uppercase tracking-wider">🧠 Puzzle {idx + 1}</div>
-                <p className="text-white text-lg font-semibold leading-relaxed">{current.question}</p>
-              </div>
+                  <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-5 relative overflow-hidden min-h-[140px] flex flex-col justify-center">
+                    <div className="text-slate-400 text-sm mb-3 uppercase tracking-wider">🧠 Puzzle {idx + 1}</div>
+                    <p className="text-white text-lg font-semibold leading-relaxed">{current.question}</p>
+                    {status === 'idle' && (
+                      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
+                        <button onClick={start} className="bg-purple-500 hover:bg-purple-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Start Puzzle</button>
+                      </div>
+                    )}
+                  </div>
 
-              <div className="space-y-3 mb-5">
-                {current.options.map((opt, i) => (
-                  <button key={i} onClick={() => choose(opt)} className={`w-full text-left px-5 py-4 rounded-xl transition-all font-medium ${optionStyle(opt)}`}>
-                    <span className="text-slate-500 mr-2">{String.fromCharCode(65 + i)}.</span> {opt}
-                  </button>
-                ))}
-              </div>
+                  <div className="space-y-3 mb-5">
+                    {current.options.map((opt, i) => (
+                      <button key={i} onClick={() => { if (status === 'idle') setStatus('playing'); choose(opt); }} className={`w-full text-left px-5 py-4 rounded-xl transition-all font-medium ${optionStyle(opt)}`}>
+                        <span className="text-slate-500 mr-2">{String.fromCharCode(65 + i)}.</span> {opt}
+                      </button>
+                    ))}
+                  </div>
 
-              {showExp && (
-                <div className={`rounded-xl p-5 mb-5 ${selected === current.answer ? 'bg-green-900/40 border border-green-500/30' : 'bg-red-900/40 border border-red-500/30'}`}>
-                  <div className="font-bold text-white mb-2">{selected === current.answer ? '✅ Correct!' : '❌ Incorrect'}</div>
-                  <p className="text-slate-300 text-sm">{current.explanation}</p>
-                  <button onClick={next} className="mt-3 bg-purple-500 hover:bg-purple-400 text-white font-bold px-5 py-2 rounded-xl transition-colors text-sm">
-                    {idx + 1 < PUZZLES.length ? 'Next Puzzle →' : 'See Results'}
-                  </button>
+                  {showExp && (
+                    <div className={`rounded-xl p-5 mb-5 ${selected === current.answer ? 'bg-green-900/40 border border-green-500/30' : 'bg-red-900/40 border border-red-500/30'}`}>
+                      <div className="font-bold text-white mb-2">{selected === current.answer ? '✅ Correct!' : '❌ Incorrect'}</div>
+                      <p className="text-slate-300 text-sm">{current.explanation}</p>
+                      <button onClick={next} className="mt-3 bg-purple-500 hover:bg-purple-400 text-white font-bold px-5 py-2 rounded-xl transition-colors text-sm">
+                        {idx + 1 < PUZZLES.length ? 'Next Puzzle →' : 'See Results'}
+                      </button>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="bg-purple-900/40 border border-purple-500/30 rounded-2xl p-8 text-center mb-6">
+                  <div className="text-5xl mb-3">🎓</div>
+                  <h2 className="text-2xl font-bold text-white mb-1">All Puzzles Complete!</h2>
+                  <p className="text-slate-400 mb-2">Score: <span className="text-purple-400 font-bold text-2xl">{score}</span> / {PUZZLES.length * 10}</p>
+                  <p className="text-slate-400 text-sm mb-4">{score >= 80 ? '🏆 Outstanding logical mind!' : score >= 50 ? '👍 Good reasoning!' : '💪 Keep practicing!'}</p>
+                  <div className="space-y-2 mb-5 max-h-[200px] overflow-y-auto">
+                    {answers.map((a, i) => (
+                      <div key={i} className={`text-left p-3 rounded-xl text-sm ${a.correct ? 'bg-green-900/30 border border-green-500/20' : 'bg-red-900/30 border border-red-500/20'}`}>
+                        <span className="mr-2">{a.correct ? '✅' : '❌'}</span>
+                        <span className="text-slate-300">{a.q.substring(0, 60)}...</span>
+                      </div>
+                    ))}
+                  </div>
+                  <button onClick={restart} className="bg-purple-500 text-white font-bold px-6 py-3 rounded-xl">Try Again</button>
                 </div>
               )}
-            </>
-          ) : (
-            <div className="bg-purple-900/40 border border-purple-500/30 rounded-2xl p-8 text-center mb-6">
-              <div className="text-5xl mb-3">🎓</div>
-              <h2 className="text-2xl font-bold text-white mb-1">All Puzzles Complete!</h2>
-              <p className="text-slate-400 mb-2">Score: <span className="text-purple-400 font-bold text-2xl">{score}</span> / {PUZZLES.length * 10}</p>
-              <p className="text-slate-400 text-sm mb-4">{score >= 80 ? '🏆 Outstanding logical mind!' : score >= 50 ? '👍 Good reasoning!' : '💪 Keep practicing!'}</p>
-              <div className="space-y-2 mb-5">
-                {answers.map((a, i) => (
-                  <div key={i} className={`text-left p-3 rounded-xl text-sm ${a.correct ? 'bg-green-900/30 border border-green-500/20' : 'bg-red-900/30 border border-red-500/20'}`}>
-                    <span className="mr-2">{a.correct ? '✅' : '❌'}</span>
-                    <span className="text-slate-300">{a.q.substring(0, 60)}...</span>
-                  </div>
-                ))}
-              </div>
-              <button onClick={restart} className="bg-purple-500 text-white font-bold px-6 py-3 rounded-xl">Try Again</button>
+
+              {status !== 'idle' && (
+                <button onClick={exit} className="mx-auto block text-slate-400 hover:text-white font-semibold underline">Exit Fullscreen</button>
+              )}
             </div>
-          )}
+          </div>
 
           <div className="space-y-6 text-slate-300 mt-8">
             <section>
