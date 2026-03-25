@@ -57,6 +57,21 @@ const PdfFooterEditor = lazy(() => import('./pages/tools/PdfFooterEditor'));
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 
+// Free Games Section
+const FreeGames = lazy(() => import('./pages/games/FreeGames'));
+const Game2048 = lazy(() => import('./pages/games/Game2048'));
+const SnakeGame = lazy(() => import('./pages/games/SnakeGame'));
+const SudokuGame = lazy(() => import('./pages/games/SudokuGame'));
+const TicTacToe = lazy(() => import('./pages/games/TicTacToe'));
+const MemoryCardGame = lazy(() => import('./pages/games/MemoryCardGame'));
+const TypingSpeedTest = lazy(() => import('./pages/games/TypingSpeedTest'));
+const MathQuizGame = lazy(() => import('./pages/games/MathQuizGame'));
+const LogicPuzzleGame = lazy(() => import('./pages/games/LogicPuzzleGame'));
+const StackGame = lazy(() => import('./pages/games/StackGame'));
+const ColorSwitchGame = lazy(() => import('./pages/games/ColorSwitchGame'));
+const WordPuzzleGame = lazy(() => import('./pages/games/WordPuzzleGame'));
+const FlappyBirdGame = lazy(() => import('./pages/games/FlappyBirdGame'));
+
 // Loading Fallback Component
 const Loader = () => (
   <div className="min-h-[60vh] flex items-center justify-center">
@@ -124,6 +139,21 @@ function App() {
                 {/* Blog Routes */}
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/:slug" element={<BlogPost />} />
+
+                {/* Free Games Routes */}
+                <Route path="/free-games" element={<FreeGames />} />
+                <Route path="/2048-game" element={<Game2048 />} />
+                <Route path="/snake-game" element={<SnakeGame />} />
+                <Route path="/sudoku-game" element={<SudokuGame />} />
+                <Route path="/tic-tac-toe" element={<TicTacToe />} />
+                <Route path="/memory-card-game" element={<MemoryCardGame />} />
+                <Route path="/typing-speed-test" element={<TypingSpeedTest />} />
+                <Route path="/math-quiz-game" element={<MathQuizGame />} />
+                <Route path="/logic-puzzle-game" element={<LogicPuzzleGame />} />
+                <Route path="/stack-game" element={<StackGame />} />
+                <Route path="/color-switch-game" element={<ColorSwitchGame />} />
+                <Route path="/word-puzzle-game" element={<WordPuzzleGame />} />
+                <Route path="/flappy-bird-game" element={<FlappyBirdGame />} />
                 
                 <Route path="*" element={
                   <div className="min-h-[70vh] flex flex-col items-center justify-center px-4 text-center">

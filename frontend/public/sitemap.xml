@@ -63,6 +63,22 @@
   <url><loc>https://studentaitools.in/blog/ai-environmental-science-guide</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/future-of-education-2030</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/about-studentai-tools-platform</loc><priority>0.8</priority></url>
+
+  <!-- Free Games Section -->
+  <url><loc>https://studentaitools.in/free-games</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
+  <url><loc>https://studentaitools.in/2048-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/snake-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/sudoku-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/tic-tac-toe</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/memory-card-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/typing-speed-test</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/math-quiz-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/logic-puzzle-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/stack-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/color-switch-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/word-puzzle-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  <url><loc>https://studentaitools.in/flappy-bird-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
+  
   <url><loc>https://studentaitools.in/blog/best-free-ai-tools-students-india-2026</loc><priority>0.9</priority></url>
   
   <url><loc>https://studentaitools.in/blog</loc><priority>0.8</priority></url>
