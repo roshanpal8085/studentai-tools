@@ -125,8 +125,8 @@ export default function StackGame() {
             <button onClick={start} className="bg-violet-500 hover:bg-violet-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer" onClick={handleTap}>
-            <canvas ref={canvasRef} width={CANVAS_W} height={CANVAS_H} className="w-full block" />
+          <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={handleTap}>
+            <canvas ref={canvasRef} width={CANVAS_W} height={CANVAS_H} className="w-full block touch-none" />
             {status === 'idle' && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/60">
                 <div className="text-center">

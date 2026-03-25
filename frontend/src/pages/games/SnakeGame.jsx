@@ -168,7 +168,7 @@ export default function SnakeGame() {
               ref={canvasRef}
               width={W * SIZE}
               height={H * SIZE}
-              className="w-full block"
+              className="w-full block touch-none"
               onTouchStart={onTouchStart}
               onTouchEnd={onTouchEnd}
             />

@@ -52,6 +52,24 @@ export default function LogicPuzzleGame() {
 
   const restart = () => { setIdx(0); setSelected(null); setShowExp(false); setScore(0); setDone(false); setAnswers([]); };
 
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (done) return;
+      if (showExp && e.key === 'Enter') {
+        next();
+        return;
+      }
+      if (selected) return;
+      const keyStr = e.key.toUpperCase();
+      const keyMap = { 'A': 0, '1': 0, 'B': 1, '2': 1, 'C': 2, '3': 2, 'D': 3, '4': 3 };
+      if (keyMap[keyStr] !== undefined && current?.options[keyMap[keyStr]] !== undefined) {
+        choose(current.options[keyMap[keyStr]]);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [done, selected, showExp, current, choose, next]);
+
   const optionStyle = (opt) => {
     if (!selected) return 'bg-slate-700 hover:bg-purple-600/50 border border-slate-600 hover:border-purple-400/50 text-white cursor-pointer';
     if (opt === current.answer) return 'bg-green-600/30 border-2 border-green-400 text-green-300';

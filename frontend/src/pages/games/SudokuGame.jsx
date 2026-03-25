@@ -76,6 +76,28 @@ export default function SudokuGame() {
     if (nb.flat().every((v, i) => v === solution[Math.floor(i / 9)][i % 9])) setSolved(true);
   };
 
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (!selected || solved) return;
+      const [r, c] = selected;
+      if (e.key >= '1' && e.key <= '9') {
+        fill(parseInt(e.key, 10));
+      } else if (e.key === 'Backspace' || e.key === 'Delete' || e.key === '0') {
+        fill(0);
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault(); setSelected([Math.max(0, r - 1), c]);
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault(); setSelected([Math.min(8, r + 1), c]);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault(); setSelected([r, Math.max(0, c - 1)]);
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault(); setSelected([r, Math.min(8, c + 1)]);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [selected, solved, fill]);
+
   const cellColor = (r, c) => {
     if (selected && selected[0] === r && selected[1] === c) return 'bg-indigo-500 text-white';
     if (errors.has(`${r},${c}`)) return 'bg-red-500/30 text-red-300';

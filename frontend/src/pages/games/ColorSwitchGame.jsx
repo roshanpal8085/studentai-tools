@@ -150,8 +150,8 @@ export default function ColorSwitchGame() {
             <button onClick={start} className="bg-pink-500 hover:bg-pink-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
           </div>
 
-          <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer" onClick={jump}>
-            <canvas ref={canvasRef} width={W} height={H} className="w-full block" />
+          <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={jump}>
+            <canvas ref={canvasRef} width={W} height={H} className="w-full block touch-none" />
             {status === 'idle' && (
               <div className="absolute inset-0 flex items-center justify-center bg-black/60">
                 <div className="text-center">

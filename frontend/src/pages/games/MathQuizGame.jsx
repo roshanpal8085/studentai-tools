@@ -67,6 +67,18 @@ export default function MathQuizGame() {
   };
 
   useEffect(() => {
+    const handleKey = (e) => {
+      if (!running || finished || feedback) return;
+      const keyMap = { '1': 0, '2': 1, '3': 2, '4': 3 };
+      if (keyMap[e.key] !== undefined && q?.options[keyMap[e.key]] !== undefined) {
+        answer(q.options[keyMap[e.key]]);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [running, finished, feedback, q, answer]);
+
+  useEffect(() => {
     if (finished && score > best) { setBest(score); localStorage.setItem('mathbest', score); }
   }, [finished]);
 
