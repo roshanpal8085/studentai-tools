@@ -12,6 +12,7 @@ const Navbar = () => {
     { label: 'Email Writer', path: '/email-writer' },
     { label: 'Presentations', path: '/presentation-generator' },
     { label: 'Captions', path: '/instagram-caption-generator' },
+    { label: 'Speed Test', path: '/tools/internet-speed-test' },
     { label: '🎮 Free Games', path: '/free-games' },
     { label: 'Blog', path: '/blog' }
   ];

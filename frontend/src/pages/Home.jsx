@@ -4,7 +4,7 @@ import {
   FileText, MonitorPlay, Image as ImageIcon, LayoutTemplate, MessageSquare, 
   Mail, Zap, CheckCircle2, TrendingUp, Users, ShieldCheck, Search, 
   Calendar, Clock, Hash, Type, QrCode, Lock, Ruler, Percent, Flame,
-  User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator, FileEdit
+  User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator, FileEdit, Wifi
 } from 'lucide-react';
 
 import { Link } from 'react-router-dom';
@@ -50,6 +50,7 @@ const allTools = [
   { name: 'Percent Calculator', description: 'Quickly find percentages for math and grades.', icon: Percent, to: '/tools/percentage-calculator', category: 'Utilities' },
   { name: 'Name Generator', description: 'Random names for creative projects and personas.', icon: User, to: '/tools/random-name-generator', category: 'Utilities' },
   { name: 'AI Prompt Gen', description: 'Master AI tools with perfectly engineered prompts.', icon: Terminal, to: '/tools/ai-prompt-generator', category: 'Utilities' },
+  { name: 'Internet Speed Test', description: 'Measure your real-time download/upload Mbps and ping latency.', icon: Wifi, to: '/tools/internet-speed-test', category: 'Utilities' },
   { name: 'Instagram Captions', description: 'Generate engaging hashtags and captions for social media.', icon: Hash, to: '/instagram-caption-generator', category: 'Utilities' },
 ];
 
@@ -157,7 +158,7 @@ const Home = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
-            { name: 'Free Web Games', desc: '12 awesome study break games.', icon: Flame, to: '/free-games', color: 'from-orange-400 to-rose-500' },
+            { name: 'Internet Speed Test', desc: 'Check your real-time Mbps.', icon: Wifi, to: '/tools/internet-speed-test', color: 'from-indigo-600 to-sky-500' },
             { name: 'AI Essay Writer', desc: 'Draft high-quality essays fast.', icon: FileText, to: '/ai-essay-writer', color: 'from-blue-500 to-indigo-500' },
             { name: 'Chat with PDF', desc: 'Ask your textbooks questions.', icon: MessageSquare, to: '/chat-pdf', color: 'from-purple-500 to-pink-500' },
             { name: 'Grammar Checker', desc: 'Flawless writing instantly.', icon: ShieldCheck, to: '/tools/grammar-checker', color: 'from-emerald-400 to-teal-500' }
