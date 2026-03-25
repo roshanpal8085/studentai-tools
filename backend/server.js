@@ -30,19 +30,22 @@ app.use('/api/upload', require('./routes/upload'));
 
 // --- Speed Test v7 Endpoints ---
 const crypto = require('crypto');
+const RANDOM_POOL = crypto.randomBytes(1024 * 1024 * 100); // 100MB random pool
 
 app.get('/api/ping', (req, res) => {
   res.status(200).json({ timestamp: Date.now() });
 });
 
 app.get('/api/download-test', (req, res) => {
-  const size = Math.min(parseInt(req.query.size) || 1024 * 1024 * 5, 20 * 1024 * 1024);
+  const size = Math.min(parseInt(req.query.size) || 1024 * 1024 * 5, RANDOM_POOL.length);
   res.set({
     'Content-Type': 'application/octet-stream',
-    'Cache-Control': 'no-store, no-cache, must-revalidate'
+    'Cache-Control': 'no-store, no-cache, must-revalidate',
+    'X-Random-Node': Math.random().toString(36).substring(2)
   });
-  // Truly random data to defeat ALL compression and caching
-  res.send(crypto.randomBytes(size));
+  // Send slice of pre-generated random pool to ensure high-speed delivery WITHOUT re-computing entropy
+  const start = Math.floor(Math.random() * (RANDOM_POOL.length - size));
+  res.send(RANDOM_POOL.slice(start, start + size));
 });
 
 app.post('/api/upload-test', (req, res) => {
