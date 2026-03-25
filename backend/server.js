@@ -29,7 +29,7 @@ app.use('/api/pdf', require('./routes/pdf'));
 app.use('/api/upload', require('./routes/upload'));
 
 // --- Speed Test v7 Endpoints ---
-const TEST_BUFFER = Buffer.alloc(1024 * 1024 * 25, 'x'); // 25MB test file
+const TEST_BUFFER = Buffer.alloc(1024 * 1024 * 50, 'x'); // 50MB test file
 
 app.get('/api/ping', (req, res) => {
   res.status(200).json({ timestamp: Date.now() });
