@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { 
   Calculator, Type, FileText, CheckCircle, Clock, 
   QrCode, Lock, Ruler, Percent, User, Lightbulb, 
-  Terminal, Timer, BookOpen, Brain, ListChecks, Quote, ShieldCheck
+  Terminal, Timer, BookOpen, Brain, ListChecks, Quote, ShieldCheck, Wifi
 } from 'lucide-react';
 
 const utilityCategories = [
@@ -51,6 +51,7 @@ const utilityCategories = [
       { name: 'Image Compressor', path: '/tools/image-compressor', desc: 'Reduce image file size without losing quality.' },
       { name: 'Password Generator', path: '/tools/password-generator', desc: 'Generate secure, random passwords for your accounts.' },
       { name: 'AI Prompt Generator', path: '/tools/ai-prompt-generator', desc: 'Master AI tools with perfectly engineered prompts.' },
+      { name: 'Internet Speed Test', path: '/tools/internet-speed-test', desc: 'Check your internet download/upload speed and ping in seconds.' },
     ]
   }
 ];
