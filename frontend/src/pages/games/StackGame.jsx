@@ -185,7 +185,7 @@ export default function StackGame() {
             <section className="bg-white/5 border border-white/10 rounded-xl p-5">
               <h2 className="text-white font-bold mb-3">🎮 More Free Games</h2>
               <div className="flex flex-wrap gap-2">
-                {[['🐦 Flappy Bird', '/flappy-bird-game'], ['🎨 Color Switch', '/color-switch-game'], ['🔢 2048', '/2048-game'], ['🐍 Snake', '/snake-game'], ['⭕ Tic Tac Toe', '/tic-tac-toe'], ['🎮 All Games', '/free-games']].map(([l, p]) => (
+                {[['🐦 Flappy Bird', '/flappy-bird-game'], ['🎨 Color Switch', '/color-switch-game'], ['🐍 Snake', '/snake-game'], ['⭕ Tic Tac Toe', '/tic-tac-toe'], ['🎮 All Games', '/free-games']].map(([l, p]) => (
                   <Link key={p} to={p} className="bg-violet-500/20 hover:bg-violet-500/30 border border-violet-400/30 rounded-lg px-3 py-1.5 text-violet-300 text-sm transition-colors">{l}</Link>
                 ))}
               </div>

@@ -176,7 +176,7 @@ export default function MemoryCardGame() {
             <section className="bg-white/5 border border-white/10 rounded-xl p-5">
               <h2 className="text-white font-bold mb-3">🎮 More Free Games</h2>
               <div className="flex flex-wrap gap-2">
-                {[['🔢 2048', '/2048-game'], ['🔍 Sudoku', '/sudoku-game'], ['⭕ Tic Tac Toe', '/tic-tac-toe'], ['📝 Word Puzzle', '/word-puzzle-game'], ['➕ Math Quiz', '/math-quiz-game'], ['🎮 All Games', '/free-games']].map(([l, p]) => (
+                {[['🔍 Sudoku', '/sudoku-game'], ['⭕ Tic Tac Toe', '/tic-tac-toe'], ['📝 Word Puzzle', '/word-puzzle-game'], ['➕ Math Quiz', '/math-quiz-game'], ['🎮 All Games', '/free-games']].map(([l, p]) => (
                   <Link key={p} to={p} className="bg-pink-500/20 hover:bg-pink-500/30 border border-pink-400/30 rounded-lg px-3 py-1.5 text-pink-300 text-sm transition-colors">{l}</Link>
                 ))}
               </div>

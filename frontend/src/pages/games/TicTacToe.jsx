@@ -185,7 +185,7 @@ export default function TicTacToe() {
             <section className="bg-white/5 border border-white/10 rounded-xl p-5">
               <h2 className="text-white font-bold mb-3">🎮 More Free Games</h2>
               <div className="flex flex-wrap gap-2">
-                {[['🔢 2048', '/2048-game'], ['🐍 Snake', '/snake-game'], ['🔍 Sudoku', '/sudoku-game'], ['🃏 Memory Cards', '/memory-card-game'], ['⌨️ Typing Speed', '/typing-speed-test'], ['🎮 All Games', '/free-games']].map(([l, p]) => (
+                {[['🐍 Snake', '/snake-game'], ['🔍 Sudoku', '/sudoku-game'], ['🃏 Memory Cards', '/memory-card-game'], ['⌨️ Typing Speed', '/typing-speed-test'], ['🎮 All Games', '/free-games']].map(([l, p]) => (
                   <Link key={p} to={p} className="bg-blue-500/20 hover:bg-blue-500/30 border border-blue-400/30 rounded-lg px-3 py-1.5 text-blue-300 text-sm transition-colors">{l}</Link>
                 ))}
               </div>

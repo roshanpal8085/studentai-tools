@@ -7,7 +7,6 @@ const gameCategories = [
     title: '🧠 Brain Training Games',
     description: 'Sharpen your mind with logic, math, and strategy games designed to boost cognitive skills.',
     games: [
-      { name: '2048 Game', path: '/2048-game', emoji: '🔢', desc: 'Merge tiles to reach 2048 and boost your strategic thinking.' },
       { name: 'Sudoku Game', path: '/sudoku-game', emoji: '🔍', desc: 'Classic number puzzle to train logic and concentration.' },
       { name: 'Math Quiz Game', path: '/math-quiz-game', emoji: '➕', desc: 'Test your arithmetic speed with fun math challenges.' },
       { name: 'Logic Puzzle Game', path: '/logic-puzzle-game', emoji: '🧩', desc: 'Solve mind-bending logical puzzles to improve reasoning.' },
@@ -71,7 +70,7 @@ export default function FreeGames() {
     <>
       <Helmet>
         <title>Free Games for Students | Browser Games | StudentAI Tools</title>
-        <meta name="description" content="Play free browser games for students — 2048, Snake, Sudoku, Tic Tac Toe, Typing Speed Test, Memory Card, Math Quiz, and more. No download needed. Perfect study break games!" />
+        <meta name="description" content="Play free browser games for students — Snake, Sudoku, Tic Tac Toe, Typing Speed Test, Memory Card, Math Quiz, and more. No download needed. Perfect study break games!" />
         <meta name="keywords" content="free browser games, study break games, brain training games for students, free online games for students, educational games" />
         <link rel="canonical" href="https://studentaitools.in/free-games" />
         <meta property="og:title" content="Free Games for Students | StudentAI Tools" />
@@ -155,7 +154,7 @@ export default function FreeGames() {
                   Research shows that brain training games improve working memory, attention span, and problem-solving speed, all of which directly benefit academic performance.
                 </p>
                 <p>
-                  Games like <Link to="/2048-game" className="text-purple-400 hover:underline">2048</Link> and <Link to="/sudoku-game" className="text-purple-400 hover:underline">Sudoku</Link> are 
+                  Games like <Link to="/sudoku-game" className="text-purple-400 hover:underline">Sudoku</Link> and <Link to="/logic-puzzle-game" className="text-purple-400 hover:underline">Logic Puzzles</Link> are 
                   proven to enhance logical thinking, while <Link to="/typing-speed-test" className="text-purple-400 hover:underline">Typing Speed Tests</Link> build 
                   a practical skill used every day in college and careers.
                 </p>

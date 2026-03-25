@@ -59,7 +59,6 @@ const BlogPost = lazy(() => import('./pages/BlogPost'));
 
 // Free Games Section
 const FreeGames = lazy(() => import('./pages/games/FreeGames'));
-const Game2048 = lazy(() => import('./pages/games/Game2048'));
 const SnakeGame = lazy(() => import('./pages/games/SnakeGame'));
 const SudokuGame = lazy(() => import('./pages/games/SudokuGame'));
 const TicTacToe = lazy(() => import('./pages/games/TicTacToe'));
@@ -142,7 +141,6 @@ function App() {
 
                 {/* Free Games Routes */}
                 <Route path="/free-games" element={<FreeGames />} />
-                <Route path="/2048-game" element={<Game2048 />} />
                 <Route path="/snake-game" element={<SnakeGame />} />
                 <Route path="/sudoku-game" element={<SudokuGame />} />
                 <Route path="/tic-tac-toe" element={<TicTacToe />} />

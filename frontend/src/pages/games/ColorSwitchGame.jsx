@@ -27,13 +27,17 @@ export default function ColorSwitchGame() {
 
   const initState = () => ({
     ball: { x: W / 2, y: H - 80, vy: 0, colorIdx: 0 },
-    rings: [{ y: H / 2, angle: 0, speed: 0.02 }],
+    rings: [{ y: H / 2, angle: 0, speed: 0.02 }, { y: 0, angle: Math.PI / 2, speed: 0.025 }],
     score: 0, over: false, gravity: 0.25, jump: -7,
+    camY: 0
   });
 
   const draw = (ctx, s) => {
     ctx.fillStyle = '#0f172a';
     ctx.fillRect(0, 0, W, H);
+    ctx.save();
+    ctx.translate(0, s.camY);
+
     // Draw rings
     s.rings.forEach(ring => {
       const segs = 4;
@@ -51,7 +55,9 @@ export default function ColorSwitchGame() {
     ctx.arc(ball.x, ball.y, BALL_R, 0, Math.PI * 2);
     ctx.fillStyle = COLORS[ball.colorIdx % COLORS.length];
     ctx.fill();
-    // Score
+    ctx.restore();
+
+    // Score (fixed)
     ctx.fillStyle = '#fff';
     ctx.font = 'bold 30px sans-serif';
     ctx.textAlign = 'center';
@@ -61,51 +67,57 @@ export default function ColorSwitchGame() {
   const loop = () => {
     const s = stateRef.current;
     if (!s || s.over) return;
-    // update ball
+    
     s.ball.vy += s.gravity;
     s.ball.y += s.ball.vy;
-    // rotate rings
+    
+    // Smooth Camera
+    const targetCam = H / 2 - s.ball.y;
+    if (targetCam > s.camY) s.camY += (targetCam - s.camY) * 0.1;
+
     s.rings.forEach(r => { r.angle += r.speed; });
-    // check ring collision
+
     const ctx = canvasRef.current?.getContext('2d');
     for (const ring of s.rings) {
-      const dx = s.ball.x - W / 2, dy = s.ball.y - ring.y;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      const inner = RING_R - RING_T / 2 - BALL_R, outer = RING_R + RING_T / 2 + BALL_R;
-      if (dist > inner && dist < outer) {
-        const angle = (Math.atan2(dy, dx) - ring.angle + Math.PI * 2) % (Math.PI * 2);
-        const seg = Math.floor(angle / (Math.PI * 2 / 4));
-        if (seg !== s.ball.colorIdx % 4) {
-          s.over = true; setStatus('over');
-          const nb = s.score;
-          if (nb > best) { setBest(nb); localStorage.setItem('colorbest', nb); }
-          if (ctx) draw(ctx, s);
-          return;
+      if (Math.abs(s.ball.y - ring.y) < RING_R + BALL_R) { // Proximity check
+        const dx = s.ball.x - W / 2, dy = s.ball.y - ring.y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const inner = RING_R - RING_T / 2 - BALL_R, outer = RING_R + RING_T / 2 + BALL_R;
+        if (dist > inner && dist < outer) {
+          const angle = (Math.atan2(dy, dx) - ring.angle + Math.PI * 4) % (Math.PI * 2);
+          const seg = Math.floor(angle / (Math.PI / 2));
+          if (seg !== s.ball.colorIdx % 4) {
+             s.over = true; setStatus('over');
+             const nb = s.score;
+             if (nb > best) { setBest(nb); localStorage.setItem('colorbest', nb); }
+             if (ctx) draw(ctx, s);
+             return;
+          }
         }
       }
     }
-    // passed a ring → spawn next
-    if (s.rings.length > 0 && s.ball.y < s.rings[0].y - RING_R * 2) {
+
+    if (s.rings.length > 0 && s.ball.y < s.rings[0].y - RING_R) {
       s.score++;
       setScore(s.score);
       s.ball.colorIdx = Math.floor(Math.random() * 4);
       s.rings.shift();
-      s.rings.push({ y: s.ball.y - H / 2, angle: Math.random() * Math.PI * 2, speed: 0.02 + s.score * 0.002 });
+      s.rings.push({ y: s.rings[s.rings.length - 1].y - 300, angle: Math.random() * Math.PI, speed: 0.02 + s.score * 0.001 });
     }
-    // out of bounds
-    if (s.ball.y > H + 20 || s.ball.y < -20) {
+
+    if (s.ball.y + s.camY > H + 50) { // Off bottom
       s.over = true; setStatus('over');
       const nb = s.score;
       if (nb > best) { setBest(nb); localStorage.setItem('colorbest', nb); }
     }
+
     if (ctx) draw(ctx, s);
     animRef.current = requestAnimationFrame(loop);
   };
 
   const jump = () => {
-    if (!stateRef.current) return;
     if (status !== 'running') { start(); return; }
-    if (stateRef.current.over) { start(); return; }
+    if (!stateRef.current || stateRef.current.over) { start(); return; }
     stateRef.current.ball.vy = stateRef.current.jump;
   };
 
@@ -210,7 +222,7 @@ export default function ColorSwitchGame() {
             <section className="bg-white/5 border border-white/10 rounded-xl p-5">
               <h2 className="text-white font-bold mb-3">🎮 More Free Games</h2>
               <div className="flex flex-wrap gap-2">
-                {[['🐦 Flappy Bird', '/flappy-bird-game'], ['🏗️ Stack Game', '/stack-game'], ['🔢 2048', '/2048-game'], ['🃏 Memory Cards', '/memory-card-game'], ['⌨️ Typing Speed', '/typing-speed-test'], ['🎮 All Games', '/free-games']].map(([l, p]) => (
+                {[['🐦 Flappy Bird', '/flappy-bird-game'], ['🏗️ Stack Game', '/stack-game'], ['🃏 Memory Cards', '/memory-card-game'], ['⌨️ Typing Speed', '/typing-speed-test'], ['🎮 All Games', '/free-games']].map(([l, p]) => (
                   <Link key={p} to={p} className="bg-pink-500/20 hover:bg-pink-500/30 border border-pink-400/30 rounded-lg px-3 py-1.5 text-pink-300 text-sm transition-colors">{l}</Link>
                 ))}
               </div>

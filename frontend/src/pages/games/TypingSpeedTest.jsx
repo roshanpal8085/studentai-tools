@@ -220,7 +220,7 @@ export default function TypingSpeedTest() {
             <section className="bg-white/5 border border-white/10 rounded-xl p-5">
               <h2 className="text-white font-bold mb-3">🎮 More Free Games</h2>
               <div className="flex flex-wrap gap-2">
-                {[['🔢 2048', '/2048-game'], ['🃏 Memory Cards', '/memory-card-game'], ['➕ Math Quiz', '/math-quiz-game'], ['📝 Word Puzzle', '/word-puzzle-game'], ['🎨 Color Switch', '/color-switch-game'], ['🎮 All Games', '/free-games']].map(([l, p]) => (
+                {[['🃏 Memory Cards', '/memory-card-game'], ['➕ Math Quiz', '/math-quiz-game'], ['📝 Word Puzzle', '/word-puzzle-game'], ['🎨 Color Switch', '/color-switch-game'], ['🎮 All Games', '/free-games']].map(([l, p]) => (
                   <Link key={p} to={p} className="bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/30 rounded-lg px-3 py-1.5 text-cyan-300 text-sm transition-colors">{l}</Link>
                 ))}
               </div>

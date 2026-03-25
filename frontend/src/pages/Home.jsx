@@ -310,7 +310,7 @@ const Home = () => {
       </div>
       
       {/* Call to action */}
-      <section className="w-full max-w-5xl mx-auto px-4 text-center mt-10 mb-20 relative">
+      <section className="w-full max-w-5xl mx-auto px-4 text-center mt-10 mb-20 relative overflow-hidden md:overflow-visible">
         <div className="absolute inset-0 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-[3rem] transform rotate-1 opacity-20 dark:opacity-40 blur-lg"></div>
         <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-slate-800 dark:to-slate-900 rounded-[3rem] p-12 md:p-20 shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)] border border-white dark:border-slate-700 relative z-10">
           <h2 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6">Ready to study smarter?</h2>
