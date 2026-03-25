@@ -31,6 +31,7 @@ export default function LogicPuzzleGame() {
   const [selected, setSelected] = useState(null);
   const [showExp, setShowExp] = useState(false);
   const [score, setScore] = useState(0);
+  const [done, setDone] = useState(false);
   const [answers, setAnswers] = useState([]);
   const [status, setStatus] = useState('idle'); // idle, playing
 

@@ -51,6 +51,7 @@ export default function TicTacToe() {
   const [xIsHuman, setXIsHuman] = useState(true);
   const [mode, setMode] = useState('pvai'); // pvc | pvp
   const [scores, setScores] = useState({ X: 0, O: 0, D: 0 });
+  const [history, setHistory] = useState([Array(9).fill(null)]);
   const [step, setStep] = useState(0);
   const [status, setStatus] = useState('idle'); // idle, playing, over
 

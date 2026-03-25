@@ -46,6 +46,8 @@ export default function SudokuGame() {
   const [board, setBoard] = useState(() => puzzle.map(r => [...r]));
   const [selected, setSelected] = useState(null);
   const [errors, setErrors] = useState(new Set());
+  const [autoCheck, setAutoCheck] = useState(true);
+  const [solved, setSolved] = useState(false);
   const [status, setStatus] = useState('idle'); // idle, playing, solved
   const [moves, setMoves] = useState(0);
 

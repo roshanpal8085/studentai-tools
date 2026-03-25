@@ -34,6 +34,7 @@ export default function MemoryCardGame() {
   const [locked, setLocked] = useState(false);
   const [time, setTime] = useState(0);
   const [best, setBest] = useState(() => parseInt(localStorage.getItem('memorybest') || '9999'));
+  const [running, setRunning] = useState(false);
   const [status, setStatus] = useState('idle'); // idle, playing, won
 
   const start = () => setStatus('playing');
