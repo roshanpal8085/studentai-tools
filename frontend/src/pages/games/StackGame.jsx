@@ -95,8 +95,10 @@ export default function StackGame() {
     if (ctx) { ctx.fillStyle = '#0f172a'; ctx.fillRect(0, 0, CANVAS_W, CANVAS_H); }
     const onKey = (e) => { if (e.code === 'Space') { e.preventDefault(); if (status !== 'running') start(); else drop(); } };
     window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); if (animRef.current) cancelAnimationFrame(animRef.current); };
+    return () => window.removeEventListener('keydown', onKey);
   }, [status]);
+
+  useEffect(() => () => { if (animRef.current) cancelAnimationFrame(animRef.current); }, []);
 
   const handleTap = () => { if (status !== 'running') start(); else drop(); };
 
@@ -117,38 +119,48 @@ export default function StackGame() {
             <p className="text-slate-400">Tap / Space / Click to drop the block. Stack perfectly to go higher!</p>
           </div>
 
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex gap-3">
-              <div className="bg-violet-800 rounded-xl px-4 py-2 text-center"><div className="text-violet-200 text-xs">Score</div><div className="text-white text-xl font-bold">{score}</div></div>
-              <div className="bg-slate-700 rounded-xl px-4 py-2 text-center"><div className="text-slate-400 text-xs">Best</div><div className="text-white text-xl font-bold">{best}</div></div>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex gap-3">
+                  <div className="bg-violet-800 rounded-xl px-4 py-2 text-center"><div className="text-violet-200 text-xs">Score</div><div className="text-white text-xl font-bold">{score}</div></div>
+                  <div className="bg-slate-700 rounded-xl px-4 py-2 text-center"><div className="text-slate-400 text-xs">Best</div><div className="text-white text-xl font-bold">{best}</div></div>
+                </div>
+                <button onClick={start} className="bg-violet-500 hover:bg-violet-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
+              </div>
+
+              <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={handleTap}>
+                <canvas ref={canvasRef} width={CANVAS_W} height={CANVAS_H} className="w-full block touch-none" />
+                {status === 'idle' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                    <div className="text-center">
+                      <div className="text-6xl mb-3">🏗️</div>
+                      <p className="text-white text-xl font-bold mb-2">Tap to Start</p>
+                      <p className="text-slate-400 text-sm">Or press Space</p>
+                    </div>
+                  </div>
+                )}
+                {status === 'over' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60" onClick={e => { e.stopPropagation(); start(); }}>
+                    <div className="text-center">
+                      <div className="text-5xl mb-3">💥</div>
+                      <h2 className="text-2xl font-bold text-white mb-1">Game Over</h2>
+                      <p className="text-slate-400 mb-3">Score: <span className="text-violet-400 font-bold">{score}</span></p>
+                      <button className="bg-violet-500 text-white font-bold px-5 py-2.5 rounded-xl">Play Again</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <p className="text-slate-500 text-sm text-center mt-3">Press <kbd className="bg-slate-700 px-2 py-0.5 rounded text-slate-300">Space</kbd> or tap the board to drop</p>
+
+              {status !== 'idle' && (
+                <button onClick={() => setStatus('idle')} className="mt-6 mx-auto block text-slate-400 hover:text-white font-semibold underline">
+                  Exit Fullscreen
+                </button>
+              )}
             </div>
-            <button onClick={start} className="bg-violet-500 hover:bg-violet-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
           </div>
-
-          <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={handleTap}>
-            <canvas ref={canvasRef} width={CANVAS_W} height={CANVAS_H} className="w-full block touch-none" />
-            {status === 'idle' && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-                <div className="text-center">
-                  <div className="text-6xl mb-3">🏗️</div>
-                  <p className="text-white text-xl font-bold mb-2">Tap to Start</p>
-                  <p className="text-slate-400 text-sm">Or press Space</p>
-                </div>
-              </div>
-            )}
-            {status === 'over' && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/60" onClick={e => { e.stopPropagation(); start(); }}>
-                <div className="text-center">
-                  <div className="text-5xl mb-3">💥</div>
-                  <h2 className="text-2xl font-bold text-white mb-1">Game Over</h2>
-                  <p className="text-slate-400 mb-3">Score: <span className="text-violet-400 font-bold">{score}</span></p>
-                  <button className="bg-violet-500 text-white font-bold px-5 py-2.5 rounded-xl">Play Again</button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <p className="text-slate-500 text-sm text-center mt-3">Press <kbd className="bg-slate-700 px-2 py-0.5 rounded text-slate-300">Space</kbd> or tap the board to drop</p>
 
           <div className="space-y-6 text-slate-300 mt-8">
             <section>

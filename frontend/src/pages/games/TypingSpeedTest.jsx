@@ -113,68 +113,78 @@ export default function TypingSpeedTest() {
             <p className="text-slate-400">Type the text below as fast and accurately as you can!</p>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-4 gap-2 mb-4">
-            {[
-              { label: 'WPM', value: wpm, color: 'text-cyan-400' },
-              { label: 'Accuracy', value: `${accuracy}%`, color: accuracy >= 90 ? 'text-green-400' : 'text-red-400' },
-              { label: 'Time Left', value: remaining, color: remaining <= 10 ? 'text-red-400' : 'text-white' },
-              { label: 'Best WPM', value: best || '--', color: 'text-yellow-400' },
-            ].map((s, i) => (
-              <div key={i} className="bg-slate-800 rounded-xl p-3 text-center border border-slate-700">
-                <div className="text-slate-400 text-xs uppercase mb-1">{s.label}</div>
-                <div className={`text-xl font-bold ${s.color}`}>{s.value}</div>
+          <div className={started ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto p-4 sm:p-8 flex flex-col items-center justify-center" : ""}>
+            <div className={started ? "w-full max-w-2xl" : ""}>
+              {/* Stats */}
+              <div className="grid grid-cols-4 gap-2 mb-4">
+                {[
+                  { label: 'WPM', value: wpm, color: 'text-cyan-400' },
+                  { label: 'Accuracy', value: `${accuracy}%`, color: accuracy >= 90 ? 'text-green-400' : 'text-red-400' },
+                  { label: 'Time Left', value: remaining, color: remaining <= 10 ? 'text-red-400' : 'text-white' },
+                  { label: 'Best WPM', value: best || '--', color: 'text-yellow-400' },
+                ].map((s, i) => (
+                  <div key={i} className="bg-slate-800 rounded-xl p-3 text-center border border-slate-700">
+                    <div className="text-slate-400 text-xs uppercase mb-1">{s.label}</div>
+                    <div className={`text-xl font-bold ${s.color}`}>{s.value}</div>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          {/* Progress bar */}
-          <div className="h-1.5 bg-slate-700 rounded-full mb-4 overflow-hidden">
-            <div className="h-full bg-cyan-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
-          </div>
-
-          {/* Text display */}
-          <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 mb-4 font-mono text-lg leading-relaxed tracking-wide min-h-24">
-            {renderText()}
-          </div>
-
-          {/* Input */}
-          <textarea
-            ref={inputRef}
-            value={input}
-            onChange={handleInput}
-            disabled={finished}
-            placeholder={started ? '' : '🖊️ Click here and start typing...'}
-            className="w-full bg-slate-800 border-2 border-slate-600 focus:border-cyan-500 rounded-xl p-4 text-white font-mono text-lg outline-none resize-none h-28 transition-colors disabled:opacity-50 mb-4"
-            onFocus={() => !started && !finished && inputRef.current?.focus()}
-          />
-
-          <div className="flex gap-3 mb-2">
-            <select onChange={e => setTime(parseInt(e.target.value))} value={time} className="bg-slate-700 border border-slate-600 text-white rounded-xl px-3 py-2 text-sm flex-1">
-              <option value={30}>30 seconds</option>
-              <option value={60}>60 seconds</option>
-              <option value={120}>2 minutes</option>
-            </select>
-            <button onClick={reset} className="bg-cyan-500 hover:bg-cyan-400 text-white font-bold px-5 py-2 rounded-xl transition-colors flex-1">Reset</button>
-          </div>
-
-          {finished && (
-            <div className="bg-cyan-900/50 border border-cyan-500/30 rounded-2xl p-6 text-center mt-4 mb-6">
-              <div className="text-5xl mb-2">🏁</div>
-              <h2 className="text-2xl font-bold text-white mb-1">Test Complete!</h2>
-              <div className="grid grid-cols-2 gap-3 mt-3 mb-4">
-                <div className="bg-slate-800 rounded-xl p-3">
-                  <div className="text-slate-400 text-sm">Speed</div>
-                  <div className="text-cyan-400 text-2xl font-bold">{wpm} WPM</div>
-                </div>
-                <div className="bg-slate-800 rounded-xl p-3">
-                  <div className="text-slate-400 text-sm">Accuracy</div>
-                  <div className="text-green-400 text-2xl font-bold">{accuracy}%</div>
-                </div>
+              {/* Progress bar */}
+              <div className="h-1.5 bg-slate-700 rounded-full mb-4 overflow-hidden">
+                <div className="h-full bg-cyan-500 rounded-full transition-all" style={{ width: `${progress}%` }} />
               </div>
-              <button onClick={reset} className="bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl">Try Again</button>
+
+              {/* Text display */}
+              <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 mb-4 font-mono text-lg leading-relaxed tracking-wide min-h-24">
+                {renderText()}
+              </div>
+
+              {/* Input */}
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={handleInput}
+                disabled={finished}
+                placeholder={started ? '' : '🖊️ Click here and start typing...'}
+                className="w-full bg-slate-800 border-2 border-slate-600 focus:border-cyan-500 rounded-xl p-4 text-white font-mono text-lg outline-none resize-none h-28 transition-colors disabled:opacity-50 mb-4"
+                onFocus={() => !started && !finished && inputRef.current?.focus()}
+              />
+
+              <div className="flex gap-3 mb-2">
+                <select onChange={e => setTime(parseInt(e.target.value))} value={time} className="bg-slate-700 border border-slate-600 text-white rounded-xl px-3 py-2 text-sm flex-1">
+                  <option value={30}>30 seconds</option>
+                  <option value={60}>60 seconds</option>
+                  <option value={120}>2 minutes</option>
+                </select>
+                <button onClick={reset} className="bg-cyan-500 hover:bg-cyan-400 text-white font-bold px-5 py-2 rounded-xl transition-colors flex-1">Reset</button>
+              </div>
+
+              {finished && (
+                <div className="bg-cyan-900/50 border border-cyan-500/30 rounded-2xl p-6 text-center mt-4 mb-6">
+                  <div className="text-5xl mb-2">🏁</div>
+                  <h2 className="text-2xl font-bold text-white mb-1">Test Complete!</h2>
+                  <div className="grid grid-cols-2 gap-3 mt-3 mb-4">
+                    <div className="bg-slate-800 rounded-xl p-3">
+                      <div className="text-slate-400 text-sm">Speed</div>
+                      <div className="text-cyan-400 text-2xl font-bold">{wpm} WPM</div>
+                    </div>
+                    <div className="bg-slate-800 rounded-xl p-3">
+                      <div className="text-slate-400 text-sm">Accuracy</div>
+                      <div className="text-green-400 text-2xl font-bold">{accuracy}%</div>
+                    </div>
+                  </div>
+                  <button onClick={reset} className="bg-cyan-500 text-white font-bold px-5 py-2.5 rounded-xl">Try Again</button>
+                </div>
+              )}
+
+              {started && (
+                <button onClick={() => { setStarted(false); setFinished(false); }} className="mt-8 mx-auto block text-slate-400 hover:text-white font-semibold underline">
+                  Exit Fullscreen
+                </button>
+              )}
             </div>
-          )}
+          </div>
 
           {/* SEO Content */}
           <div className="space-y-6 text-slate-300 mt-8">

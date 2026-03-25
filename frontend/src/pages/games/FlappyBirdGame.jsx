@@ -155,8 +155,10 @@ export default function FlappyBirdGame() {
     if (ctx) { const sky = ctx.createLinearGradient(0,0,0,H); sky.addColorStop(0,'#0ea5e9'); sky.addColorStop(1,'#7dd3fc'); ctx.fillStyle = sky; ctx.fillRect(0,0,W,H); }
     const onKey = (e) => { if (e.code === 'Space') { e.preventDefault(); flap(); } };
     window.addEventListener('keydown', onKey);
-    return () => { window.removeEventListener('keydown', onKey); if (animRef.current) cancelAnimationFrame(animRef.current); };
+    return () => window.removeEventListener('keydown', onKey);
   }, [status]);
+
+  useEffect(() => () => { if (animRef.current) cancelAnimationFrame(animRef.current); }, []);
 
   return (
     <>
@@ -175,39 +177,49 @@ export default function FlappyBirdGame() {
             <p className="text-slate-400">Tap to flap through the pipes. How far can you go?</p>
           </div>
 
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex gap-3">
-              <div className="bg-sky-900/60 rounded-xl px-4 py-2 text-center"><div className="text-sky-300 text-xs">Score</div><div className="text-white text-xl font-bold">{score}</div></div>
-              <div className="bg-slate-700 rounded-xl px-4 py-2 text-center"><div className="text-slate-400 text-xs">Best</div><div className="text-white text-xl font-bold">{best}</div></div>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+              <div className="flex justify-between items-center mb-4">
+                <div className="flex gap-3">
+                  <div className="bg-sky-900/60 rounded-xl px-4 py-2 text-center"><div className="text-sky-300 text-xs">Score</div><div className="text-white text-xl font-bold">{score}</div></div>
+                  <div className="bg-slate-700 rounded-xl px-4 py-2 text-center"><div className="text-slate-400 text-xs">Best</div><div className="text-white text-xl font-bold">{best}</div></div>
+                </div>
+                <button onClick={start} className="bg-sky-500 hover:bg-sky-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
+              </div>
+
+              <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={flap} onTouchStart={e => { e.preventDefault(); flap(); }}>
+                <canvas ref={canvasRef} width={W} height={H} className="w-full block" />
+                {status === 'idle' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                    <div className="text-center">
+                      <div className="text-6xl mb-3">🐦</div>
+                      <p className="text-white text-xl font-bold mb-2">Tap to Start</p>
+                      <p className="text-slate-200 text-sm">Or press Space</p>
+                    </div>
+                  </div>
+                )}
+                {status === 'over' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                    <div className="text-center bg-slate-900/90 rounded-2xl p-6 mx-4">
+                      <div className="text-5xl mb-3">💀</div>
+                      <h2 className="text-2xl font-bold text-white mb-1">Game Over!</h2>
+                      <p className="text-slate-400 mb-1">Score: <span className="text-sky-400 font-bold text-xl">{score}</span></p>
+                      <p className="text-slate-400 mb-3 text-sm">Best: <span className="text-yellow-400 font-bold">{best}</span></p>
+                      <button onClick={start} className="bg-sky-500 text-white font-bold px-5 py-2.5 rounded-xl">Play Again</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <p className="text-slate-500 text-sm text-center mt-3">Tap / <kbd className="bg-slate-700 px-2 py-0.5 rounded text-slate-300">Space</kbd> to flap</p>
+
+              {status !== 'idle' && (
+                <button onClick={() => setStatus('idle')} className="mt-6 mx-auto block text-slate-400 hover:text-white font-semibold underline">
+                  Exit Fullscreen
+                </button>
+              )}
             </div>
-            <button onClick={start} className="bg-sky-500 hover:bg-sky-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
           </div>
-
-          <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={flap} onTouchStart={e => { e.preventDefault(); flap(); }}>
-            <canvas ref={canvasRef} width={W} height={H} className="w-full block" />
-            {status === 'idle' && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/40">
-                <div className="text-center">
-                  <div className="text-6xl mb-3">🐦</div>
-                  <p className="text-white text-xl font-bold mb-2">Tap to Start</p>
-                  <p className="text-slate-200 text-sm">Or press Space</p>
-                </div>
-              </div>
-            )}
-            {status === 'over' && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                <div className="text-center bg-slate-900/90 rounded-2xl p-6 mx-4">
-                  <div className="text-5xl mb-3">💀</div>
-                  <h2 className="text-2xl font-bold text-white mb-1">Game Over!</h2>
-                  <p className="text-slate-400 mb-1">Score: <span className="text-sky-400 font-bold text-xl">{score}</span></p>
-                  <p className="text-slate-400 mb-3 text-sm">Best: <span className="text-yellow-400 font-bold">{best}</span></p>
-                  <button onClick={start} className="bg-sky-500 text-white font-bold px-5 py-2.5 rounded-xl">Play Again</button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <p className="text-slate-500 text-sm text-center mt-3">Tap / <kbd className="bg-slate-700 px-2 py-0.5 rounded text-slate-300">Space</kbd> to flap</p>
 
           <div className="space-y-6 text-slate-300 mt-8">
             <section>

@@ -31,6 +31,7 @@ const allTools = [
   { name: 'Essay Topic Generator', description: 'Beat writer\'s block with 10 fresh ideas for your topic.', icon: Lightbulb, to: '/tools/essay-topic-generator', category: 'Writing' },
   
   // Study & Productivity
+  { name: 'Free Student Games', description: 'Take a productive study break with 12 free brain-training games.', icon: Flame, to: '/free-games', category: 'Study' },
   { name: 'Pomodoro Timer', description: 'Boost focus with 25-minute study sprints and breaks.', icon: BookOpen, to: '/tools/study-timer', category: 'Study' },
   { name: 'Exam Countdown', description: 'Track your deadlines in real-time. Never miss an exam.', icon: Timer, to: '/tools/exam-countdown', category: 'Study' },
   { name: 'Homework Planner', description: 'Organize your assignments and set priorities efficiently.', icon: ListChecks, to: '/tools/homework-planner', category: 'Study' },
@@ -156,8 +157,8 @@ const Home = () => {
         
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
+            { name: 'Free Web Games', desc: '12 awesome study break games.', icon: Flame, to: '/free-games', color: 'from-orange-400 to-rose-500' },
             { name: 'AI Essay Writer', desc: 'Draft high-quality essays fast.', icon: FileText, to: '/ai-essay-writer', color: 'from-blue-500 to-indigo-500' },
-            { name: 'Homework Helper', desc: 'Instant help for any subject.', icon: Zap, to: '/ai-homework-helper', color: 'from-indigo-500 to-purple-500' },
             { name: 'Chat with PDF', desc: 'Ask your textbooks questions.', icon: MessageSquare, to: '/chat-pdf', color: 'from-purple-500 to-pink-500' },
             { name: 'Grammar Checker', desc: 'Flawless writing instantly.', icon: ShieldCheck, to: '/tools/grammar-checker', color: 'from-emerald-400 to-teal-500' }
           ].map((tool, idx) => (

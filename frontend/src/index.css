@@ -22,6 +22,11 @@
     font-family: 'Outfit', sans-serif;
   }
 
+  html, body {
+    overflow-x: hidden;
+    width: 100vw;
+  }
+
   html {
     scroll-behavior: smooth;
   }

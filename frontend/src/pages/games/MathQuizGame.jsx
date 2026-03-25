@@ -99,57 +99,67 @@ export default function MathQuizGame() {
             <p className="text-slate-400">Answer as many math questions as possible in 30 seconds!</p>
           </div>
 
-          <div className="flex gap-2 justify-center mb-4">
-            {['easy', 'medium', 'hard'].map(d => (
-              <button key={d} onClick={() => { setDifficulty(d); }} className={`px-4 py-2 rounded-xl text-sm font-bold capitalize transition-colors ${difficulty === d ? 'bg-orange-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>{d}</button>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-4 gap-2 mb-6">
-            {[{ l: 'Score', v: score, c: 'text-orange-400' }, { l: 'Time', v: time, c: time <= 10 ? 'text-red-400' : 'text-white' }, { l: 'Streak', v: `🔥${streak}`, c: 'text-yellow-400' }, { l: 'Best', v: best, c: 'text-green-400' }].map((s, i) => (
-              <div key={i} className="bg-slate-800 rounded-xl p-3 text-center border border-slate-700">
-                <div className="text-slate-400 text-xs uppercase mb-1">{s.l}</div>
-                <div className={`text-lg font-bold ${s.c}`}>{s.v}</div>
-              </div>
-            ))}
-          </div>
-
-          {!running && !finished && (
-            <div className="text-center mb-6">
-              <button onClick={start} className="bg-orange-500 hover:bg-orange-400 text-white font-bold text-xl px-10 py-4 rounded-2xl transition-colors shadow-lg shadow-orange-900/30">▶ Start Game</button>
-            </div>
-          )}
-
-          {running && !finished && (
-            <div className={`bg-slate-800 border-2 rounded-2xl p-8 text-center mb-4 transition-colors ${feedback === 'correct' ? 'border-green-500' : feedback === 'wrong' ? 'border-red-500' : 'border-slate-700'}`}>
-              <div className="text-slate-400 text-sm mb-2">What is...</div>
-              <div className="text-5xl font-extrabold text-white mb-8">{q.question} = ?</div>
-              <div className="grid grid-cols-2 gap-3">
-                {q.options.map((opt, i) => (
-                  <button key={i} onClick={() => answer(opt)} className="bg-slate-700 hover:bg-orange-500 text-white text-2xl font-bold py-4 rounded-2xl transition-all hover:-translate-y-0.5 active:scale-95">
-                    {opt}
-                  </button>
+          <div className={running || finished ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto p-4 sm:p-8 flex flex-col items-center justify-center touch-none" : ""}>
+            <div className={running || finished ? "w-full max-w-lg" : ""}>
+              <div className="flex gap-2 justify-center mb-4">
+                {['easy', 'medium', 'hard'].map(d => (
+                  <button key={d} onClick={() => { setDifficulty(d); }} className={`px-4 py-2 rounded-xl text-sm font-bold capitalize transition-colors ${difficulty === d ? 'bg-orange-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>{d}</button>
                 ))}
               </div>
-              {feedback && (
-                <div className={`mt-4 text-2xl font-bold ${feedback === 'correct' ? 'text-green-400' : 'text-red-400'}`}>
-                  {feedback === 'correct' ? '✅ Correct!' : `❌ Answer: ${q.answer}`}
+
+              <div className="grid grid-cols-4 gap-2 mb-6">
+                {[{ l: 'Score', v: score, c: 'text-orange-400' }, { l: 'Time', v: time, c: time <= 10 ? 'text-red-400' : 'text-white' }, { l: 'Streak', v: `🔥${streak}`, c: 'text-yellow-400' }, { l: 'Best', v: best, c: 'text-green-400' }].map((s, i) => (
+                  <div key={i} className="bg-slate-800 rounded-xl p-3 text-center border border-slate-700">
+                    <div className="text-slate-400 text-xs uppercase mb-1">{s.l}</div>
+                    <div className={`text-lg font-bold ${s.c}`}>{s.v}</div>
+                  </div>
+                ))}
+              </div>
+
+              {!running && !finished && (
+                <div className="text-center mb-6">
+                  <button onClick={start} className="bg-orange-500 hover:bg-orange-400 text-white font-bold text-xl px-10 py-4 rounded-2xl transition-colors shadow-lg shadow-orange-900/30">▶ Start Game</button>
                 </div>
               )}
-            </div>
-          )}
 
-          {finished && (
-            <div className="bg-orange-900/40 border border-orange-500/30 rounded-2xl p-8 text-center mb-6">
-              <div className="text-5xl mb-3">🏆</div>
-              <h2 className="text-2xl font-bold text-white mb-2">Time's Up!</h2>
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div className="bg-slate-800 rounded-xl p-3"><div className="text-slate-400 text-sm">Final Score</div><div className="text-orange-400 text-2xl font-bold">{score}</div></div>
-                <div className="bg-slate-800 rounded-xl p-3"><div className="text-slate-400 text-sm">Answered</div><div className="text-white text-2xl font-bold">{total}</div></div>
-              </div>
-              <button onClick={start} className="bg-orange-500 text-white font-bold px-6 py-3 rounded-xl">Play Again</button>
+              {running && !finished && (
+                <div className={`bg-slate-800 border-2 rounded-2xl p-8 text-center mb-4 transition-colors ${feedback === 'correct' ? 'border-green-500' : feedback === 'wrong' ? 'border-red-500' : 'border-slate-700'}`}>
+                  <div className="text-slate-400 text-sm mb-2">What is...</div>
+                  <div className="text-5xl font-extrabold text-white mb-8">{q.question} = ?</div>
+                  <div className="grid grid-cols-2 gap-3">
+                    {q.options.map((opt, i) => (
+                      <button key={i} onClick={() => answer(opt)} className="bg-slate-700 hover:bg-orange-500 text-white text-2xl font-bold py-4 rounded-2xl transition-all hover:-translate-y-0.5 active:scale-95 touch-none">
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                  {feedback && (
+                    <div className={`mt-4 text-2xl font-bold ${feedback === 'correct' ? 'text-green-400' : 'text-red-400'}`}>
+                      {feedback === 'correct' ? '✅ Correct!' : `❌ Answer: ${q.answer}`}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {finished && (
+                <div className="bg-orange-900/40 border border-orange-500/30 rounded-2xl p-8 text-center mb-6">
+                  <div className="text-5xl mb-3">🏆</div>
+                  <h2 className="text-2xl font-bold text-white mb-2">Time's Up!</h2>
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    <div className="bg-slate-800 rounded-xl p-3"><div className="text-slate-400 text-sm">Final Score</div><div className="text-orange-400 text-2xl font-bold">{score}</div></div>
+                    <div className="bg-slate-800 rounded-xl p-3"><div className="text-slate-400 text-sm">Answered</div><div className="text-white text-2xl font-bold">{total}</div></div>
+                  </div>
+                  <button onClick={start} className="bg-orange-500 text-white font-bold px-6 py-3 rounded-xl touch-none">Play Again</button>
+                </div>
+              )}
+
+              {(running || finished) && (
+                <button onClick={() => { setRunning(false); setFinished(false); }} className="mt-8 mx-auto block text-slate-400 hover:text-white font-semibold underline text-center touch-none">
+                  Exit Fullscreen
+                </button>
+              )}
             </div>
-          )}
+          </div>
 
           <div className="space-y-6 text-slate-300 mt-8">
             <section>

@@ -147,59 +147,69 @@ export default function SnakeGame() {
             <p className="text-slate-400">Eat food, grow longer, avoid walls! Arrow keys or swipe to play.</p>
           </div>
 
-          <div className="flex justify-between items-center mb-4 gap-3">
-            <div className="flex gap-3 flex-1">
-              <div className="bg-green-800 rounded-xl p-3 text-center flex-1">
-                <div className="text-green-200 text-xs uppercase">Score</div>
-                <div className="text-white text-xl font-bold">{score}</div>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+              <div className="flex justify-between items-center mb-4 gap-3">
+                <div className="flex gap-3 flex-1">
+                  <div className="bg-green-800 rounded-xl p-3 text-center flex-1">
+                    <div className="text-green-200 text-xs uppercase">Score</div>
+                    <div className="text-white text-xl font-bold">{score}</div>
+                  </div>
+                  <div className="bg-slate-700 rounded-xl p-3 text-center flex-1">
+                    <div className="text-slate-400 text-xs uppercase">Best</div>
+                    <div className="text-white text-xl font-bold">{best}</div>
+                  </div>
+                </div>
+                <button onClick={startGame} className="bg-green-500 hover:bg-green-400 text-white font-bold px-5 py-3 rounded-xl transition-colors">
+                  {status === 'idle' ? 'Start' : 'Restart'}
+                </button>
               </div>
-              <div className="bg-slate-700 rounded-xl p-3 text-center flex-1">
-                <div className="text-slate-400 text-xs uppercase">Best</div>
-                <div className="text-white text-xl font-bold">{best}</div>
+
+              <div className="relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-700">
+                <canvas
+                  ref={canvasRef}
+                  width={W * SIZE}
+                  height={H * SIZE}
+                  className="w-full block touch-none"
+                  onTouchStart={onTouchStart}
+                  onTouchEnd={onTouchEnd}
+                />
+                {status === 'idle' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50">
+                    <div className="text-center">
+                      <div className="text-6xl mb-3">🐍</div>
+                      <p className="text-white text-lg font-bold mb-2">Press Start or Arrow Key</p>
+                      <p className="text-slate-400 text-sm">Swipe on mobile</p>
+                    </div>
+                  </div>
+                )}
+                {status === 'over' && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60" onClick={startGame}>
+                    <div className="text-center">
+                      <div className="text-5xl mb-3">💀</div>
+                      <h2 className="text-2xl font-bold text-white mb-1">Game Over!</h2>
+                      <p className="text-slate-400 mb-3">Score: <span className="text-green-400 font-bold">{score}</span></p>
+                      <button className="bg-green-500 text-white font-bold px-5 py-2.5 rounded-xl">Play Again</button>
+                    </div>
+                  </div>
+                )}
               </div>
+
+              <div className="grid grid-cols-3 gap-2 mt-4 max-w-36 mx-auto">
+                <div />
+                <button onClick={() => { if (!stateRef.current.running) startGame(); else if (stateRef.current.dir.y !== 1) stateRef.current.nextDir = {x:0,y:-1}; }} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-bold transition-colors">↑</button>
+                <div />
+                <button onClick={() => { if (!stateRef.current.running) startGame(); else if (stateRef.current.dir.x !== 1) stateRef.current.nextDir = {x:-1,y:0}; }} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-bold transition-colors">←</button>
+                <button onClick={() => { if (!stateRef.current.running) startGame(); else if (stateRef.current.dir.y !== -1) stateRef.current.nextDir = {x:0,y:1}; }} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-bold transition-colors">↓</button>
+                <button onClick={() => { if (!stateRef.current.running) startGame(); else if (stateRef.current.dir.x !== -1) stateRef.current.nextDir = {x:1,y:0}; }} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-bold transition-colors">→</button>
+              </div>
+
+              {status !== 'idle' && (
+                <button onClick={() => setStatus('idle')} className="mt-6 mx-auto block text-slate-400 hover:text-white font-semibold underline">
+                  Exit Fullscreen
+                </button>
+              )}
             </div>
-            <button onClick={startGame} className="bg-green-500 hover:bg-green-400 text-white font-bold px-5 py-3 rounded-xl transition-colors">
-              {status === 'idle' ? 'Start' : 'Restart'}
-            </button>
-          </div>
-
-          <div className="relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-700">
-            <canvas
-              ref={canvasRef}
-              width={W * SIZE}
-              height={H * SIZE}
-              className="w-full block touch-none"
-              onTouchStart={onTouchStart}
-              onTouchEnd={onTouchEnd}
-            />
-            {status === 'idle' && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                <div className="text-center">
-                  <div className="text-6xl mb-3">🐍</div>
-                  <p className="text-white text-lg font-bold mb-2">Press Start or Arrow Key</p>
-                  <p className="text-slate-400 text-sm">Swipe on mobile</p>
-                </div>
-              </div>
-            )}
-            {status === 'over' && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/60" onClick={startGame}>
-                <div className="text-center">
-                  <div className="text-5xl mb-3">💀</div>
-                  <h2 className="text-2xl font-bold text-white mb-1">Game Over!</h2>
-                  <p className="text-slate-400 mb-3">Score: <span className="text-green-400 font-bold">{score}</span></p>
-                  <button className="bg-green-500 text-white font-bold px-5 py-2.5 rounded-xl">Play Again</button>
-                </div>
-              </div>
-            )}
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 mt-4 max-w-36 mx-auto">
-            <div />
-            <button onClick={() => { if (!stateRef.current.running) startGame(); else if (stateRef.current.dir.y !== 1) stateRef.current.nextDir = {x:0,y:-1}; }} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-bold transition-colors">↑</button>
-            <div />
-            <button onClick={() => { if (!stateRef.current.running) startGame(); else if (stateRef.current.dir.x !== 1) stateRef.current.nextDir = {x:-1,y:0}; }} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-bold transition-colors">←</button>
-            <button onClick={() => { if (!stateRef.current.running) startGame(); else if (stateRef.current.dir.y !== -1) stateRef.current.nextDir = {x:0,y:1}; }} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-bold transition-colors">↓</button>
-            <button onClick={() => { if (!stateRef.current.running) startGame(); else if (stateRef.current.dir.x !== -1) stateRef.current.nextDir = {x:1,y:0}; }} className="bg-slate-700 hover:bg-slate-600 text-white rounded-xl p-3 text-lg font-bold transition-colors">→</button>
           </div>
 
           <div className="mt-10 space-y-6 text-slate-300">
