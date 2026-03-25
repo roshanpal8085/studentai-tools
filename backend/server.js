@@ -30,12 +30,15 @@ app.use('/api/upload', require('./routes/upload'));
 
 // Speed Test Endpoint
 app.get('/api/speedtest', (req, res) => {
-  const size = parseInt(req.query.size) || 1024 * 1024 * 5; // Default 5MB
+  const size = parseInt(req.query.size) || 1024 * 1024 * 25; // Default 25MB for better sampling
   const buffer = Buffer.alloc(size, 'x');
   res.writeHead(200, {
     'Content-Type': 'application/octet-stream',
     'Content-Length': size,
     'Access-Control-Allow-Origin': '*',
+    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
   });
   res.end(buffer);
 });
