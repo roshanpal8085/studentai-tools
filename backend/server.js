@@ -29,20 +29,20 @@ app.use('/api/pdf', require('./routes/pdf'));
 app.use('/api/upload', require('./routes/upload'));
 
 // --- Speed Test v7 Endpoints ---
-const TEST_BUFFER = Buffer.alloc(1024 * 1024 * 50, 'x'); // 50MB test file
+const crypto = require('crypto');
 
 app.get('/api/ping', (req, res) => {
   res.status(200).json({ timestamp: Date.now() });
 });
 
 app.get('/api/download-test', (req, res) => {
-  const size = Math.min(parseInt(req.query.size) || 1024 * 1024 * 10, TEST_BUFFER.length);
+  const size = Math.min(parseInt(req.query.size) || 1024 * 1024 * 5, 20 * 1024 * 1024);
   res.set({
     'Content-Type': 'application/octet-stream',
-    'Content-Length': size,
-    'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate'
+    'Cache-Control': 'no-store, no-cache, must-revalidate'
   });
-  res.send(TEST_BUFFER.slice(0, size));
+  // Truly random data to defeat ALL compression and caching
+  res.send(crypto.randomBytes(size));
 });
 
 app.post('/api/upload-test', (req, res) => {
