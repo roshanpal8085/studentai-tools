@@ -28,10 +28,12 @@ app.use('/api/ai', require('./routes/ai'));
 app.use('/api/pdf', require('./routes/pdf'));
 app.use('/api/upload', require('./routes/upload'));
 
+// Pre-allocate a large chunk to avoid per-request load
+const SPEED_TEST_BUFFER = Buffer.alloc(1024 * 1024 * 50, 'x');
+
 // Speed Test Endpoint
 app.get('/api/speedtest', (req, res) => {
-  const size = parseInt(req.query.size) || 1024 * 1024 * 25; // Default 25MB for better sampling
-  const buffer = Buffer.alloc(size, 'x');
+  const size = Math.min(parseInt(req.query.size) || 1024 * 1024 * 25, SPEED_TEST_BUFFER.length);
   res.writeHead(200, {
     'Content-Type': 'application/octet-stream',
     'Content-Length': size,
@@ -40,7 +42,7 @@ app.get('/api/speedtest', (req, res) => {
     'Pragma': 'no-cache',
     'Expires': '0',
   });
-  res.end(buffer);
+  res.end(SPEED_TEST_BUFFER.slice(0, size));
 });
 
 // Basic route
