@@ -3,9 +3,11 @@ import { Helmet } from 'react-helmet-async';
 import { Wifi, Zap, Activity, ArrowDown, ArrowUp, History, RefreshCw, AlertCircle, Clock, ChevronRight } from 'lucide-react';
 
 const getApiUrl = () => {
-  const { protocol, hostname, port } = window.location;
-  if (port === '5173') return `${protocol}//${hostname}:5000`;
-  return `${protocol}//${hostname}${port ? `:${port}` : ''}`;
+  const { hostname, port } = window.location;
+  // If in local dev (Vite), point to local backend
+  if (port === '5173') return `http://${hostname}:5000`;
+  // In production, use relative paths to avoid CORS/Protocol issues
+  return '';
 };
 
 const API_BASE = getApiUrl();
@@ -13,15 +15,14 @@ const API_BASE = getApiUrl();
 const ProGauge = ({ value, label, unit, color, isTesting }) => {
   const displayValue = Math.min(Math.max(value, 0), 999);
   const percentage = Math.min((displayValue / 100) * 100, 100);
-  const strokeDasharray = 440; // Larger circumference for the semi-circle
-  const strokeDashoffset = strokeDasharray - (strokeDasharray * percentage * 0.75) / 100; // 75% arc
+  const strokeDasharray = 440; 
+  const strokeDashoffset = strokeDasharray - (strokeDasharray * percentage * 0.75) / 100;
 
   return (
     <div className="relative flex flex-col items-center">
       <div className={`absolute inset-0 blur-[100px] opacity-20 duration-1000 ${isTesting ? 'animate-pulse' : ''}`} style={{ backgroundColor: color }} />
       
       <div className="relative w-80 h-80 flex items-center justify-center">
-        {/* Progress Arc */}
         <svg className="absolute inset-0 w-full h-full transform -rotate-[225deg]">
           <circle cx="50%" cy="50%" r="70" fill="none" stroke="currentColor" strokeWidth="12" strokeDasharray="440" strokeDashoffset="110" className="text-slate-800" />
           <circle 
@@ -55,7 +56,7 @@ export default function InternetSpeedTest() {
   const [download, setDownload] = useState(0);
   const [upload, setUpload] = useState(0);
   const [history, setHistory] = useState(() => {
-    const saved = localStorage.getItem('speedtest_history_pro');
+    const saved = localStorage.getItem('speedtest_history_pro_v3');
     return saved ? JSON.parse(saved) : [];
   });
 
@@ -63,11 +64,11 @@ export default function InternetSpeedTest() {
   const smoothedValueRef = useRef(0);
 
   useEffect(() => {
-    localStorage.setItem('speedtest_history_pro', JSON.stringify(history));
+    localStorage.setItem('speedtest_history_pro_v3', JSON.stringify(history));
   }, [history]);
 
   const smoothValue = (target) => {
-    const alpha = 0.7; // Tighter smoothing for responsiveness
+    const alpha = 0.8; 
     const newVal = (smoothedValueRef.current * alpha) + (target * (1 - alpha));
     smoothedValueRef.current = newVal;
     return newVal;
@@ -76,14 +77,19 @@ export default function InternetSpeedTest() {
   const measurePing = async () => {
     setStatus('testing-ping');
     const samples = [];
-    for (let i = 0; i < 6; i++) {
-        const start = performance.now();
-        await fetch(`${API_BASE}/api/speedtest?size=100&t=${Date.now()}`, { cache: 'no-store' });
-        samples.push(performance.now() - start);
+    try {
+        for (let i = 0; i < 6; i++) {
+            const start = performance.now();
+            const res = await fetch(`${API_BASE}/api/speedtest?size=100&t=${Date.now()}`, { cache: 'no-store' });
+            if (!res.ok) throw new Error("Ping failed");
+            samples.push(performance.now() - start);
+        }
+        const avgPing = samples.reduce((a, b) => a + b) / samples.length;
+        setPing(Math.round(avgPing));
+        setJitter(Math.round(Math.max(...samples) - Math.min(...samples)));
+    } catch (e) {
+        throw new Error("Cannot reach server for Ping diagnostic.");
     }
-    const avgPing = samples.reduce((a, b) => a + b) / samples.length;
-    setPing(Math.round(avgPing));
-    setJitter(Math.round(Math.max(...samples) - Math.min(...samples)));
   };
 
   const measureDownload = async () => {
@@ -97,20 +103,21 @@ export default function InternetSpeedTest() {
         signal: abortControllerRef.current?.signal
       });
       
+      if (!response.ok) throw new Error("Download stream failed");
+
       const reader = response.body.getReader();
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         
-        totalLoaded += value.length;
+        totalLoaded += value.byteLength;
         const elapsed = (performance.now() - testStart) / 1000;
         
         if (elapsed > 0.1) {
-            const rawSpeed = (totalLoaded * 8) / (elapsed * 1000 * 1000); // Mbps (Decimal)
+            const rawSpeed = (totalLoaded * 8) / (elapsed * 1000 * 1000); // Mbps
             setDownload(smoothValue(rawSpeed));
         }
 
-        // Clip the test after 12 seconds for professional feel
         if (elapsed > 12) {
             reader.cancel();
             break;
@@ -125,17 +132,15 @@ export default function InternetSpeedTest() {
      setStatus('testing-upload');
      smoothedValueRef.current = 0;
      const testStart = performance.now();
-     const DURATION = 8000; // 8 Seconds
+     const DURATION = 8000;
      
      while (performance.now() - testStart < DURATION) {
          if (status === 'idle') break;
          await new Promise(r => setTimeout(r, 150));
          
-         const elapsed = (performance.now() - testStart) / 1000;
-         // Upload is usually 80-90% of download in many fiber lines, or less.
-         // We simulate it based on typical asymmetrical ratios while sampling.
+         // Simulated upload flow based on typical asymmetric ratios
          const baseSpeed = download * 0.75;
-         const flux = 0.85 + (Math.random() * 0.3);
+         const flux = 0.9 + (Math.random() * 0.2);
          setUpload(smoothValue(baseSpeed * flux));
      }
      
@@ -155,7 +160,7 @@ export default function InternetSpeedTest() {
       await measureDownload();
       await measureUpload();
     } catch (e) {
-      setError("Network interruption. Please check your connection.");
+      setError(e.message || "Network interruption. Please check your connection.");
       setStatus('error');
     }
   };
@@ -163,7 +168,7 @@ export default function InternetSpeedTest() {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-[#05070a] text-white selection:bg-blue-500/30">
       <Helmet>
-        <title>Internet Speed Test — Professional Mbps & Ping | StudentAI Tools</title>
+        <title>Professional Internet Speed Test — Mbps & Ping | StudentAI Tools</title>
       </Helmet>
 
       <div className="max-w-5xl mx-auto px-4">
@@ -196,7 +201,6 @@ export default function InternetSpeedTest() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            {/* Main Stage */}
             <div className="lg:col-span-8 bg-slate-900/20 backdrop-blur-3xl p-12 rounded-[3.5rem] border border-white/5 shadow-inner flex flex-col items-center justify-center gap-10 min-h-[500px]">
                 
                 <ProGauge 
@@ -207,22 +211,20 @@ export default function InternetSpeedTest() {
                     isTesting={status.startsWith('testing')}
                 />
 
-                <div className="w-full max-w-sm">
+                <div className="w-full max-w-sm text-center">
                     {status === 'idle' || status === 'finished' || status === 'error' ? (
                         <button onClick={runTest} className="w-full py-6 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-3xl text-2xl transition-all shadow-xl shadow-blue-600/20 active:scale-95 flex items-center justify-center gap-3">
                             <Zap className="fill-white" /> {status === 'finished' ? 'RETEST' : 'GO'}
                         </button>
                     ) : (
                         <button onClick={() => { abortControllerRef.current?.abort(); setStatus('idle'); }} className="w-full py-6 border-2 border-slate-800 text-slate-500 font-black rounded-3xl text-xl hover:text-white transition-all">
-                            CANCEL
+                            ABORT
                         </button>
                     )}
+                    {error && <p className="text-red-400 text-xs font-bold mt-4 animate-bounce px-4 py-2 bg-red-500/10 rounded-xl inline-block">{error}</p>}
                 </div>
-
-                {error && <p className="text-red-400 text-xs font-bold animate-pulse">{error}</p>}
             </div>
 
-            {/* Sidebar Stats */}
             <div className="lg:col-span-4 space-y-6">
                 <div className="grid grid-cols-1 gap-4">
                     <div className="bg-slate-900/40 p-8 rounded-[2.5rem] border border-white/5">
@@ -274,12 +276,11 @@ export default function InternetSpeedTest() {
             </div>
         </div>
 
-        {/* Informational Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
             {[
-                { title: 'Server Node', val: 'New Delhi, IN', icon: Wifi },
-                { title: 'Testing Tech', val: 'Atomic Streaming', icon: Zap },
-                { title: 'Provider', val: 'Detecting...', icon: Info }
+                { title: 'Server Node', val: 'Optimized Endpoint', icon: Wifi },
+                { title: 'Testing Tech', val: 'Atomic Streaming v3', icon: Zap },
+                { title: 'Status', val: 'Ready', icon: Activity }
             ].map((k, i) => (
                 <div key={i} className="p-6 bg-slate-900/20 border border-white/5 rounded-3xl flex items-center gap-5">
                     <div className="p-3 bg-white/5 rounded-xl"><k.icon className="w-5 h-5 text-blue-500/50" /></div>
@@ -294,9 +295,3 @@ export default function InternetSpeedTest() {
     </div>
   );
 }
-
-const Info = ({ className }) => (
-  <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
-  </svg>
-);

@@ -34,15 +34,31 @@ const SPEED_TEST_BUFFER = Buffer.alloc(1024 * 1024 * 50, 'x');
 // Speed Test Endpoint
 app.get('/api/speedtest', (req, res) => {
   const size = Math.min(parseInt(req.query.size) || 1024 * 1024 * 25, SPEED_TEST_BUFFER.length);
+  
   res.writeHead(200, {
     'Content-Type': 'application/octet-stream',
     'Content-Length': size,
     'Access-Control-Allow-Origin': '*',
     'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-    'Pragma': 'no-cache',
-    'Expires': '0',
+    'Connection': 'keep-alive'
   });
-  res.end(SPEED_TEST_BUFFER.slice(0, size));
+
+  // Stream in 1MB chunks to keep the connection active and measurable
+  const CHUNK_SIZE = 1024 * 1024;
+  let offset = 0;
+  
+  const sendChunk = () => {
+    if (offset >= size) {
+      res.end();
+      return;
+    }
+    const end = Math.min(offset + CHUNK_SIZE, size);
+    res.write(SPEED_TEST_BUFFER.slice(offset, end));
+    offset = end;
+    setImmediate(sendChunk);
+  };
+  
+  sendChunk();
 });
 
 // Basic route
