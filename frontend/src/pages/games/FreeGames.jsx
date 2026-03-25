@@ -87,7 +87,7 @@ export default function FreeGames() {
             <div className="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-400/30 rounded-full px-4 py-2 text-purple-300 text-sm font-medium mb-6">
               🎮 100% Free · No Download · Browser Playable
             </div>
-            <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
+            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
               Free Games for{' '}
               <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
                 Students

@@ -95,13 +95,13 @@ const Home = () => {
       />
 
       {/* Hero Section */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-16 mb-24">
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-16 mb-24 relative overflow-hidden">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-500/20 blur-[120px] rounded-full point-events-none -z-10" />
-        <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6 leading-tight">
+        <h1 className="text-4xl md:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6 leading-tight">
           Supercharge Your <br className="hidden md:block"/>
           <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Student Life</span>
         </h1>
-        <p className="mt-6 max-w-2xl text-xl text-slate-600 dark:text-slate-300 mx-auto mb-12 leading-relaxed font-medium">
+        <p className="mt-6 max-w-2xl text-lg md:text-xl text-slate-600 dark:text-slate-300 mx-auto mb-12 leading-relaxed font-medium">
           The all-in-one platform integrating AI to generate stunning resumes, build presentations, craft clever captions, and master your PDFs.
         </p>
         

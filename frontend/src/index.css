@@ -22,7 +22,7 @@
     font-family: 'Outfit', sans-serif;
   }
 
-  html, body {
+  html, body, #root {
     overflow-x: hidden;
     max-width: 100%;
   }
