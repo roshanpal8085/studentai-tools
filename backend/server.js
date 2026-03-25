@@ -28,6 +28,18 @@ app.use('/api/ai', require('./routes/ai'));
 app.use('/api/pdf', require('./routes/pdf'));
 app.use('/api/upload', require('./routes/upload'));
 
+// Speed Test Endpoint
+app.get('/api/speedtest', (req, res) => {
+  const size = parseInt(req.query.size) || 1024 * 1024 * 5; // Default 5MB
+  const buffer = Buffer.alloc(size, 'x');
+  res.writeHead(200, {
+    'Content-Type': 'application/octet-stream',
+    'Content-Length': size,
+    'Access-Control-Allow-Origin': '*',
+  });
+  res.end(buffer);
+});
+
 // Basic route
 app.get('/', (req, res) => {
   res.send('StudentAI Tools API is running (Pure Stateless)...');
