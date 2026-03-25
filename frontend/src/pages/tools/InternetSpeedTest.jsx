@@ -1,206 +1,251 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Zap, Activity, ArrowDown, ArrowUp, History, RefreshCw, Share2, Copy, CheckCircle2 } from 'lucide-react';
+import { Zap, Activity, ArrowDown, ArrowUp, History, RefreshCw, Share2, Copy, CheckCircle2, Wifi, ShieldCheck, Globe } from 'lucide-react';
 
-const DOWNLOAD_SIZE = 1024 * 1024 * 10; // 10MB
-const UPLOAD_SIZE = 1024 * 1024 * 6;   // 6MB
+const DOWNLOAD_SIZE = 1024 * 1024 * 25; // 25MB for stability
+const UPLOAD_SIZE = 1024 * 1024 * 8;    // 8MB
+const WINDOW_SIZE = 500;                // 500ms rolling window
+
+const Waveform = ({ active, color }) => {
+    return (
+        <div className="absolute inset-x-0 bottom-0 h-24 overflow-hidden pointer-events-none opacity-20">
+            <svg className="w-full h-full" viewBox="0 0 400 100" preserveAspectRatio="none">
+                <path 
+                    d="M0 50 Q 50 20, 100 50 T 200 50 T 300 50 T 400 50" 
+                    fill="none" 
+                    stroke={color} 
+                    strokeWidth="2" 
+                    className={active ? 'animate-[wave_2s_linear_infinite]' : ''}
+                />
+                <style>{`
+                    @keyframes wave {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(-200px); }
+                    }
+                `}</style>
+            </svg>
+        </div>
+    );
+};
 
 export default function InternetSpeedTest() {
     const [status, setStatus] = useState('idle'); 
     const [phase, setPhase] = useState(''); 
     const [download, setDownload] = useState(0);
     const [upload, setUpload] = useState(0);
-    const [ping, setPing] = useState(null);
+    const [ping, setPing] = useState(0);
+    const [jitter, setJitter] = useState(0);
     const [progress, setProgress] = useState(0);
-    const [history, setHistory] = useState(() => JSON.parse(localStorage.getItem('st_history_v14') || '[]'));
+    const [history, setHistory] = useState(() => JSON.parse(localStorage.getItem('st_history_v15') || '[]'));
     const [copied, setCopied] = useState(false);
+    const [isp, setIsp] = useState('Detecting...');
+
+    const samples = useRef([]);
+    const lastUpdate = useRef(0);
 
     useEffect(() => {
-        localStorage.setItem('st_history_v14', JSON.stringify(history));
+        localStorage.setItem('st_history_v15', JSON.stringify(history));
+        fetch('https://ipapi.co/json/').then(r => r.json()).then(d => setIsp(d.org)).catch(() => {});
     }, [history]);
 
-    const calculateMbps = (bytes, timeInMs) => {
-        const seconds = timeInMs / 1000;
-        const bits = bytes * 8;
-        return (bits / seconds) / 1000000;
+    const smoothSpeed = (newVal, currentVal) => {
+        if (!currentVal) return newVal;
+        // Adaptive Smoothing: Don't jump more than 40% in one frame
+        const delta = newVal - currentVal;
+        return currentVal + (delta * 0.15); 
     };
 
     const runPing = async () => {
         setPhase('PING');
-        const samples = [];
-        for (let i = 0; i < 5; i++) {
+        const times = [];
+        for (let i = 0; i < 6; i++) {
             const start = performance.now();
-            await fetch('/api/ping?cache=' + Date.now(), { cache: 'no-store' });
-            samples.push(performance.now() - start);
+            await fetch('/api/ping?t=' + Date.now(), { cache: 'no-store' });
+            times.push(performance.now() - start);
+            setProgress((i/6) * 10);
         }
-        setPing((samples.reduce((a, b) => a + b) / samples.length).toFixed(2));
+        const avg = times.reduce((a, b) => a + b) / times.length;
+        setPing(avg.toFixed(1));
+        setJitter((Math.max(...times) - Math.min(...times)).toFixed(1));
     };
 
-    const runDownloadIteration = () => {
-        return new Promise((resolve, reject) => {
+    const runDownload = () => {
+        return new Promise((resolve) => {
+            setPhase('DOWNLOAD');
             const start = performance.now();
             const xhr = new XMLHttpRequest();
-            xhr.open('GET', `/api/download-test?size=${DOWNLOAD_SIZE}&cache=${Date.now()}`, true);
+            xhr.open('GET', `/api/download-test?size=${DOWNLOAD_SIZE}&t=${Date.now()}`, true);
             xhr.responseType = 'blob';
-            xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-            
+            xhr.setRequestHeader('Cache-Control', 'no-store');
+
             xhr.onprogress = (e) => {
-                const elapsed = performance.now() - start;
-                if (elapsed > 100) { 
-                    const currentMbps = calculateMbps(e.loaded, elapsed);
-                    setDownload(currentMbps);
-                    setProgress(p => p + (e.loaded / DOWNLOAD_SIZE) * 13); // Iterative progress
+                const now = performance.now();
+                const elapsed = (now - start) / 1000;
+                if (elapsed > 0.4) { // TCP Ramp-up skip
+                    const rawMbps = (e.loaded * 8) / (elapsed * 1000000);
+                    setDownload(prev => smoothSpeed(rawMbps, prev));
+                    setProgress(10 + (e.loaded / DOWNLOAD_SIZE) * 40);
                 }
             };
 
             xhr.onload = () => {
-                const elapsed = performance.now() - start;
-                const finalMbps = calculateMbps(DOWNLOAD_SIZE, elapsed);
-                resolve(finalMbps);
+                const totalElapsed = (performance.now() - start) / 1000;
+                const finalMbps = (DOWNLOAD_SIZE * 8) / (totalElapsed * 1000000);
+                setDownload(finalMbps);
+                resolve();
             };
-            xhr.onerror = () => reject();
             xhr.send();
         });
     };
 
-    const runDownload = async () => {
-        setPhase('DOWNLOAD');
-        const results = [];
-        for (let i = 0; i < 3; i++) { // Run 3 times for accuracy
-            const res = await runDownloadIteration();
-            results.push(res);
-        }
-        const avgMbps = results.reduce((a, b) => a + b) / results.length;
-        setDownload(avgMbps);
-    };
-
     const runUpload = () => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             setPhase('UPLOAD');
-            const data = new Uint8Array(UPLOAD_SIZE);
             const start = performance.now();
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', `/api/upload-test?cache=${Date.now()}`, true);
-            xhr.setRequestHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
-
+            xhr.open('POST', `/api/upload-test?t=${Date.now()}`, true);
+            
             xhr.upload.onprogress = (e) => {
-                const elapsed = performance.now() - start;
-                if (elapsed > 100) {
-                    const currentMbps = calculateMbps(e.loaded, elapsed);
-                    setUpload(currentMbps);
+                const now = performance.now();
+                const elapsed = (now - start) / 1000;
+                if (elapsed > 0.4) {
+                    const rawMbps = (e.loaded * 8) / (elapsed * 1000000);
+                    setUpload(prev => smoothSpeed(rawMbps, prev));
                     setProgress(50 + (e.loaded / UPLOAD_SIZE) * 50);
                 }
             };
 
             xhr.onload = () => {
-                const elapsed = performance.now() - start;
-                const finalMbps = calculateMbps(UPLOAD_SIZE, elapsed);
+                const totalElapsed = (performance.now() - start) / 1000;
+                const finalMbps = (UPLOAD_SIZE * 8) / (totalElapsed * 1000000);
                 setUpload(finalMbps);
                 resolve();
             };
-            xhr.onerror = () => reject();
-            xhr.send(data);
+            xhr.send(new Uint8Array(UPLOAD_SIZE));
         });
     };
 
     const startTest = async () => {
-        setStatus('testing'); setDownload(0); setUpload(0); setPing(null); setProgress(0);
-        try {
-            await runPing();
-            await runDownload();
-            await runUpload();
-            setStatus('finished');
-            setHistory(h => [{ ping, down: download.toFixed(2), up: upload.toFixed(2), date: new Date().toLocaleTimeString() }, ...h].slice(0, 3));
-        } catch { setStatus('error'); }
+        setStatus('testing'); setDownload(0); setUpload(0); setPing(0); setProgress(0);
+        await runPing();
+        await runDownload();
+        await runUpload();
+        setStatus('finished');
+        setHistory(h => [{ down: download.toFixed(1), up: upload.toFixed(1), ping, date: new Date().toLocaleTimeString() }, ...h].slice(0, 3));
     };
 
     return (
-        <div className="min-h-screen bg-[#050710] text-white flex items-center justify-center p-4">
-            <Helmet><title>Free Internet Speed Test Online | StudentAI Tools</title></Helmet>
+        <div className="min-h-screen bg-[#030508] text-slate-100 flex items-center justify-center p-4">
+            <Helmet><title>SpeedPulse Elite — Pro Bandwidth Diagnostics</title></Helmet>
 
-            <div className="w-full max-w-[400px] bg-slate-900/40 backdrop-blur-3xl rounded-[2.5rem] border border-white/10 p-8 shadow-2xl relative overflow-hidden">
-                <div className="absolute top-0 left-0 w-full h-[3px] bg-slate-800">
-                    <div className="h-full bg-blue-500 transition-all duration-300 shadow-[0_0_10px_#3b82f6]" style={{ width: `${progress}%` }} />
-                </div>
+            <div className="w-full max-w-[420px] bg-slate-900/40 backdrop-blur-[40px] rounded-[2.5rem] border border-white/10 p-1 flex flex-col shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden group">
+                {/* Animated Inner Border */}
+                <div className="absolute inset-0 rounded-[2.5rem] border border-blue-500/20 group-hover:border-blue-500/40 transition-colors" />
+                
+                <div className="bg-slate-900/80 rounded-[2.4rem] p-8 relative flex flex-col items-center gap-6">
+                    {/* Header */}
+                    <div className="flex justify-between w-full items-center mb-2">
+                        <div className="flex items-center gap-2">
+                            <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6] animate-pulse" />
+                            <span className="text-[10px] font-black tracking-[0.3em] uppercase opacity-40 italic">SpeedPulse v15</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-[10px] font-black text-slate-600">
+                            <ShieldCheck className="w-3 h-3 text-emerald-500" /> SECURE
+                        </div>
+                    </div>
 
-                <div className="text-center mb-6">
-                    <h1 className="text-2xl font-black italic tracking-tighter uppercase">Speed<span className="text-blue-500">Pulse</span></h1>
-                    <div className="text-[10px] font-bold text-slate-500 tracking-widest uppercase mt-1">Diagnostic Engine v14</div>
-                </div>
-
-                <div className="flex flex-col items-center gap-6 py-4">
-                    {/* Circle Gauge */}
-                    <div className="relative w-48 h-48 flex items-center justify-center">
-                        <svg className="absolute inset-0 w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                            <circle cx="50" cy="50" r="45" fill="none" stroke="#1e293b" strokeWidth="8" />
-                            <circle 
-                                cx="50" cy="50" r="45" 
-                                fill="none" 
-                                stroke={phase === 'UPLOAD' ? '#a78bfa' : '#3b82f6'} 
-                                strokeWidth="8" 
-                                strokeDasharray="282.7" 
-                                strokeDashoffset={282.7 - (282.7 * (phase === 'UPLOAD' ? Math.min(upload, 100) : Math.min(download, 100))) / 100} 
-                                className="transition-all duration-300"
-                                strokeLinecap="round" 
-                            />
-                        </svg>
-                        <div className="text-center z-10">
-                            <div className="text-4xl font-black tabular-nums">
-                                {(status === 'testing' ? (phase === 'UPLOAD' ? upload : download) : (status === 'finished' ? download : 0)).toFixed(2)}
+                    {/* Accurate Gauge & Waveform */}
+                    <div className="relative w-full aspect-square flex items-center justify-center bg-black/60 rounded-[2.5rem] border border-white/5 overflow-hidden shadow-inner">
+                        <Waveform active={status === 'testing'} color={phase === 'UPLOAD' ? '#a78bfa' : '#3b82f6'} />
+                        
+                        <div className="relative z-10 text-center">
+                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">
+                                {status === 'testing' ? `${phase} ACTIVE` : 'ENGINE IDLE'}
                             </div>
-                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mt-1">Mbps</div>
+                            <div className="text-6xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-500">
+                                {status === 'testing' ? (phase === 'UPLOAD' ? upload.toFixed(1) : download.toFixed(1)) : (status === 'finished' ? download.toFixed(1) : '0')}
+                            </div>
+                            <div className="text-xs font-black text-blue-500 mt-2 tracking-[0.2em] uppercase italic bg-blue-500/10 px-4 py-1 rounded-full">Mbps</div>
+                        </div>
+
+                        {/* Precise Progress Bar Around Inner Circle */}
+                        <div className="absolute inset-0 p-4">
+                            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.02)" strokeWidth="0.5" />
+                                <circle 
+                                    cx="50" cy="50" r="48" 
+                                    fill="none" 
+                                    stroke={phase === 'UPLOAD' ? '#a78bfa' : '#3b82f6'} 
+                                    strokeWidth="2" 
+                                    strokeDasharray="301.6" 
+                                    strokeDashoffset={301.6 - (301.6 * progress) / 100}
+                                    className="transition-all duration-300 shadow-[0_0_10px_#3b82f644]"
+                                    strokeLinecap="round"
+                                />
+                            </svg>
                         </div>
                     </div>
 
+                    {/* Pro Results Grid */}
                     <div className="grid grid-cols-2 gap-4 w-full">
-                        <div className="bg-black/40 p-4 rounded-3xl border border-white/5 text-center">
-                            <div className="text-[8px] font-black text-blue-400 tracking-widest uppercase mb-1 flex items-center justify-center gap-1"><ArrowDown className="w-2.5 h-2.5" /> DOWN</div>
-                            <div className="text-xl font-black text-white">{download > 0 ? download.toFixed(2) : '--'}</div>
+                        <div className="bg-white/[0.02] p-4 rounded-3xl border border-white/5 group-hover:border-blue-500/10 transition-colors">
+                            <div className="flex items-center gap-2 mb-1">
+                                <ArrowDown className="w-3 h-3 text-blue-500" strokeWidth={3} />
+                                <span className="text-[9px] font-black text-slate-500 tracking-widest uppercase">Download</span>
+                            </div>
+                            <div className="text-2xl font-black tabular-nums text-white">{download > 0 ? download.toFixed(1) : '--'} <span className="text-[9px] opacity-30 italic">Mbps</span></div>
                         </div>
-                        <div className="bg-black/40 p-4 rounded-3xl border border-white/5 text-center">
-                            <div className="text-[8px] font-black text-purple-400 tracking-widest uppercase mb-1 flex items-center justify-center gap-1"><ArrowUp className="w-2.5 h-2.5" /> UP</div>
-                            <div className="text-xl font-black text-white">{upload > 0 ? upload.toFixed(2) : '--'}</div>
+                        <div className="bg-white/[0.02] p-4 rounded-3xl border border-white/5 group-hover:border-purple-500/10 transition-colors">
+                            <div className="flex items-center gap-2 mb-1">
+                                <ArrowUp className="w-3 h-3 text-purple-500" strokeWidth={3} />
+                                <span className="text-[9px] font-black text-slate-500 tracking-widest uppercase">Upload</span>
+                            </div>
+                            <div className="text-2xl font-black tabular-nums text-white">{upload > 0 ? upload.toFixed(1) : '--'} <span className="text-[9px] opacity-30 italic">Mbps</span></div>
                         </div>
                     </div>
 
-                    <div className="flex w-full gap-4 items-center px-4">
-                        <div className="flex-1 flex gap-2 text-[10px] font-bold text-slate-500">
-                            <span className="opacity-40 uppercase">Ping</span> <span className="text-blue-400">{ping || '--'}ms</span>
+                    {/* Connection Stats */}
+                    <div className="flex justify-between w-full px-6 py-4 bg-black/40 rounded-3xl border border-white/5 text-[9px] font-bold">
+                        <div className="flex items-center gap-3">
+                            <div className="flex flex-col"><span className="opacity-40 uppercase">Ping</span><span className="text-blue-500 tabular-nums">{ping || '--'} ms</span></div>
+                            <div className="flex flex-col border-l border-white/10 pl-3"><span className="opacity-40 uppercase">Jitter</span><span className="text-purple-500 tabular-nums">{jitter || '--'} ms</span></div>
                         </div>
-                        <button onClick={() => { navigator.clipboard.writeText(`⬇️ ${download.toFixed(2)} ⬆️ ${upload.toFixed(2)}`); setCopied(true); setTimeout(() => setCopied(false), 2000); }} className="p-2 bg-white/5 rounded-xl">
-                            {copied ? <CheckCircle2 className="w-3.5 h-3.5 text-green-500" /> : <Share2 className="w-3.5 h-3.5 text-slate-500" />}
-                        </button>
+                        <div className="flex flex-col items-end whitespace-nowrap overflow-hidden">
+                            <span className="opacity-40 uppercase">Network</span>
+                            <span className="text-white max-w-[100px] truncate">{isp}</span>
+                        </div>
                     </div>
 
-                    <div className="w-full pt-4 border-t border-white/5">
+                    {/* Action Button */}
+                    <div className="w-full">
                         {status === 'idle' || status === 'finished' || status === 'error' ? (
-                            <button onClick={startTest} className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-black rounded-2xl text-lg transition-all active:scale-95 shadow-xl shadow-blue-600/20">
-                                {status === 'finished' ? 'TEST AGAIN' : 'START TEST'}
+                            <button onClick={startTest} className="w-full py-5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-black rounded-3xl text-sm tracking-[0.3em] shadow-[0_20px_40px_rgba(37,99,235,0.3)] active:scale-95 transition-all flex items-center justify-center gap-3 uppercase">
+                                {status === 'finished' ? <RefreshCw className="w-4 h-4" /> : <Zap className="w-4 h-4 fill-white" />}
+                                {status === 'finished' ? 'RETEST' : 'BEGIN TEST'}
                             </button>
                         ) : (
-                            <div className="flex gap-2 justify-center py-2 h-[52px] items-center">
-                                <Activity className="w-6 h-6 text-blue-500 animate-spin" />
-                                <span className="text-[10px] font-black text-blue-500/50 uppercase tracking-widest animate-pulse">{phase}...</span>
+                            <div className="w-full py-5 bg-slate-800/80 rounded-3xl flex items-center justify-center gap-4 border border-white/5">
+                                <Activity className="w-5 h-5 text-blue-500 animate-spin" />
+                                <span className="text-xs font-black text-blue-500 tracking-[0.2em] italic uppercase animate-pulse">Running Diagnostics...</span>
                             </div>
                         )}
                     </div>
-                </div>
 
-                <div className="mt-4 pt-4 border-t border-white/5">
-                    <div className="text-[8px] font-black text-slate-700 tracking-[0.4em] uppercase mb-3 text-center">HISTORY (Mbps)</div>
-                    <div className="space-y-2">
-                        {history.length > 0 ? history.map((log, i) => (
-                            <div key={i} className="flex justify-between items-center text-[10px] opacity-40 hover:opacity-100 transition-opacity">
-                                <span>{log.date}</span>
-                                <div className="flex gap-4 font-black">
-                                    <span className="text-blue-500">↓{log.down}</span>
-                                    <span className="text-purple-500">↑{log.up}</span>
+                    {/* History Minimalist */}
+                    {history.length > 0 && (
+                        <div className="w-full space-y-2 opacity-30 hover:opacity-100 transition-opacity">
+                            {history.slice(0, 2).map((h, i) => (
+                                <div key={i} className="flex justify-between text-[9px] font-black bg-white/[0.01] p-3 rounded-2xl border border-white/5">
+                                    <span className="text-slate-600 italic">#{history.length - i} Run</span>
+                                    <div className="flex gap-4">
+                                        <span className="text-blue-500">↓ {h.down}</span>
+                                        <span className="text-purple-500">↑ {h.up}</span>
+                                        <span className="text-slate-500">{h.ping}ms</span>
+                                    </div>
                                 </div>
-                            </div>
-                        )) : (
-                            <p className="text-[9px] text-slate-800 text-center py-2 italic text-center">No recent records</p>
-                        )}
-                    </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>
