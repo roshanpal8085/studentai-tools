@@ -41,6 +41,16 @@ const faqSchema = {
   ],
 };
 
+const gameSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Daily Sudoku Challenge Online",
+  "description": "Play free Sudoku puzzles with multiple difficulty levels. Sharpen your logic and concentration in your browser.",
+  "genre": "Puzzle Game",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+};
+
 export default function SudokuGame() {
   const [{ puzzle, solution }, setGame] = useState(() => generateSudoku());
   const [board, setBoard] = useState(() => puzzle.map(r => [...r]));
@@ -127,6 +137,7 @@ export default function SudokuGame() {
         <meta name="keywords" content="sudoku game online, free sudoku, brain puzzle game, logic game for students, sudoku no download" />
         <link rel="canonical" href="https://studentaitools.in/sudoku-game" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(gameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-indigo-900/20 to-slate-900 py-8 px-4">

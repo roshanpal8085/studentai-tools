@@ -26,6 +26,16 @@ const faqSchema = {
   ],
 };
 
+const gameSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Emoji Memory Matching Game",
+  "description": "Train your brain with our free emoji-based memory card game. Find all 8 pairs in the fewest moves possible.",
+  "genre": "Brain Game",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+};
+
 export default function MemoryCardGame() {
   const [cards, setCards] = useState(() => makeCards(8));
   const [flipped, setFlipped] = useState([]);
@@ -92,6 +102,7 @@ export default function MemoryCardGame() {
         <meta name="keywords" content="memory card game, memory game online, brain training game, concentration game for students, free card matching game" />
         <link rel="canonical" href="https://studentaitools.in/memory-card-game" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(gameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-pink-900/20 to-slate-900 py-8 px-4">

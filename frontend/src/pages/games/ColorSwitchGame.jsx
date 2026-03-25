@@ -17,6 +17,16 @@ const faqSchema = {
   ],
 };
 
+const gameSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Color Switch Online",
+  "description": "A high-reflex browser game where players match ball colors to rotating obstacles. Perfect for focus training.",
+  "genre": "Arcade Game",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+};
+
 export default function ColorSwitchGame() {
   const canvasRef = useRef(null);
   const stateRef = useRef(null);
@@ -147,6 +157,7 @@ export default function ColorSwitchGame() {
         <meta name="keywords" content="color switch game, color match game, free reflex game, study break game for students, reaction game online" />
         <link rel="canonical" href="https://studentaitools.in/color-switch-game" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(gameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-pink-900/20 to-slate-900 py-8 px-4">

@@ -46,7 +46,17 @@ const StudyPlanner = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Study Planner - Personalized Exam Schedules" 
-        description="Generate efficient, science-backed study plans with our AI Study Planner. Optimize your preparation using Spaced Repetition and Active Recall techniques." 
+        description="Generate efficient, science-backed study plans with our AI Study Planner. Optimize your preparation using Spaced Repetition and Active Recall techniques."
+        keywords="ai study planner, exam preparation, personalized study plan, student productivity, science-backed study"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Study Planner",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "AI-powered study plan generator utilizing spaced repetition and active recall for optimized exam preparation.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

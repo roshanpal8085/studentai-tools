@@ -46,7 +46,17 @@ const ExamCountdown = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Exam Countdown Timer - Student Deadline Tracker" 
-        description="Never miss an exam again. Track your upcoming midterm and final exams with our personalized countdown timer app. Autosaves securely to your device." 
+        description="Never miss an exam again. Track your upcoming midterm and final exams with our personalized countdown timer app. Autosaves securely to your device."
+        keywords="exam countdown, study timer, deadline tracker, student planner, free countdown tool"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Exam Countdown Timer",
+          "operatingSystem": "Web",
+          "applicationCategory": "UtilitiesApplication",
+          "description": "Personalized countdown timer for tracking academic exams and deadlines with local browser sync.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">

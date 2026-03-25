@@ -29,7 +29,17 @@ const EssayTopicGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free AI Essay Topic Generator - Creative & Academic Ideas" 
-        description="Stuck on your next assignment? Generate creative, argumentative, and academic essay topics instantly with our AI-powered topic generator. 100% free online tool." 
+        description="Stuck on your next assignment? Generate creative, argumentative, and academic essay topics instantly with our AI-powered topic generator. 100% free online tool."
+        keywords="ai essay topic generator, essay idea maker, college essay topics, research paper ideas, free writing tool"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Essay Topic Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "AI-powered brainstorming tool for generating academic and creative essay topics and ideas.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

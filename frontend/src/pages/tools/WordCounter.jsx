@@ -27,7 +27,17 @@ const WordCounter = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free Word & Character Counter - Target SEO Analyzer" 
-        description="Professional-grade real-time word and character counter. Analyze reading time, sentence density, and paragraph structure instantly directly in your browser." 
+        description="Professional-grade real-time word and character counter. Analyze reading time, sentence density, and paragraph structure instantly directly in your browser."
+        keywords="word counter, character counter, seo counter, reading time calculator, word count tool"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Word & Character Counter",
+          "operatingSystem": "Web",
+          "applicationCategory": "UtilitiesApplication",
+          "description": "Real-time word and character counting tool with reading time and structure analysis.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
       
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

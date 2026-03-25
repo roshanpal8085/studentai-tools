@@ -21,6 +21,16 @@ const faqSchema = {
   ],
 };
 
+const gameSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Professional Typing Speed Test",
+  "description": "Measure your words per minute (WPM) and accuracy with our free typing speed test. Build a vital academic skill.",
+  "genre": "Educational Game",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+};
+
 export default function TypingSpeedTest() {
   const [textIdx, setTextIdx] = useState(() => Math.floor(Math.random() * SAMPLE_TEXTS.length));
   const [input, setInput] = useState('');
@@ -104,6 +114,7 @@ export default function TypingSpeedTest() {
         <meta name="keywords" content="typing speed test, WPM test online, typing test for students, free typing test, improve typing speed" />
         <link rel="canonical" href="https://studentaitools.in/typing-speed-test" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(gameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-cyan-900/20 to-slate-900 py-8 px-4">

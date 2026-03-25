@@ -46,7 +46,17 @@ const EssayWriter = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Essay Writer - Generate Academic Essays for Free" 
-        description="Craft high-quality, structured essays in seconds with our AI Essay Writer. Perfect for argumentative, descriptive, and persuasive essays with proper academic flow." 
+        description="Craft high-quality, structured essays in seconds with our AI Essay Writer. Perfect for argumentative, descriptive, and persuasive essays with proper academic flow."
+        keywords="ai essay writer, essay generator, academic writing tool, free essay maker, student ai"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Essay Writer",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Powerful AI tool for generating well-structured academic essays across multiple genres.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

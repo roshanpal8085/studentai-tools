@@ -76,7 +76,17 @@ const AiResume = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Resume Builder - Free ATS-Friendly Resume Generator" 
-        description="Create a professional, ATS-optimized resume in minutes with our AI Resume Builder. Choose from modern templates and download as a high-quality PDF for free." 
+        description="Create a professional, ATS-optimized resume in minutes with our AI Resume Builder. Choose from modern templates and download as a high-quality PDF for free."
+        keywords="ai resume builder, ats resume generator, free resume maker, cv builder, studentai tools"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Resume Builder",
+          "operatingSystem": "Web",
+          "applicationCategory": "BusinessApplication",
+          "description": "Professional AI-powered resume builder for creating ATS-friendly CVs and PDFs.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

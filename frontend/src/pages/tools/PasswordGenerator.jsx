@@ -42,7 +42,17 @@ const PasswordGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Secure Password Generator - Military Grade Protection" 
-        description="Generate strong, unhackable passwords for your student portals and personal accounts. Free, private, and local browser-based generation." 
+        description="Generate strong, unhackable passwords for your student portals and personal accounts. Free, private, and local browser-based generation."
+        keywords="password generator, secure password maker, strong password creator, random password tool, student security"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Strong Password Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "UtilitiesApplication",
+          "description": "Secure local-only password generator with customizable complexity and entropy optimization.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

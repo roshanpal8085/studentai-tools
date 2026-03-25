@@ -38,7 +38,17 @@ const HomeworkPlanner = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free Online Homework Planner - Student Task Manager" 
-        description="Organize your school assignments and upcoming deadlines with our free online homework planner. Stay on top of your tasks locally within your browser." 
+        description="Organize your school assignments and upcoming deadlines with our free online homework planner. Stay on top of your tasks locally within your browser."
+        keywords="homework planner, school task manager, assignment tracker, student organizer, free study planner"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Homework Planner",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Secure local task manager for students to track homework assignments and deadlines.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">

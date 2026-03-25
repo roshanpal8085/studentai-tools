@@ -29,7 +29,17 @@ const QRGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free QR Code Generator - Professional & Fast" 
-        description="Instantly generate high-quality QR codes for URLs, text, and social media. Free, static codes with no expiration or watermarks for students." 
+        description="Instantly generate high-quality QR codes for URLs, text, and social media. Free, static codes with no expiration or watermarks for students."
+        keywords="qr code generator, free qr maker, static qr code, online qr generator, student sharing tool"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Free QR Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "UtilitiesApplication",
+          "description": "High-quality static QR code generator with no expiration and high-resolution PNG exports.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

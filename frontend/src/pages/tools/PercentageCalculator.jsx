@@ -16,7 +16,17 @@ const PercentageCalculator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free Percentage Calculator - Math & Finance Tool" 
-        description="Calculate percentages quickly and accurately. Perfect for homework, grades, retail discounts, and tax estimation. Professional calculation utility." 
+        description="Calculate percentages quickly and accurately. Perfect for homework, grades, retail discounts, and tax estimation. Professional calculation utility."
+        keywords="percentage calculator, math tool, discount calculator, grade percentage, student math utility"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Percentage Calculator",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Fast and accurate percentage calculator for academic and financial mathematics.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

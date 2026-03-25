@@ -1,11 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 
-const SEO = ({ title, description, keywords, canonical, ogImage, ogType = 'website' }) => {
+const SEO = ({ title, description, keywords, canonical, ogImage, ogType = 'website', schema }) => {
   const siteTitle = "StudentAI Tools - Best AI Study Tools for Students";
   const fullTitle = title ? `${title} | ${siteTitle}` : siteTitle;
   const defaultDescription = "Free AI-powered study tools for students. Resume builder, homework helper, essay writer, PDF utilities, and more. Boost your productivity with StudentAI.";
   const metaDescription = description || defaultDescription;
-  const url = `https://studentaitools.com${canonical || ''}`;
+  const url = `https://studentaitools.in${canonical || ''}`;
 
   return (
     <Helmet>
@@ -28,8 +28,15 @@ const SEO = ({ title, description, keywords, canonical, ogImage, ogType = 'websi
       <meta name="twitter:description" content={metaDescription} />
       {ogImage && <meta name="twitter:image" content={ogImage} />}
 
-      {/* AdSense Placeholder (Auto Ads) - User will need to add their ID */}
-      {/* <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossorigin="anonymous"></script> */}
+      {/* AEO: Structured Data */}
+      {schema && (
+        <script type="application/ld+json">
+          {JSON.stringify(schema)}
+        </script>
+      )}
+
+      {/* AdSense Placeholder (Auto Ads) */}
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1647228811800166" crossorigin="anonymous"></script>
     </Helmet>
   );
 };

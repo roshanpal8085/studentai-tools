@@ -37,7 +37,17 @@ const AiPromptGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free AI Prompt Generator - Master ChatGPT & Gemini" 
-        description="Master AI tools like ChatGPT and Gemini with perfectly engineered prompts. Generate high-quality prompts for studying, writing, and coding instantly. 100% free." 
+        description="Master AI tools like ChatGPT and Gemini with perfectly engineered prompts. Generate high-quality prompts for studying, writing, and coding instantly. 100% free."
+        keywords="ai prompt generator, chatgpt prompt maker, prompt engineering tool, free ai prompts, gemini prompt generator"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Prompt Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Expert AI prompt engineering tool for optimizing outputs from ChatGPT, Gemini, and Claude.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -26,6 +26,16 @@ const faqSchema = {
   ],
 };
 
+const gameSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Academic Logic Puzzle Challenges",
+  "description": "Enhance your critical thinking with our collection of 10 expert-designed logic puzzles. Free to play for students.",
+  "genre": "Puzzle Game",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+};
+
 export default function LogicPuzzleGame() {
   const [puzzles, setPuzzles] = useState([]);
   const [idx, setIdx] = useState(0);
@@ -97,6 +107,7 @@ export default function LogicPuzzleGame() {
         <meta name="keywords" content="logic puzzle game, brain teaser online, logic games for students, critical thinking game, free puzzle game" />
         <link rel="canonical" href="https://studentaitools.in/logic-puzzle-game" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(gameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900/20 to-slate-900 py-8 px-4">

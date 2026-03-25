@@ -31,7 +31,17 @@ const StudyTimetableGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Study Timetable Generator - Weekly Schedule Maker" 
-        description="Create a personalized, optimal weekly study schedule in seconds. Our AI timetable generator balances your subjects and breaks for maximum student productivity. 100% free." 
+        description="Create a personalized, optimal weekly study schedule in seconds. Our AI timetable generator balances your subjects and breaks for maximum student productivity. 100% free."
+        keywords="study timetable generator, weekly schedule maker, student planner, academic schedule, free timetable tool"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Study Timetable Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "AI-powered tool for creating balanced weekly study schedules and actionable academic workflows.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

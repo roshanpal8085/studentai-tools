@@ -44,7 +44,17 @@ const NotesGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Notes Generator - Structured Study Notes for Students" 
-        description="Transform lecture transcripts, long articles, or book chapters into structured, high-quality study notes. Supports Cornell Method, Outlines, and more." 
+        description="Transform lecture transcripts, long articles, or book chapters into structured, high-quality study notes. Supports Cornell Method, Outlines, and more."
+        keywords="ai notes generator, study notes maker, cornell notes system, transcript to notes, student ai"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Notes Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "AI-powered tool for transforming raw educational content into structured study notes and Cornell summaries.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -59,7 +59,17 @@ const PdfToWord = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free PDF to Word Converter - Extract Text Instantly" 
-        description="Convert your PDF files to editable Word documents or text instantly for free. Secure, fast, and completely processed in your browser." 
+        description="Convert your PDF files to editable Word documents or text instantly for free. Secure, fast, and completely processed in your browser."
+        keywords="pdf to word, extract text from pdf, pdf converter, student academic tools, free pdf to docx"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "PDF to Word Converter",
+          "operatingSystem": "Web",
+          "applicationCategory": "UtilitiesApplication",
+          "description": "Fast and secure extraction of text from PDF files into editable document formats.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

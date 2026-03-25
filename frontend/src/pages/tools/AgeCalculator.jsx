@@ -32,7 +32,17 @@ const AgeCalculator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free Accurate Age Calculator - Premium Time Tool" 
-        description="Calculate your exact age down to the day. Professional-grade age analysis tool for students, applications, and record keeping." 
+        description="Calculate your exact age down to the day. Professional-grade age analysis tool for students, applications, and record keeping."
+        keywords="age calculator, exact age, age in days, time calculator, student utility"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Accurate Age Calculator",
+          "operatingSystem": "Web",
+          "applicationCategory": "UtilitiesApplication",
+          "description": "High-precision age calculator for determining exact years, months, and days since birth.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

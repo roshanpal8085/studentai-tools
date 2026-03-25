@@ -18,6 +18,16 @@ const faqSchema = {
   ],
 };
 
+const gameSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Classic Flappy Bird Online",
+  "description": "The cult classic Flappy Bird reimagined for the web. Avoid pipes and beat your high score in this free browser game.",
+  "genre": "Arcade Game",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+};
+
 export default function FlappyBirdGame() {
   const canvasRef = useRef(null);
   const stateRef = useRef(null);
@@ -168,6 +178,7 @@ export default function FlappyBirdGame() {
         <meta name="keywords" content="flappy bird game, flappy bird online free, classic arcade game, study break game for students, free browser game" />
         <link rel="canonical" href="https://studentaitools.in/flappy-bird-game" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(gameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-sky-900/20 to-slate-900 py-8 px-4">

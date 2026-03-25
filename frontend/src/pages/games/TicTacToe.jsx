@@ -46,6 +46,16 @@ const faqSchema = {
   ],
 };
 
+const gameSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Smart Tic Tac Toe AI",
+  "description": "Play the classic Tic Tac Toe game against our unbeatable AI or a friend. Perfect strategic break for students.",
+  "genre": "Strategy Game",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+};
+
 export default function TicTacToe() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [xIsHuman, setXIsHuman] = useState(true);
@@ -113,6 +123,7 @@ export default function TicTacToe() {
         <meta name="keywords" content="tic tac toe online, tic tac toe vs computer, free tic tac toe, classic game for students, study break game" />
         <link rel="canonical" href="https://studentaitools.in/tic-tac-toe" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(gameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900/20 to-slate-900 py-8 px-4">

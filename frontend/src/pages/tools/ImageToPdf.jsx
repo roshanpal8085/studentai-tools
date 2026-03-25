@@ -88,6 +88,16 @@ const ImageToPdf = () => {
             <SEO
                 title="Free Image to PDF Converter - Multiple Images, High Quality & Secure"
                 description="Convert multiple JPG, PNG, and WebP images into a single high-quality PDF instantly. 100% free, secure, browser-based. Perfect for student assignments."
+                keywords="image to pdf, jpg to pdf, png to pdf, multiple images to pdf, student assignment tool"
+                schema={{
+                  "@context": "https://schema.org",
+                  "@type": "SoftwareApplication",
+                  "name": "Image to PDF Converter",
+                  "operatingSystem": "Web",
+                  "applicationCategory": "UtilitiesApplication",
+                  "description": "Professional-grade local image-to-PDF converter with support for multiple images and reordering.",
+                  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+                }}
             />
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

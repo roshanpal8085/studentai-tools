@@ -7,6 +7,17 @@ const DIRS = { ArrowUp: [0,-1], ArrowDown: [0,1], ArrowLeft: [-1,0], ArrowRight:
 
 function rand(max) { return Math.floor(Math.random() * max); }
 
+const videoGameSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'VideoGame',
+  'name': 'Snake Retro',
+  'description': 'Classic focus & reflex game for students. Eat food, grow longer, and avoid walls.',
+  'operatingSystem': 'Web',
+  'applicationCategory': 'Game',
+  'genre': 'Arcade',
+  'offers': { '@type': 'Offer', 'price': '0', 'priceCurrency': 'INR' }
+};
+
 const faqSchema = {
   '@context': 'https://schema.org',
   '@type': 'FAQPage',
@@ -138,6 +149,7 @@ export default function SnakeGame() {
         <meta name="keywords" content="snake game, snake game online, free classic browser game, study break game, snake for students" />
         <link rel="canonical" href="https://studentaitools.in/snake-game" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(videoGameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-green-900/20 to-slate-900 py-8 px-4">

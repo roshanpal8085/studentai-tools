@@ -36,7 +36,17 @@ const HomeworkHelper = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Homework Helper - Step-by-Step Solutions for Students" 
-        description="Get instant, expert-level homework help for any subject. Our AI tutor provides clear, step-by-step explanations to help you master complex topics in seconds." 
+        description="Get instant, expert-level homework help for any subject. Our AI tutor provides clear, step-by-step explanations to help you master complex topics in seconds."
+        keywords="ai homework helper, homework solver, step by step math, science help, free ai tutor"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Homework Helper",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Instant AI-powered homework assistance with step-by-step explanations for all academic subjects.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

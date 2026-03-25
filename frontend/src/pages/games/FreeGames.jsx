@@ -65,6 +65,27 @@ const faqSchema = {
   ],
 };
 
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Free Student Brain Games Collection",
+  "description": "Explore 11+ free brain-training and educational games for students. Play Sudoku, Snake, Typing Test, and more in your browser.",
+  "url": "https://studentaitools.in/free-games",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "item": { "@type": "VideoGame", "name": "Snake Game", "url": "https://studentaitools.in/snake-game" } },
+    { "@type": "ListItem", "position": 2, "item": { "@type": "VideoGame", "name": "Sudoku", "url": "https://studentaitools.in/sudoku-game" } },
+    { "@type": "ListItem", "position": 3, "item": { "@type": "VideoGame", "name": "Tic Tac Toe", "url": "https://studentaitools.in/tic-tac-toe" } },
+    { "@type": "ListItem", "position": 4, "item": { "@type": "VideoGame", "name": "Memory Card Game", "url": "https://studentaitools.in/memory-card-game" } },
+    { "@type": "ListItem", "position": 5, "item": { "@type": "VideoGame", "name": "Typing Speed Test", "url": "https://studentaitools.in/typing-speed-test" } },
+    { "@type": "ListItem", "position": 6, "item": { "@type": "VideoGame", "name": "Math Quiz", "url": "https://studentaitools.in/math-quiz-game" } },
+    { "@type": "ListItem", "position": 7, "item": { "@type": "VideoGame", "name": "Logic Puzzle", "url": "https://studentaitools.in/logic-puzzle-game" } },
+    { "@type": "ListItem", "position": 8, "item": { "@type": "VideoGame", "name": "Stack Game", "url": "https://studentaitools.in/stack-game" } },
+    { "@type": "ListItem", "position": 9, "item": { "@type": "VideoGame", "name": "Color Switch", "url": "https://studentaitools.in/color-switch-game" } },
+    { "@type": "ListItem", "position": 10, "item": { "@type": "VideoGame", "name": "Word Puzzle", "url": "https://studentaitools.in/word-puzzle-game" } },
+    { "@type": "ListItem", "position": 11, "item": { "@type": "VideoGame", "name": "Flappy Bird", "url": "https://studentaitools.in/flappy-bird-game" } }
+  ]
+};
+
 export default function FreeGames() {
   return (
     <>
@@ -73,10 +94,8 @@ export default function FreeGames() {
         <meta name="description" content="Play free browser games for students — Snake, Sudoku, Tic Tac Toe, Typing Speed Test, Memory Card, Math Quiz, and more. No download needed. Perfect study break games!" />
         <meta name="keywords" content="free browser games, study break games, brain training games for students, free online games for students, educational games" />
         <link rel="canonical" href="https://studentaitools.in/free-games" />
-        <meta property="og:title" content="Free Games for Students | StudentAI Tools" />
-        <meta property="og:description" content="Play 12 free browser games — brain training, classics, and study break games. No download needed!" />
-        <meta property="og:url" content="https://studentaitools.in/free-games" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">

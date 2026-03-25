@@ -32,7 +32,17 @@ const RandomQuestionGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Random Practice Question Generator - AI Quiz Tool" 
-        description="Test your knowledge with AI-generated random practice questions on any subject. Perfect for trivia, exam prep, and flashcard-style learning. 100% free online." 
+        description="Test your knowledge with AI-generated random practice questions on any subject. Perfect for trivia, exam prep, and flashcard-style learning. 100% free online."
+        keywords="random question generator, practice questions, ai quiz maker, trivia generator, student study tool"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Random Question Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "AI-powered tool for generating unique practice and trivia questions for academic mastery.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

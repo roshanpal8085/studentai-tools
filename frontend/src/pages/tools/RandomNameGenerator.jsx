@@ -30,7 +30,17 @@ const RandomNameGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free Random Name Generator - Fictional & Placeholder Names" 
-        description="Generate diverse random names instantly for creative writing, persona development, or demo projects. 100% free premium online tool." 
+        description="Generate diverse random names instantly for creative writing, persona development, or demo projects. 100% free premium online tool."
+        keywords="random name generator, fictional name maker, character names, placeholder names, student creative tools"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Random Name Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "UtilitiesApplication",
+          "description": "Diverse random name generator for creative writing and persona development with bulk generation support.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

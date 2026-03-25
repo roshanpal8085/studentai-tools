@@ -26,6 +26,16 @@ const faqSchema = {
   ],
 };
 
+const gameSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Fast Mental Math Quiz Online",
+  "description": "Boost your calculation speed with our timed math quiz. Covers addition, subtraction, multiplication, and division.",
+  "genre": "Educational Game",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+};
+
 export default function MathQuizGame() {
   const [difficulty, setDifficulty] = useState('medium');
   const [q, setQ] = useState(() => gen('medium'));
@@ -90,6 +100,7 @@ export default function MathQuizGame() {
         <meta name="keywords" content="math quiz game, mental math game, free math game for students, arithmetic quiz, brain training math" />
         <link rel="canonical" href="https://studentaitools.in/math-quiz-game" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(gameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-orange-900/20 to-slate-900 py-8 px-4">

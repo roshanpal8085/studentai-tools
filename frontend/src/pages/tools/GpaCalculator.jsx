@@ -36,7 +36,17 @@ const GpaCalculator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free Online GPA Calculator - College & High School" 
-        description="Calculate your semester, cumulative, and major GPA instantly. Features standard 4.0 scales, custom credits, and academic performance tracking for students." 
+        description="Calculate your semester, cumulative, and major GPA instantly. Features standard 4.0 scales, custom credits, and academic performance tracking for students."
+        keywords="gpa calculator, college gpa, weighted gpa, cumulative gpa calculator, grade point average tool"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Academic GPA Calculator",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Standard 4.0 scale GPA calculator for college and high school students with weighted credit support.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

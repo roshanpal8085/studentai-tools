@@ -45,7 +45,17 @@ const QuizGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Quiz Generator - Personalized Practice Tests" 
-        description="Convert any study material into custom practice quizzes. Generate Multiple Choice, True/False, or Short Answer questions to master active recall." 
+        description="Convert any study material into custom practice quizzes. Generate Multiple Choice, True/False, or Short Answer questions to master active recall."
+        keywords="ai quiz generator, practice test maker, study quiz creator, free ai quiz, student tools"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Quiz Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "AI-powered tool for generating custom practice quizzes and tests from study materials.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

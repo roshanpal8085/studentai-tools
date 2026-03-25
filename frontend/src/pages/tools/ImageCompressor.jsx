@@ -42,7 +42,17 @@ const ImageCompressor = () => {
         <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
             <SEO 
                 title="Free Image Compressor - Reduce Photo Size Online" 
-                description="Compress JPG, PNG, and WebP images instantly online without losing quality. Free tool to reduce file size for fast uploads and storage saving." 
+                description="Compress JPG, PNG, and WebP images instantly online without losing quality. Free tool to reduce file size for fast uploads and storage saving."
+                keywords="image compressor, reduce image size, photo compressor, online image shrinker, free student tool"
+                schema={{
+                  "@context": "https://schema.org",
+                  "@type": "SoftwareApplication",
+                  "name": "Smart Image Compressor",
+                  "operatingSystem": "Web",
+                  "applicationCategory": "UtilitiesApplication",
+                  "description": "Fast and secure local image compressor to reduce file sizes for JPG, PNG, and WebP.",
+                  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+                }}
             />
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

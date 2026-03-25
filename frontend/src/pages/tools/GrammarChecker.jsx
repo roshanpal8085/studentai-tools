@@ -37,7 +37,17 @@ const GrammarChecker = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free AI Grammar & Proofreading Checker - Premium Standards" 
-        description="Fix spelling, syntax, and punctuation errors instantly with our AI-powered grammar engine. Get flawless essays and professional emails for free online." 
+        description="Fix spelling, syntax, and punctuation errors instantly with our AI-powered grammar engine. Get flawless essays and professional emails for free online."
+        keywords="ai grammar checker, grammar corrector, free proofreading, spelling checker, sentence fixer"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Grammar Checker",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Professional-grade AI proofreading and grammar correction tool for students and business writers.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

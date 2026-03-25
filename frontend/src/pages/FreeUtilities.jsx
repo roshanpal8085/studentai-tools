@@ -56,12 +56,33 @@ const utilityCategories = [
   }
 ];
 
+const itemListSchema = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "name": "Free AI and Utility Tools for Students",
+  "description": "A collection of 29+ free AI writers, calculators, and productivity utilities for active students.",
+  "url": "https://studentaitools.in/free-tools",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "item": { "@type": "SoftwareApplication", "name": "AI Text Summarizer", "url": "https://studentaitools.in/ai-text-summarizer" } },
+    { "@type": "ListItem", "position": 2, "item": { "@type": "SoftwareApplication", "name": "AI Resume Builder", "url": "https://studentaitools.in/ai-resume-generator" } },
+    { "@type": "ListItem", "position": 3, "item": { "@type": "SoftwareApplication", "name": "AI Homework Helper", "url": "https://studentaitools.in/ai-homework-helper" } },
+    { "@type": "ListItem", "position": 4, "item": { "@type": "SoftwareApplication", "name": "AI Essay Writer", "url": "https://studentaitools.in/ai-essay-writer" } },
+    { "@type": "ListItem", "position": 5, "item": { "@type": "SoftwareApplication", "name": "AI Study Planner", "url": "https://studentaitools.in/ai-study-planner" } },
+    { "@type": "ListItem", "position": 6, "item": { "@type": "SoftwareApplication", "name": "AI Notes Generator", "url": "https://studentaitools.in/ai-notes-generator" } },
+    { "@type": "ListItem", "position": 7, "item": { "@type": "SoftwareApplication", "name": "AI Quiz Generator", "url": "https://studentaitools.in/ai-quiz-generator" } },
+    { "@type": "ListItem", "position": 8, "item": { "@type": "SoftwareApplication", "name": "AI Assignment Generator", "url": "https://studentaitools.in/ai-assignment-generator" } },
+    { "@type": "ListItem", "position": 9, "item": { "@type": "SoftwareApplication", "name": "Presentation Builder", "url": "https://studentaitools.in/presentation-generator" } },
+    { "@type": "ListItem", "position": 10, "item": { "@type": "SoftwareApplication", "name": "Internet Speed Test", "url": "https://studentaitools.in/tools/internet-speed-test" } }
+  ]
+};
+
 const FreeUtilities = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free Utility Tools for Students" 
         description="Access 30+ free AI and utility tools for students: word counters, GPA calculators, Pomodoro timers, and more. Boost your academic productivity today." 
+        schema={itemListSchema}
       />
       
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -40,7 +40,17 @@ const TextSummarizer = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Text Summarizer - Free Online Context Generator" 
-        description="Fast and wildly accurate AI text summarizer. Turn long articles, essays, and dense documents into incredibly concise, reliable summaries in seconds." 
+        description="Fast and wildly accurate AI text summarizer. Turn long articles, essays, and dense documents into incredibly concise, reliable summaries in seconds."
+        keywords="ai text summarizer, article summarizer, free study tool, text condenser, ai summarizer online"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Text Summarizer",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Powerful AI tool for condensing long articles and documents into concise summaries.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

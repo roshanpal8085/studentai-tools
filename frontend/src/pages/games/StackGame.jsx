@@ -16,6 +16,16 @@ const faqSchema = {
   ],
 };
 
+const gameSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Tower Stack Arcade Online",
+  "description": "Test your timing with our free tower stacking game. Build the highest tower possible by dropping blocks with precision.",
+  "genre": "Arcade Game",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+};
+
 export default function StackGame() {
   const canvasRef = useRef(null);
   const stateRef = useRef(null);
@@ -110,6 +120,7 @@ export default function StackGame() {
         <meta name="keywords" content="stack game online, block stacking game, free arcade game for students, tower stacking game, study break game" />
         <link rel="canonical" href="https://studentaitools.in/stack-game" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(gameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-violet-900/20 to-slate-900 py-8 px-4">

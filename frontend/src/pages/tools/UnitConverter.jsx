@@ -46,7 +46,17 @@ const UnitConverter = () => {
         <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
             <SEO 
                 title="Free Universal Unit Converter - Length, Weight & Temp" 
-                description="Instantly convert between metric and imperial units. Fast, accurate, and professional-grade converter for students and professionals." 
+                description="Instantly convert between metric and imperial units. Fast, accurate, and professional-grade converter for students and professionals."
+                keywords="unit converter, metric to imperial, length converter, weight converter, temperature converter, free utility"
+                schema={{
+                  "@context": "https://schema.org",
+                  "@type": "SoftwareApplication",
+                  "name": "Universal Unit Converter",
+                  "operatingSystem": "Web",
+                  "applicationCategory": "UtilitiesApplication",
+                  "description": "High-precision unit converter for length, weight, and temperature with metric and imperial support.",
+                  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+                }}
             />
 
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

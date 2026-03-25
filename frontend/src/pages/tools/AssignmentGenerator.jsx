@@ -45,7 +45,17 @@ const AssignmentGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Assignment Generator - Create Comprehensive Academic Tasks" 
-        description="Design detailed academic assignments in seconds. Our AI generates objectives, instructions, and grading rubrics perfect for students and educators." 
+        description="Design detailed academic assignments in seconds. Our AI generates objectives, instructions, and grading rubrics perfect for students and educators."
+        keywords="ai assignment generator, assignment maker, academic task creator, studentai tools, teacher tools"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "AI Assignment Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Professional AI tool for generating structured academic assignments with rubrics and objectives.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

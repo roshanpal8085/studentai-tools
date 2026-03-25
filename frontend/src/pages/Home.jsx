@@ -4,7 +4,7 @@ import {
   FileText, MonitorPlay, Image as ImageIcon, LayoutTemplate, MessageSquare, 
   Mail, Zap, CheckCircle2, TrendingUp, Users, ShieldCheck, Search, 
   Calendar, Clock, Hash, Type, QrCode, Lock, Ruler, Percent, Flame,
-  User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator, FileEdit, Wifi
+  User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator, FileEdit, Wifi, Gamepad2, LayoutGrid
 } from 'lucide-react';
 
 import { Link } from 'react-router-dom';
@@ -142,11 +142,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Ad Space Placeholder */}
-      <div className="w-full max-w-4xl mx-auto h-24 bg-slate-100 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 flex items-center justify-center text-slate-400 text-sm mb-12">
-        Ad Placement - Header
-      </div>
-
       {/* Trending Tools Section */}
       <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <div className="flex items-center gap-3 mb-8">
@@ -175,7 +170,40 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Features Grid */}
+      {/* Brain Games Section (New) */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl text-indigo-500">
+               <Gamepad2 className="w-6 h-6 animate-bounce" />
+            </div>
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Free Student Brain Games</h2>
+          </div>
+          <Link to="/free-games" className="text-primary font-bold hover:underline flex items-center gap-1 group">
+            View All Games <Zap className="w-4 h-4 group-hover:fill-primary transition-all" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            { name: 'Logic Puzzle', desc: 'Sharpen your deduction skills.', icon: Brain, to: '/logic-puzzle-game', color: 'from-orange-500 to-amber-400' },
+            { name: 'Typing Test', desc: 'Boost your WPM speed.', icon: Hash, to: '/typing-speed-test', color: 'from-blue-600 to-indigo-500' },
+            { name: 'Sudoku Pro', desc: 'Ultimate daily math challenge.', icon: LayoutGrid, to: '/sudoku-game', color: 'from-purple-500 to-pink-500' },
+            { name: 'Snake Retro', desc: 'Classic focus & reflex game.', icon: MonitorPlay, to: '/snake-game', color: 'from-emerald-500 to-teal-400' }
+          ].map((game, idx) => (
+            <Link key={idx} to={game.to} className="group relative bg-white dark:bg-slate-800 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-700/50 hover:shadow-2xl transition-all overflow-hidden cursor-pointer shadow-sm">
+              <div className={`absolute -right-10 -bottom-10 w-32 h-32 bg-gradient-to-br ${game.color} opacity-5 group-hover:opacity-20 rounded-full blur-2xl transition-all`}></div>
+              <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${game.color} text-white flex items-center justify-center mb-8 shadow-lg shadow-indigo-500/10 group-hover:scale-110 transition-transform`}>
+                <game.icon className="w-7 h-7" />
+              </div>
+              <h3 className="font-bold text-2xl text-slate-900 dark:text-white mb-3">{game.name}</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-base font-medium leading-relaxed">{game.desc}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Tools for Academic Success */}
       <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center mb-16">
           <h2 className="text-3xl md:text-5xl font-bold text-slate-900 dark:text-white mb-6 tracking-tight">Tools for Academic Success</h2>
@@ -304,11 +332,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* Another Ad Banner */}
-      <div className="w-full py-10 flex justify-center">
-
-      </div>
       
       {/* Call to action */}
       <section className="w-full max-w-5xl mx-auto px-4 text-center mt-10 mb-20 relative overflow-hidden md:overflow-visible">

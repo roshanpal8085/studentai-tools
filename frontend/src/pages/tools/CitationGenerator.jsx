@@ -38,7 +38,17 @@ const CitationGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free Online Citation Generator" 
-        description="Generate citations in APA, MLA, and Chicago styles instantly. A must-have free tool for students writing research papers and essays." 
+        description="Generate citations in APA, MLA, and Chicago styles instantly. A must-have free tool for students writing research papers and essays."
+        keywords="citation generator, apa citation, mla citation, bibliography maker, free student tool"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Universal Citation Generator",
+          "operatingSystem": "Web",
+          "applicationCategory": "EducationalApplication",
+          "description": "Free tool for generating citations in APA, MLA, and Chicago styles for academic papers.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

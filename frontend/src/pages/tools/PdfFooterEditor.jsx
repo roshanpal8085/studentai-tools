@@ -132,6 +132,16 @@ const PdfFooterEditor = () => {
             <SEO
                 title="Free PDF Footer Editor — Add Name & Enrollment Number"
                 description="Add your name, enrollment number, and page numbers to every page footer of any PDF — 100% free, secure, and browser-based. No upload needed."
+                keywords="pdf footer editor, add name to pdf, enrollment number pdf, student pdf tool, free pdf editor"
+                schema={{
+                  "@context": "https://schema.org",
+                  "@type": "SoftwareApplication",
+                  "name": "PDF Footer Editor",
+                  "operatingSystem": "Web",
+                  "applicationCategory": "UtilitiesApplication",
+                  "description": "Professional local PDF editor to add custom footers, enrollment numbers, and page numbers securely.",
+                  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+                }}
             />
 
             <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">

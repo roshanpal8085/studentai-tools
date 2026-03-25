@@ -43,7 +43,17 @@ const StudyTimer = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free Pomodoro Study Timer - Maximize Academic Focus" 
-        description="Radically boost your productivity and retention with our highly-optimized Pomodoro Study Timer. Leverage deep 25-minute study sessions securely in your browser." 
+        description="Radically boost your productivity and retention with our highly-optimized Pomodoro Study Timer. Leverage deep 25-minute study sessions securely in your browser."
+        keywords="study timer, pomodoro timer, focus timer, online productivity tool, student focus"
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          "name": "Focus Study Timer",
+          "operatingSystem": "Web",
+          "applicationCategory": "UtilitiesApplication",
+          "description": "Optimized Pomodoro timer for deep study sessions and cognitive recovery.",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+        }}
       />
 
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">

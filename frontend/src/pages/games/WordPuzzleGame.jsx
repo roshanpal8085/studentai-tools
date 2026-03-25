@@ -40,6 +40,16 @@ const faqSchema = {
   ],
 };
 
+const gameSchema = {
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Academic Word Scramble Puzzle",
+  "description": "Unscramble words in categories like Science, Animals, and Countries. A fun way for students to build vocabulary.",
+  "genre": "Brain Game",
+  "operatingSystem": "Web",
+  "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+};
+
 export default function WordPuzzleGame() {
   const [catIdx, setCatIdx] = useState(() => Math.floor(Math.random() * CATEGORIES.length));
   const [wordIdx, setWordIdx] = useState(() => Math.floor(Math.random() * CATEGORIES[0].words.length));
@@ -100,6 +110,7 @@ export default function WordPuzzleGame() {
         <meta name="keywords" content="word puzzle game, word scramble game, vocabulary game for students, free word game online, spelling game" />
         <link rel="canonical" href="https://studentaitools.in/word-puzzle-game" />
         <script type="application/ld+json">{JSON.stringify(faqSchema)}</script>
+        <script type="application/ld+json">{JSON.stringify(gameSchema)}</script>
       </Helmet>
 
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-teal-900/20 to-slate-900 py-8 px-4">
