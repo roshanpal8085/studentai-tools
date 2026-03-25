@@ -6,7 +6,8 @@ frontend/dist/
 backend/dist/
 
 # Environment variables
-.env
+.env*
+**/.env*
 .env.local
 .env.production
 
