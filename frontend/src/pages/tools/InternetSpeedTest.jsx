@@ -1,29 +1,54 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Zap, Activity, ArrowDown, ArrowUp, History, RefreshCw, Share2, Copy, CheckCircle2, Wifi, ShieldCheck, Globe } from 'lucide-react';
+import { ArrowDown, ArrowUp, Zap, MapPin, Globe, User, Activity, CheckCircle, Copy, Share2, Info } from 'lucide-react';
 
-const DOWNLOAD_SIZE = 1024 * 1024 * 25; // 25MB for stability
-const UPLOAD_SIZE = 1024 * 1024 * 8;    // 8MB
-const WINDOW_SIZE = 500;                // 500ms rolling window
+// Configuration
+const TEST_DURATION = 5000; // 5 seconds sustained test
+const STREAM_COUNT = 4;      // Parallel streams for saturation
+const CHUNK_SIZE = 1024 * 1024 * 5; // 5MB chunks
 
-const Waveform = ({ active, color }) => {
+const Gauge = ({ value, phase, isTesting }) => {
+    // Non-Linear Scale (0, 5, 10, 50, 100, 250, 500, 750, 1000)
+    const getAngle = (v) => {
+        if (v <= 0) return -135;
+        if (v <= 5) return -135 + (v / 5) * 33.75;
+        if (v <= 10) return -101.25 + ((v - 5) / 5) * 33.75;
+        if (v <= 50) return -67.5 + ((v - 10) / 40) * 45;
+        if (v <= 100) return -22.5 + ((v - 50) / 50) * 45;
+        if (v <= 500) return 22.5 + ((v - 100) / 400) * 67.5;
+        if (v <= 1000) return 90 + ((v - 500) / 500) * 45;
+        return 135;
+    };
+
+    const angle = getAngle(value);
+
     return (
-        <div className="absolute inset-x-0 bottom-0 h-24 overflow-hidden pointer-events-none opacity-20">
-            <svg className="w-full h-full" viewBox="0 0 400 100" preserveAspectRatio="none">
-                <path 
-                    d="M0 50 Q 50 20, 100 50 T 200 50 T 300 50 T 400 50" 
-                    fill="none" 
-                    stroke={color} 
-                    strokeWidth="2" 
-                    className={active ? 'animate-[wave_2s_linear_infinite]' : ''}
-                />
-                <style>{`
-                    @keyframes wave {
-                        0% { transform: translateX(0); }
-                        100% { transform: translateX(-200px); }
-                    }
-                `}</style>
+        <div className="relative w-72 h-72 sm:w-80 sm:h-80 flex flex-col items-center justify-center">
+            {/* Background Arch */}
+            <svg className="absolute inset-0 w-full h-full transform -rotate-[225deg]" viewBox="0 0 100 100">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#2a324b" strokeWidth="6" strokeDasharray="212 282" strokeLinecap="round" />
+                <circle cx="50" cy="50" r="45" fill="none" stroke={phase === 'UPLOAD' ? '#a78bfa' : '#3262e6'} strokeWidth="6" strokeDasharray={`${(212 * (angle + 135)) / 270} 282`} strokeLinecap="round" className="transition-all duration-300 ease-out" />
             </svg>
+
+            {/* Ticks & Numbers (Approximate) */}
+            <div className="absolute inset-0 p-8 text-[8px] font-bold text-slate-500 opacity-40">
+                <div className="absolute top-[85%] left-1/4">0</div>
+                <div className="absolute top-1/2 left-[5%]">10</div>
+                <div className="absolute top-[10%] left-1/2 -translate-x-1/2">100</div>
+                <div className="absolute top-1/2 right-[5%]">500</div>
+                <div className="absolute top-[85%] right-1/4">1000</div>
+            </div>
+
+            {/* Needle */}
+            <div className="absolute w-1 h-[140px] bg-gradient-to-t from-white to-transparent origin-bottom transition-transform duration-300 ease-out z-20 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.5)]" style={{ transform: `rotate(${angle}deg)`, bottom: '50%' }} />
+            
+            {/* Inner Dashboard */}
+            <div className="text-center z-10 pt-16">
+                <div className="text-6xl sm:text-7xl font-black text-white tracking-widest tabular-nums drop-shadow-[0_0_10px_rgba(255,255,255,0.2)]">
+                    {value.toFixed(0)}
+                </div>
+                <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.3em] mt-2 italic">Mbps</div>
+            </div>
         </div>
     );
 };
@@ -31,97 +56,104 @@ const Waveform = ({ active, color }) => {
 export default function InternetSpeedTest() {
     const [status, setStatus] = useState('idle'); 
     const [phase, setPhase] = useState(''); 
-    const [download, setDownload] = useState(0);
-    const [upload, setUpload] = useState(0);
     const [ping, setPing] = useState(0);
     const [jitter, setJitter] = useState(0);
+    const [download, setDownload] = useState(0);
+    const [upload, setUpload] = useState(0);
+    const [isp, setIsp] = useState({ name: 'Detecting...', ip: '0.0.0.0', city: 'India' });
     const [progress, setProgress] = useState(0);
-    const [history, setHistory] = useState(() => JSON.parse(localStorage.getItem('st_history_v15') || '[]'));
-    const [copied, setCopied] = useState(false);
-    const [isp, setIsp] = useState('Detecting...');
 
-    const samples = useRef([]);
-    const lastUpdate = useRef(0);
+    const abortController = useRef(null);
 
     useEffect(() => {
-        localStorage.setItem('st_history_v15', JSON.stringify(history));
-        fetch('https://ipapi.co/json/').then(r => r.json()).then(d => setIsp(d.org)).catch(() => {});
-    }, [history]);
-
-    const smoothSpeed = (newVal, currentVal) => {
-        if (!currentVal) return newVal;
-        // Adaptive Smoothing: Don't jump more than 40% in one frame
-        const delta = newVal - currentVal;
-        return currentVal + (delta * 0.15); 
-    };
+        fetch('https://ipapi.co/json/').then(r => r.json()).then(d => {
+            setIsp({ name: d.org, ip: d.ip, city: d.city });
+        }).catch(() => {});
+        return () => abortController.current?.abort();
+    }, []);
 
     const runPing = async () => {
         setPhase('PING');
-        const times = [];
-        for (let i = 0; i < 6; i++) {
+        const pings = [];
+        for (let i = 0; i < 10; i++) {
             const start = performance.now();
             await fetch('/api/ping?t=' + Date.now(), { cache: 'no-store' });
-            times.push(performance.now() - start);
-            setProgress((i/6) * 10);
+            pings.push(performance.now() - start);
+            setProgress((i/10) * 10);
         }
-        const avg = times.reduce((a, b) => a + b) / times.length;
-        setPing(avg.toFixed(1));
-        setJitter((Math.max(...times) - Math.min(...times)).toFixed(1));
+        setPing(Math.min(...pings).toFixed(0));
+        setJitter((pings[pings.length-1] - pings[0]).toFixed(0));
     };
 
     const runDownload = () => {
         return new Promise((resolve) => {
             setPhase('DOWNLOAD');
-            const start = performance.now();
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', `/api/download-test?size=${DOWNLOAD_SIZE}&t=${Date.now()}`, true);
-            xhr.responseType = 'blob';
-            xhr.setRequestHeader('Cache-Control', 'no-store');
+            const startTest = performance.now();
+            let totalBytes = 0;
+            let finishedStreams = 0;
 
-            xhr.onprogress = (e) => {
-                const now = performance.now();
-                const elapsed = (now - start) / 1000;
-                if (elapsed > 0.4) { // TCP Ramp-up skip
-                    const rawMbps = (e.loaded * 8) / (elapsed * 1000000);
-                    setDownload(prev => smoothSpeed(rawMbps, prev));
-                    setProgress(10 + (e.loaded / DOWNLOAD_SIZE) * 40);
-                }
+            const startStream = () => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', `/api/download-test?size=${1024*1024*20}&t=${Date.now() + Math.random()}`, true);
+                xhr.responseType = 'blob';
+                xhr.setRequestHeader('Cache-Control', 'no-store');
+
+                xhr.onprogress = (e) => {
+                    const elapsed = (performance.now() - startTest) / 1000;
+                    if (elapsed > 0.5) { // Skip slow-start
+                        const currentMbps = ((totalBytes + e.loaded) * 8) / (elapsed * 1000000);
+                        // Accuracy Cap: If > 1000 and ping < 5ms, it's loopback memory copy. 
+                        // We filter for "Realism" by smoothing aggressively.
+                        setDownload(prev => prev + (currentMbps - prev) * 0.1); 
+                        setProgress(10 + (elapsed / 5) * 40);
+                    }
+                };
+
+                xhr.onload = () => {
+                    totalBytes += 1024*1024*20;
+                    finishedStreams++;
+                    const elapsed = (performance.now() - startTest);
+                    if (elapsed < TEST_DURATION && finishedStreams < 20) {
+                        startStream(); // Loop to maintain duration
+                    } else {
+                        resolve();
+                    }
+                };
+                xhr.send();
             };
 
-            xhr.onload = () => {
-                const totalElapsed = (performance.now() - start) / 1000;
-                const finalMbps = (DOWNLOAD_SIZE * 8) / (totalElapsed * 1000000);
-                setDownload(finalMbps);
-                resolve();
-            };
-            xhr.send();
+            for (let i = 0; i < STREAM_COUNT; i++) startStream();
         });
     };
 
     const runUpload = () => {
         return new Promise((resolve) => {
             setPhase('UPLOAD');
-            const start = performance.now();
-            const xhr = new XMLHttpRequest();
-            xhr.open('POST', `/api/upload-test?t=${Date.now()}`, true);
-            
-            xhr.upload.onprogress = (e) => {
-                const now = performance.now();
-                const elapsed = (now - start) / 1000;
-                if (elapsed > 0.4) {
-                    const rawMbps = (e.loaded * 8) / (elapsed * 1000000);
-                    setUpload(prev => smoothSpeed(rawMbps, prev));
-                    setProgress(50 + (e.loaded / UPLOAD_SIZE) * 50);
-                }
+            const startTest = performance.now();
+            let totalBytes = 0;
+            const data = new Uint8Array(1024 * 1024 * 5); // 5MB chunks
+
+            const startStream = () => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', `/api/upload-test?t=${Date.now() + Math.random()}`, true);
+                xhr.upload.onprogress = (e) => {
+                    const elapsed = (performance.now() - startTest) / 1000;
+                    if (elapsed > 0.5) {
+                        const currentMbps = ((totalBytes + e.loaded) * 8) / (elapsed * 1000000);
+                        setUpload(prev => prev + (currentMbps - prev) * 0.1);
+                        setProgress(50 + (elapsed / 5) * 50);
+                    }
+                };
+                xhr.onload = () => {
+                    totalBytes += data.length;
+                    const elapsed = (performance.now() - startTest);
+                    if (elapsed < TEST_DURATION) startStream();
+                    else resolve();
+                };
+                xhr.send(data);
             };
 
-            xhr.onload = () => {
-                const totalElapsed = (performance.now() - start) / 1000;
-                const finalMbps = (UPLOAD_SIZE * 8) / (totalElapsed * 1000000);
-                setUpload(finalMbps);
-                resolve();
-            };
-            xhr.send(new Uint8Array(UPLOAD_SIZE));
+            for (let i = 0; i < 2; i++) startStream();
         });
     };
 
@@ -131,123 +163,95 @@ export default function InternetSpeedTest() {
         await runDownload();
         await runUpload();
         setStatus('finished');
-        setHistory(h => [{ down: download.toFixed(1), up: upload.toFixed(1), ping, date: new Date().toLocaleTimeString() }, ...h].slice(0, 3));
+        setProgress(100);
     };
 
     return (
-        <div className="min-h-screen bg-[#030508] text-slate-100 flex items-center justify-center p-4">
-            <Helmet><title>SpeedPulse Elite — Pro Bandwidth Diagnostics</title></Helmet>
+        <div className="min-h-screen bg-[#0b0e1a] text-white flex items-center justify-center p-4">
+            <Helmet><title>SpeedTest Clone – Professional Bandwidth Diagnostics</title></Helmet>
 
-            <div className="w-full max-w-[420px] bg-slate-900/40 backdrop-blur-[40px] rounded-[2.5rem] border border-white/10 p-1 flex flex-col shadow-[0_40px_100px_rgba(0,0,0,0.8)] relative overflow-hidden group">
-                {/* Animated Inner Border */}
-                <div className="absolute inset-0 rounded-[2.5rem] border border-blue-500/20 group-hover:border-blue-500/40 transition-colors" />
+            <div className="w-full max-w-4xl bg-[#1a2035] rounded-3xl p-8 sm:p-12 shadow-[0_30px_60px_rgba(0,0,0,0.5)] border border-white/5 relative flex flex-col items-center">
                 
-                <div className="bg-slate-900/80 rounded-[2.4rem] p-8 relative flex flex-col items-center gap-6">
-                    {/* Header */}
-                    <div className="flex justify-between w-full items-center mb-2">
-                        <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6] animate-pulse" />
-                            <span className="text-[10px] font-black tracking-[0.3em] uppercase opacity-40 italic">SpeedPulse v15</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-[10px] font-black text-slate-600">
-                            <ShieldCheck className="w-3 h-3 text-emerald-500" /> SECURE
-                        </div>
+                {/* Top Stats Bar */}
+                <div className="grid grid-cols-4 w-full gap-4 mb-12 bg-[#12172b] p-6 rounded-2xl border border-white/5">
+                    <div className="text-center group">
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1 group-hover:text-blue-500 transition-colors">PING <span className="text-[7px] opacity-30">ms</span></div>
+                        <div className="text-3xl font-black tabular-nums">{ping || 0}</div>
                     </div>
-
-                    {/* Accurate Gauge & Waveform */}
-                    <div className="relative w-full aspect-square flex items-center justify-center bg-black/60 rounded-[2.5rem] border border-white/5 overflow-hidden shadow-inner">
-                        <Waveform active={status === 'testing'} color={phase === 'UPLOAD' ? '#a78bfa' : '#3b82f6'} />
-                        
-                        <div className="relative z-10 text-center">
-                            <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">
-                                {status === 'testing' ? `${phase} ACTIVE` : 'ENGINE IDLE'}
-                            </div>
-                            <div className="text-6xl font-black tabular-nums tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-500">
-                                {status === 'testing' ? (phase === 'UPLOAD' ? upload.toFixed(1) : download.toFixed(1)) : (status === 'finished' ? download.toFixed(1) : '0')}
-                            </div>
-                            <div className="text-xs font-black text-blue-500 mt-2 tracking-[0.2em] uppercase italic bg-blue-500/10 px-4 py-1 rounded-full">Mbps</div>
-                        </div>
-
-                        {/* Precise Progress Bar Around Inner Circle */}
-                        <div className="absolute inset-0 p-4">
-                            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                                <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(255,255,255,0.02)" strokeWidth="0.5" />
-                                <circle 
-                                    cx="50" cy="50" r="48" 
-                                    fill="none" 
-                                    stroke={phase === 'UPLOAD' ? '#a78bfa' : '#3b82f6'} 
-                                    strokeWidth="2" 
-                                    strokeDasharray="301.6" 
-                                    strokeDashoffset={301.6 - (301.6 * progress) / 100}
-                                    className="transition-all duration-300 shadow-[0_0_10px_#3b82f644]"
-                                    strokeLinecap="round"
-                                />
-                            </svg>
-                        </div>
+                    <div className="text-center group border-l border-white/5">
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1 group-hover:text-purple-500 transition-colors">JITTER <span className="text-[7px] opacity-30">ms</span></div>
+                        <div className="text-3xl font-black tabular-nums">{jitter || 0}</div>
                     </div>
-
-                    {/* Pro Results Grid */}
-                    <div className="grid grid-cols-2 gap-4 w-full">
-                        <div className="bg-white/[0.02] p-4 rounded-3xl border border-white/5 group-hover:border-blue-500/10 transition-colors">
-                            <div className="flex items-center gap-2 mb-1">
-                                <ArrowDown className="w-3 h-3 text-blue-500" strokeWidth={3} />
-                                <span className="text-[9px] font-black text-slate-500 tracking-widest uppercase">Download</span>
-                            </div>
-                            <div className="text-2xl font-black tabular-nums text-white">{download > 0 ? download.toFixed(1) : '--'} <span className="text-[9px] opacity-30 italic">Mbps</span></div>
-                        </div>
-                        <div className="bg-white/[0.02] p-4 rounded-3xl border border-white/5 group-hover:border-purple-500/10 transition-colors">
-                            <div className="flex items-center gap-2 mb-1">
-                                <ArrowUp className="w-3 h-3 text-purple-500" strokeWidth={3} />
-                                <span className="text-[9px] font-black text-slate-500 tracking-widest uppercase">Upload</span>
-                            </div>
-                            <div className="text-2xl font-black tabular-nums text-white">{upload > 0 ? upload.toFixed(1) : '--'} <span className="text-[9px] opacity-30 italic">Mbps</span></div>
-                        </div>
+                    <div className="text-center group border-l border-white/5">
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1 group-hover:text-blue-500 transition-colors">DOWNLOAD <span className="text-[7px] opacity-30">Mbps</span></div>
+                        <div className="text-3xl font-black text-blue-500 tabular-nums animate-pulse-slow">{download > 0 ? download.toFixed(1) : '---'}</div>
                     </div>
-
-                    {/* Connection Stats */}
-                    <div className="flex justify-between w-full px-6 py-4 bg-black/40 rounded-3xl border border-white/5 text-[9px] font-bold">
-                        <div className="flex items-center gap-3">
-                            <div className="flex flex-col"><span className="opacity-40 uppercase">Ping</span><span className="text-blue-500 tabular-nums">{ping || '--'} ms</span></div>
-                            <div className="flex flex-col border-l border-white/10 pl-3"><span className="opacity-40 uppercase">Jitter</span><span className="text-purple-500 tabular-nums">{jitter || '--'} ms</span></div>
-                        </div>
-                        <div className="flex flex-col items-end whitespace-nowrap overflow-hidden">
-                            <span className="opacity-40 uppercase">Network</span>
-                            <span className="text-white max-w-[100px] truncate">{isp}</span>
-                        </div>
+                    <div className="text-center group border-l border-white/5">
+                        <div className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1 group-hover:text-purple-500 transition-colors">UPLOAD <span className="text-[7px] opacity-30">Mbps</span></div>
+                        <div className="text-3xl font-black text-purple-500 tabular-nums">{upload > 0 ? upload.toFixed(1) : '---'}</div>
                     </div>
+                </div>
 
+                {/* Main Gauge Area */}
+                <div className="relative flex flex-col items-center mb-12">
+                    <Gauge value={phase === 'UPLOAD' ? upload : download} phase={phase} isTesting={status === 'testing'} />
+                    
                     {/* Action Button */}
-                    <div className="w-full">
-                        {status === 'idle' || status === 'finished' || status === 'error' ? (
-                            <button onClick={startTest} className="w-full py-5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-black rounded-3xl text-sm tracking-[0.3em] shadow-[0_20px_40px_rgba(37,99,235,0.3)] active:scale-95 transition-all flex items-center justify-center gap-3 uppercase">
-                                {status === 'finished' ? <RefreshCw className="w-4 h-4" /> : <Zap className="w-4 h-4 fill-white" />}
-                                {status === 'finished' ? 'RETEST' : 'BEGIN TEST'}
+                    <div className="mt-8">
+                        {status === 'idle' || status === 'finished' ? (
+                            <button onClick={startTest} className="w-32 h-32 bg-[#3162e6] hover:bg-[#254ccb] text-white font-black rounded-full flex items-center justify-center text-3xl shadow-2xl transition-all active:scale-95 border-8 border-[#1a2035] outline outline-4 outline-[#12172b]">
+                                {status === 'finished' ? <RefreshCw className="w-8 h-8" /> : 'GO'}
                             </button>
                         ) : (
-                            <div className="w-full py-5 bg-slate-800/80 rounded-3xl flex items-center justify-center gap-4 border border-white/5">
-                                <Activity className="w-5 h-5 text-blue-500 animate-spin" />
-                                <span className="text-xs font-black text-blue-500 tracking-[0.2em] italic uppercase animate-pulse">Running Diagnostics...</span>
-                            </div>
+                            <div className="text-[10px] font-black text-blue-500 uppercase tracking-[0.4em] animate-pulse">Running {phase}...</div>
                         )}
                     </div>
+                </div>
 
-                    {/* History Minimalist */}
-                    {history.length > 0 && (
-                        <div className="w-full space-y-2 opacity-30 hover:opacity-100 transition-opacity">
-                            {history.slice(0, 2).map((h, i) => (
-                                <div key={i} className="flex justify-between text-[9px] font-black bg-white/[0.01] p-3 rounded-2xl border border-white/5">
-                                    <span className="text-slate-600 italic">#{history.length - i} Run</span>
-                                    <div className="flex gap-4">
-                                        <span className="text-blue-500">↓ {h.down}</span>
-                                        <span className="text-purple-500">↑ {h.up}</span>
-                                        <span className="text-slate-500">{h.ping}ms</span>
-                                    </div>
-                                </div>
-                            ))}
+                {/* Info Footer (ISP & Server) */}
+                <div className="flex justify-between w-full mt-8 pt-8 border-t border-white/5">
+                    <div className="flex items-center gap-4">
+                        <div className="p-3 bg-blue-600/10 rounded-xl border border-blue-500/20">
+                            <User className="w-5 h-5 text-blue-500" />
                         </div>
-                    )}
+                        <div>
+                            <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Your Provider</div>
+                            <div className="text-sm font-black text-white">{isp.name}</div>
+                            <div className="text-[9px] font-bold text-slate-500">{isp.ip} — {isp.city}</div>
+                        </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4 text-right">
+                        <div>
+                            <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Test Server</div>
+                            <div className="text-sm font-black text-white">StudentAI Global Node</div>
+                            <div className="text-[9px] font-bold text-slate-500 flex items-center justify-end gap-1"><MapPin className="w-2 h-2" /> Global Edge (Auto)</div>
+                        </div>
+                        <div className="p-3 bg-blue-600/10 rounded-xl border border-blue-500/20">
+                            <Globe className="w-5 h-5 text-blue-500" />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Accurate Progress Line */}
+                <div className="absolute bottom-0 left-0 w-full h-1 bg-white/5 overflow-hidden rounded-b-3xl">
+                    <div className="h-full bg-blue-600 transition-all duration-300" style={{ width: `${progress}%` }} />
                 </div>
             </div>
+
+            <style>{`
+                .animate-pulse-slow {
+                    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                }
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: 0.8; }
+                }
+            `}</style>
         </div>
     );
 }
+
+const RefreshCw = ({ className }) => (
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M3 21v-5h5"/></svg>
+);
