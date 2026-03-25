@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Wifi, Zap, Activity, ArrowDown, ArrowUp, Info, RefreshCw, AlertCircle } from 'lucide-react';
+import { Wifi, Zap, Activity, ArrowDown, ArrowUp, Info, RefreshCw, AlertCircle, History } from 'lucide-react';
 import axios from 'axios';
 
 // Dynamic API URL Detection
