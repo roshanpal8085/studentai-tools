@@ -22,7 +22,7 @@ const faqSchema = {
 };
 
 export default function TypingSpeedTest() {
-  const [textIdx, setTextIdx] = useState(0);
+  const [textIdx, setTextIdx] = useState(() => Math.floor(Math.random() * SAMPLE_TEXTS.length));
   const [input, setInput] = useState('');
   const [started, setStarted] = useState(false);
   const [finished, setFinished] = useState(false);

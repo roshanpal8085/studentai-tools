@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
@@ -27,6 +27,7 @@ const faqSchema = {
 };
 
 export default function LogicPuzzleGame() {
+  const [puzzles, setPuzzles] = useState([]);
   const [idx, setIdx] = useState(0);
   const [selected, setSelected] = useState(null);
   const [showExp, setShowExp] = useState(false);
@@ -35,30 +36,37 @@ export default function LogicPuzzleGame() {
   const [answers, setAnswers] = useState([]);
   const [status, setStatus] = useState('idle'); // idle, playing
 
+  useEffect(() => {
+    setPuzzles([...PUZZLES].sort(() => Math.random() - 0.5));
+  }, []);
+
   const start = () => setStatus('playing');
   const exit = () => setStatus('idle');
 
-  const current = PUZZLES[idx];
+  const current = puzzles[idx];
 
-  const choose = (opt) => {
-    if (selected) return;
+  const choose = useCallback((opt) => {
+    if (selected || !current) return;
     setSelected(opt);
     const correct = opt === current.answer;
     if (correct) setScore(s => s + 10);
     setAnswers(a => [...a, { q: current.question, chosen: opt, correct, answer: current.answer }]);
     setShowExp(true);
-  };
+  }, [selected, current]);
 
-  const next = () => {
-    if (idx + 1 >= PUZZLES.length) { setDone(true); return; }
+  const next = useCallback(() => {
+    if (idx + 1 >= puzzles.length) { setDone(true); return; }
     setIdx(i => i + 1); setSelected(null); setShowExp(false);
-  };
+  }, [idx, puzzles.length]);
 
-  const restart = () => { setIdx(0); setSelected(null); setShowExp(false); setScore(0); setDone(false); setAnswers([]); };
+  const restart = useCallback(() => {
+    setPuzzles([...PUZZLES].sort(() => Math.random() - 0.5));
+    setIdx(0); setSelected(null); setShowExp(false); setScore(0); setDone(false); setAnswers([]);
+  }, []);
 
   useEffect(() => {
     const handleKey = (e) => {
-      if (done) return;
+      if (done || !current) return;
       if (showExp && e.key === 'Enter') {
         next();
         return;
@@ -102,48 +110,52 @@ export default function LogicPuzzleGame() {
             <div className={status !== 'idle' ? "w-full max-w-2xl" : ""}>
               {!done ? (
                 <>
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="text-slate-400 text-sm">Question <span className="text-white font-bold">{idx + 1}</span> / {PUZZLES.length}</div>
-                    <div className="text-purple-400 font-bold">Score: {score}</div>
-                  </div>
-
-                  <div className="h-1.5 bg-slate-700 rounded-full mb-6 overflow-hidden">
-                    <div className="h-full bg-purple-500 rounded-full transition-all" style={{ width: `${((idx) / PUZZLES.length) * 100}%` }} />
-                  </div>
-
-                  <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-5 relative overflow-hidden min-h-[140px] flex flex-col justify-center">
-                    <div className="text-slate-400 text-sm mb-3 uppercase tracking-wider">🧠 Puzzle {idx + 1}</div>
-                    <p className="text-white text-lg font-semibold leading-relaxed">{current.question}</p>
-                    {status === 'idle' && (
-                      <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
-                        <button onClick={start} className="bg-purple-500 hover:bg-purple-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Start Puzzle</button>
+                  {current && (
+                    <>
+                      <div className="flex justify-between items-center mb-4">
+                        <div className="text-slate-400 text-sm">Question <span className="text-white font-bold">{idx + 1}</span> / {puzzles.length}</div>
+                        <div className="text-purple-400 font-bold">Score: {score}</div>
                       </div>
-                    )}
-                  </div>
 
-                  <div className="space-y-3 mb-5">
-                    {current.options.map((opt, i) => (
-                      <button key={i} onClick={() => { if (status === 'idle') setStatus('playing'); choose(opt); }} className={`w-full text-left px-5 py-4 rounded-xl transition-all font-medium ${optionStyle(opt)}`}>
-                        <span className="text-slate-500 mr-2">{String.fromCharCode(65 + i)}.</span> {opt}
-                      </button>
-                    ))}
-                  </div>
+                      <div className="h-1.5 bg-slate-700 rounded-full mb-6 overflow-hidden">
+                        <div className="h-full bg-purple-500 rounded-full transition-all" style={{ width: `${((idx) / puzzles.length) * 100}%` }} />
+                      </div>
 
-                  {showExp && (
-                    <div className={`rounded-xl p-5 mb-5 ${selected === current.answer ? 'bg-green-900/40 border border-green-500/30' : 'bg-red-900/40 border border-red-500/30'}`}>
-                      <div className="font-bold text-white mb-2">{selected === current.answer ? '✅ Correct!' : '❌ Incorrect'}</div>
-                      <p className="text-slate-300 text-sm">{current.explanation}</p>
-                      <button onClick={next} className="mt-3 bg-purple-500 hover:bg-purple-400 text-white font-bold px-5 py-2 rounded-xl transition-colors text-sm">
-                        {idx + 1 < PUZZLES.length ? 'Next Puzzle →' : 'See Results'}
-                      </button>
-                    </div>
+                      <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-5 relative overflow-hidden min-h-[140px] flex flex-col justify-center">
+                        <div className="text-slate-400 text-sm mb-3 uppercase tracking-wider">🧠 Puzzle {idx + 1}</div>
+                        <p className="text-white text-lg font-semibold leading-relaxed">{current.question}</p>
+                        {status === 'idle' && (
+                          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
+                            <button onClick={start} className="bg-purple-500 hover:bg-purple-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Start Puzzle</button>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="space-y-3 mb-5">
+                        {current.options.map((opt, i) => (
+                          <button key={i} onClick={() => { if (status === 'idle') setStatus('playing'); choose(opt); }} className={`w-full text-left px-5 py-4 rounded-xl transition-all font-medium ${optionStyle(opt)}`}>
+                            <span className="text-slate-500 mr-2">{String.fromCharCode(65 + i)}.</span> {opt}
+                          </button>
+                        ))}
+                      </div>
+
+                      {showExp && (
+                        <div className={`rounded-xl p-5 mb-5 ${selected === current.answer ? 'bg-green-900/40 border border-green-500/30' : 'bg-red-900/40 border border-red-500/30'}`}>
+                          <div className="font-bold text-white mb-2">{selected === current.answer ? '✅ Correct!' : '❌ Incorrect'}</div>
+                          <p className="text-slate-300 text-sm">{current.explanation}</p>
+                          <button onClick={next} className="mt-3 bg-purple-500 hover:bg-purple-400 text-white font-bold px-5 py-2 rounded-xl transition-colors text-sm">
+                            {idx + 1 < puzzles.length ? 'Next Puzzle →' : 'See Results'}
+                          </button>
+                        </div>
+                      )}
+                    </>
                   )}
                 </>
               ) : (
                 <div className="bg-purple-900/40 border border-purple-500/30 rounded-2xl p-8 text-center mb-6">
                   <div className="text-5xl mb-3">🎓</div>
                   <h2 className="text-2xl font-bold text-white mb-1">All Puzzles Complete!</h2>
-                  <p className="text-slate-400 mb-2">Score: <span className="text-purple-400 font-bold text-2xl">{score}</span> / {PUZZLES.length * 10}</p>
+                  <p className="text-slate-400 mb-2">Score: <span className="text-purple-400 font-bold text-2xl">{score}</span> / {puzzles.length * 10}</p>
                   <p className="text-slate-400 text-sm mb-4">{score >= 80 ? '🏆 Outstanding logical mind!' : score >= 50 ? '👍 Good reasoning!' : '💪 Keep practicing!'}</p>
                   <div className="space-y-2 mb-5 max-h-[200px] overflow-y-auto">
                     {answers.map((a, i) => (

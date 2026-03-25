@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
@@ -41,8 +41,8 @@ const faqSchema = {
 };
 
 export default function WordPuzzleGame() {
-  const [catIdx, setCatIdx] = useState(0);
-  const [wordIdx, setWordIdx] = useState(0);
+  const [catIdx, setCatIdx] = useState(() => Math.floor(Math.random() * CATEGORIES.length));
+  const [wordIdx, setWordIdx] = useState(() => Math.floor(Math.random() * CATEGORIES[0].words.length));
   const [input, setInput] = useState('');
   const [feedback, setFeedback] = useState(null);
   const [score, setScore] = useState(0);
@@ -62,7 +62,18 @@ export default function WordPuzzleGame() {
 
   const getScrambled = () => scrambledMap[catIdx + '-' + wordIdx] || scramble(word);
 
-  const check = () => {
+  const next = useCallback(() => {
+    const nw = (wordIdx + 1) % cat.words.length;
+    const key = catIdx + '-' + nw;
+    if (!scrambledMap[key]) setScrambledMap(m => ({ ...m, [key]: scramble(cat.words[nw]) }));
+    setWordIdx(nw);
+    setInput('');
+    setFeedback(null);
+    setHintUsed(false);
+    setShowHint(false);
+  }, [wordIdx, cat.words.length, catIdx, scrambledMap]);
+
+  const check = useCallback(() => {
     if (!input.trim()) return;
     if (input.trim().toUpperCase() === word) {
       setFeedback('correct');
@@ -75,21 +86,10 @@ export default function WordPuzzleGame() {
       setStreak(0);
       setTimeout(() => setFeedback(null), 600);
     }
-  };
+  }, [input, word, hintUsed, streak, next]);
 
-  const next = () => {
-    const nw = (wordIdx + 1) % cat.words.length;
-    const key = catIdx + '-' + nw;
-    if (!scrambledMap[key]) setScrambledMap(m => ({ ...m, [key]: scramble(cat.words[nw]) }));
-    setWordIdx(nw);
-    setInput('');
-    setFeedback(null);
-    setHintUsed(false);
-    setShowHint(false);
-  };
-
-  const skip = () => { setStreak(0); next(); };
-  const hint = () => { setHintUsed(true); setShowHint(true); };
+  const skip = useCallback(() => { setStreak(0); next(); }, [next]);
+  const hint = useCallback(() => { setHintUsed(true); setShowHint(true); }, []);
   const currentScrambled = scrambledMap[catIdx + '-' + wordIdx] || scramble(word);
 
   return (
