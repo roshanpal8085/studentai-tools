@@ -28,35 +28,36 @@ app.use('/api/ai', require('./routes/ai'));
 app.use('/api/pdf', require('./routes/pdf'));
 app.use('/api/upload', require('./routes/upload'));
 
-// --- Industry-Standard Multi-Stream Endpoints (LibreSpeed Optimized) ---
+// --- Industry-Standard Fixed-File Endpoints (v5 Pro) ---
 const crypto = require('crypto');
-const STATIC_POOL = crypto.randomBytes(1024 * 1024 * 10); // 10MB static random pool for zero-overhead serving
+const MASTER_POOL = crypto.randomBytes(1024 * 1024 * 50); // 50MB master random pool
 
 app.get('/api/ping', (req, res) => {
   res.status(200).json({ timestamp: Date.now() });
 });
 
-app.get('/api/download-test', (req, res) => {
-    // Disable compression and cache
-    res.setHeader('Content-Encoding', 'identity'); // Force no-compression
-    res.setHeader('Content-Type', 'application/octet-stream');
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
-    res.setHeader('Content-Disposition', 'attachment; filename=speedtest.bin');
-
-    // Repeatedly write the static pool to the response (Zero CPU entropy cost)
-    const writeLoop = () => {
-        if (res.writableEnded) return;
-        const canWrite = res.write(STATIC_POOL);
-        if (canWrite) {
-            setImmediate(writeLoop);
-        } else {
-            res.once('drain', writeLoop);
-        }
-    };
-    writeLoop();
+// Serve fixed-size binary files for precise Mbps calculation
+app.get('/api/speed-test/:size', (req, res) => {
+    const sizeStr = req.params.size;
+    let size = 10 * 1024 * 1024; // Default 10MB
     
-    // Safety timeout: Auto-terminate stream after 20 seconds to prevent hanging connections
-    setTimeout(() => { if (!res.writableEnded) res.end(); }, 20000);
+    if (sizeStr.includes('1mb')) size = 1 * 1024 * 1024;
+    else if (sizeStr.includes('5mb')) size = 5 * 1024 * 1024;
+    else if (sizeStr.includes('10mb')) size = 10 * 1024 * 1024;
+    else if (sizeStr.includes('50mb')) size = 50 * 1024 * 1024;
+
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Content-Length', size);
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+    res.setHeader('Content-Disposition', `attachment; filename=${sizeStr}`);
+    
+    // Serve exactly the requested bytes from the master pool
+    res.end(MASTER_POOL.slice(0, size));
+});
+
+// Legacy support for download-test (maps to 25MB)
+app.get('/api/download-test', (req, res) => {
+    res.redirect('/api/speed-test/25mb.bin');
 });
 
 app.post('/api/upload-test', (req, res) => {
