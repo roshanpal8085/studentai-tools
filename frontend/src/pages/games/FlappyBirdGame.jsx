@@ -265,8 +265,8 @@ export default function FlappyBirdGame() {
             <p className="text-slate-400">Tap to flap through the pipes. How far can you go?</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
-            <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-lg mb-10" : ""}>
               <div className="flex flex-col gap-3 mb-4">
                 <div className="flex justify-between items-center">
                   <div className="flex gap-3">

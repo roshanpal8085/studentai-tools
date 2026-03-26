@@ -121,8 +121,8 @@ export default function MathQuizGame() {
             <p className="text-slate-400">Answer as many math questions as possible in 30 seconds!</p>
           </div>
 
-          <div className={running || finished ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto p-4 sm:p-8 flex flex-col items-center justify-center touch-none" : ""}>
-            <div className={running || finished ? "w-full max-w-lg" : ""}>
+          <div className={running || finished ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
+            <div className={running || finished ? "w-full max-w-lg mb-10" : ""}>
               <div className="flex gap-2 justify-center mb-4">
                 {['easy', 'medium', 'hard'].map(d => (
                   <button key={d} onClick={() => { setDifficulty(d); }} className={`px-4 py-2 rounded-xl text-sm font-bold capitalize transition-colors ${difficulty === d ? 'bg-orange-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>{d}</button>

@@ -147,8 +147,8 @@ export default function TicTacToe() {
             <p className="text-slate-400">Challenge the AI or play with a friend!</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
-            <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-lg mb-10" : ""}>
               {/* Mode & Score */}
               <div className="flex gap-2 mb-4 justify-center">
                 <button onClick={() => { setMode('pvai'); reset(); }} className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${mode === 'pvai' ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}>🤖 vs AI</button>

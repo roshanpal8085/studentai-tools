@@ -164,8 +164,8 @@ export default function SudokuGame() {
             <p className="text-slate-400">Fill every row, column, and 3×3 box with digits 1–9.</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
-            <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
+            <div className={status !== 'idle' ? "w-full max-w-lg mb-10" : ""}>
               <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2">
                   <label className="text-slate-400 text-sm">Auto-Check</label>

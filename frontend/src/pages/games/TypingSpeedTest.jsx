@@ -134,8 +134,8 @@ export default function TypingSpeedTest() {
             <p className="text-slate-400">Type the text below as fast and accurately as you can!</p>
           </div>
 
-          <div className={started ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto p-4 sm:p-8 flex flex-col items-center justify-center" : ""}>
-            <div className={started ? "w-full max-w-2xl" : ""}>
+          <div className={started || finished ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
+            <div className={started || finished ? "w-full max-w-2xl mb-10" : ""}>
               {/* Stats */}
               <div className="grid grid-cols-4 gap-2 mb-4">
                 {[

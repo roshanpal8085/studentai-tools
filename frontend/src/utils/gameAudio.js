@@ -2,16 +2,24 @@ let audioCtx = null;
 
 export const initAudio = () => {
   if (typeof window === 'undefined') return;
-  if (!audioCtx) {
-    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  }
-  if (audioCtx.state === 'suspended') {
-    audioCtx.resume();
+  try {
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioCtx.state === 'suspended') {
+      audioCtx.resume();
+    }
+  } catch (e) {
+    console.error('Audio init failed', e);
   }
 };
 
 export const playSound = (type) => {
   if (!audioCtx) return;
+  // Auto-resume for mobile browsers that suspend context
+  if (audioCtx.state === 'suspended') {
+    audioCtx.resume();
+  }
   
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
