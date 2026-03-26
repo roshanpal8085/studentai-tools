@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Zap, Activity, ArrowDown, ArrowUp, RefreshCw, Share2, Globe, StatusOnline, Gamepad2, MonitorPlay, Video, Cpu, History } from 'lucide-react';
+import { Zap, Activity, ArrowDown, ArrowUp, RefreshCw, Share2, Globe, Wifi, Gamepad2, MonitorPlay, Video, Cpu, History } from 'lucide-react';
 import SEO from '../../components/SEO';
 
 // Industry Standard v27 Multi-Stream Config
