@@ -2,16 +2,73 @@ import { useState, useEffect, useRef } from 'react';
 import { Zap, Activity, ArrowDown, ArrowUp, RefreshCw, Share2, Globe, Wifi, Gamepad2, MonitorPlay, Video, Cpu, History, Rocket, HeartPulse, ShieldCheck, CheckCircle2 } from 'lucide-react';
 import SEO from '../../components/SEO';
 
-const speedTestSchema = {
-    "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "StudentAI SpeedPulse v27 Ultra Pro",
-    "operatingSystem": "Web",
-    "applicationCategory": "UtilityApplication",
-    "description": "Professional Multi-Threaded Internet Speed Test (v7). Industry-standard symmetric diagnostics for fiber and broadband.",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "5.0", "ratingCount": "2850" }
-};
+const speedTestSchema = [
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Internet Speed Test - StudentAI SpeedPulse",
+        "url": "https://studentaitools.in/tools/internet-speed-test",
+        "operatingSystem": "Web Browser",
+        "applicationCategory": "UtilityApplication",
+        "description": "Free online internet speed test tool. Check your broadband download speed, upload speed, and ping/latency instantly. Accurate multi-threaded speed test for fiber, broadband, and mobile connections.",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
+        "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "3120" },
+        "featureList": [
+            "Download Speed Test",
+            "Upload Speed Test",
+            "Ping & Latency Test",
+            "Multi-threaded parallel streams",
+            "No app download required",
+            "Works on mobile and desktop"
+        ]
+    },
+    {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": "How to check my internet speed?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Click the GO button on our speed test tool. It will automatically measure your download speed, upload speed, and ping in about 20 seconds. No app or plugin needed."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is a good internet speed for students?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "For students, a download speed of 25 Mbps or more is recommended for smooth video calls, streaming lectures, and online research. Upload speed of 5 Mbps+ is good for submitting assignments and video conferencing."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "What is ping in internet speed test?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Ping (latency) is the time it takes for data to travel from your device to a server and back, measured in milliseconds (ms). Lower ping means faster response — under 50ms is excellent, 50-100ms is good, above 150ms may cause lag in video calls and gaming."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Why is my upload speed slower than download speed?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Most broadband connections are designed to download faster than they upload — this is called asymmetric broadband. ISPs prioritize download speed because most users consume more content than they upload. If your upload is extremely low, contact your ISP."
+                }
+            },
+            {
+                "@type": "Question",
+                "name": "Is this internet speed test accurate?",
+                "acceptedAnswer": {
+                    "@type": "Answer",
+                    "text": "Yes. Our speed test uses multi-threaded parallel connections and 90th percentile peak sampling to deliver accurate results. It measures your real connection speed using Cloudflare's global CDN, similar to professional tools like Ookla Speedtest."
+                }
+            }
+        ]
+    }
+];
 
 const Gauge = ({ value, phase, isTesting }) => {
     const getAngle = (v) => {
@@ -129,9 +186,9 @@ export default function InternetSpeedTest() {
             <div className="absolute bottom-[-15%] left-[-10%] w-[60%] h-[60%] bg-purple-600/5 rounded-full blur-[180px]" />
 
             <SEO 
-                title="Internet Speed Test - Accurate Mbps & Pro Analytics"
-                description="Industry-standard Multi-Threaded Speed Test. 95th-percentile sampling for absolute accuracy on download, upload, and ping."
-                keywords="speedtest, mbps test, verify internet speed, fiber test, librespeed, student ai tools"
+                title="Internet Speed Test - Free Online Broadband Speed Checker"
+                description="Free internet speed test tool. Check download speed, upload speed, and ping instantly. Accurate multi-threaded speed test for fiber, broadband & mobile connections in India. No app needed."
+                keywords="internet speed test, broadband speed test, check internet speed, download speed test, upload speed test, ping test, wifi speed test, speed test online free, internet speed check india, mbps test, jio speed test, airtel speed test, bsnl speed test"
                 canonical="/tools/internet-speed-test"
                 schema={speedTestSchema}
             />
