@@ -265,8 +265,9 @@ export default function FlappyBirdGame() {
             <p className="text-slate-400">Tap to flap through the pipes. How far can you go?</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
-            <div className={status !== 'idle' ? "w-full max-w-lg mb-10" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
+              <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
               <div className="flex flex-col gap-3 mb-4">
                 <div className="flex justify-between items-center">
                   <div className="flex gap-3">
@@ -321,13 +322,17 @@ export default function FlappyBirdGame() {
 
               <p className="text-slate-500 text-sm text-center mt-3">Tap / <kbd className="bg-slate-700 px-2 py-0.5 rounded text-slate-300">Space</kbd> to flap</p>
 
-              {status !== 'idle' && (
-                <button onClick={() => setStatus('idle')} className="mt-6 mx-auto block text-slate-400 hover:text-white font-semibold underline">
-                  Exit Fullscreen
+               {status !== 'idle' && (
+                <button 
+                  onClick={() => setStatus('idle')} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
                 </button>
               )}
             </div>
           </div>
+        </div>
 
           <div className="space-y-6 text-slate-300 mt-8">
             <section>

@@ -123,8 +123,9 @@ export default function WordPuzzleGame() {
             <p className="text-slate-400">Unscramble the letters to form the hidden word!</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
-            <div className={status !== 'idle' ? "w-full max-w-lg mb-10" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
+              <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
               {/* Category selector */}
               <div className="flex gap-2 flex-wrap justify-center mb-4">
                 {CATEGORIES.map((c, i) => (
@@ -184,6 +185,7 @@ export default function WordPuzzleGame() {
                   <span>✕</span> Exit Game
                 </button>
               )}
+              </div>
             </div>
           </div>
 

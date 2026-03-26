@@ -122,8 +122,9 @@ export default function MemoryCardGame() {
             <p className="text-slate-400">Find all matching pairs to win! Test your memory.</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
-            <div className={status !== 'idle' ? "w-full max-w-xl mb-10" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
+              <div className={status !== 'idle' ? "w-full max-w-xl" : ""}>
               <div className="flex justify-between items-center mb-4 gap-2">
                 <div className="flex flex-col w-full gap-2">
                   <div className="flex gap-2 w-full">
@@ -218,6 +219,7 @@ export default function MemoryCardGame() {
               )}
             </div>
           </div>
+        </div>
 
           <div className="space-y-6 text-slate-300 mt-8">
             <section>

@@ -129,8 +129,9 @@ export default function LogicPuzzleGame() {
             <p className="text-slate-400">10 mind-bending logic challenges. Think carefully!</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
-            <div className={status !== 'idle' ? "w-full max-w-2xl mb-10" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
+              <div className={status !== 'idle' ? "w-full max-w-2xl" : ""}>
               {!done ? (
                 <>
                   {current && (
@@ -200,6 +201,7 @@ export default function LogicPuzzleGame() {
                   <span>✕</span> Exit Game
                 </button>
               )}
+              </div>
             </div>
           </div>
 

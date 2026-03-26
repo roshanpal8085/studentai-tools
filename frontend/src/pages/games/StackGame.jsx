@@ -156,8 +156,9 @@ export default function StackGame() {
             <p className="text-slate-400">Tap / Space / Click to drop the block. Stack perfectly to go higher!</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
-            <div className={status !== 'idle' ? "w-full max-w-lg mb-10" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
+              <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
               <div className="flex flex-col gap-3 mb-4">
                 <div className="flex justify-between items-center gap-3">
                   <div className="flex gap-3 flex-1">
@@ -227,6 +228,7 @@ export default function StackGame() {
               )}
             </div>
           </div>
+        </div>
 
           <div className="space-y-6 text-slate-300 mt-8">
             <section>

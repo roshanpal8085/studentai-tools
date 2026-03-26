@@ -180,8 +180,9 @@ export default function SnakeGame() {
             <p className="text-slate-400">Eat food, grow longer, avoid walls! Arrow keys or swipe to play.</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center py-10 px-4 touch-none overflow-y-auto min-h-[100dvh]" : ""}>
-            <div className={status !== 'idle' ? "w-full max-w-lg mb-10" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
+              <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
               <div className="flex flex-col gap-3 mb-4">
                 <div className="flex justify-between items-center gap-3">
                   <div className="flex gap-3 flex-1">
@@ -267,6 +268,7 @@ export default function SnakeGame() {
               )}
             </div>
           </div>
+        </div>
 
           <div className="mt-10 space-y-6 text-slate-300">
             <section>
