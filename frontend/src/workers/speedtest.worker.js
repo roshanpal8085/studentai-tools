@@ -106,8 +106,8 @@ self.onmessage = async (e) => {
 
     // ─── UPLOAD ────────────────────────────────────────────────────────────────
     if (type === 'UPLOAD') {
-        const TEST_DURATION = 8000; // ms
-        const CHUNK_SIZE = 2 * 1024 * 1024; // 2MB per chunk (smaller = more completions = better accuracy)
+        const TEST_DURATION = 10000; // ms
+        const CHUNK_SIZE = 256 * 1024; // 256KB per chunk — completes in ~0.4s even at 5 Mbps
         const startTime = performance.now();
         const samples = [];
         let totalBytes = 0;
@@ -115,7 +115,8 @@ self.onmessage = async (e) => {
 
         // Pre-generate random chunk
         const chunkData = new Uint8Array(CHUNK_SIZE);
-        for (let i = 0; i < 256; i++) chunkData[i] = i; // fill start, rest is zeros — fine for throughput
+        // Fill with pattern so it's not compressed by the network stack
+        for (let i = 0; i < CHUNK_SIZE; i++) chunkData[i] = i % 256;
 
         const sampleTimer = setInterval(() => {
             const elapsed = performance.now() - startTime;
