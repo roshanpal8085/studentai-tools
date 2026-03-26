@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { initAudio, playSound } from '../../utils/gameAudio';
 
 const W = 20, H = 20, SIZE = 20;
 const DIRS = { ArrowUp: [0,-1], ArrowDown: [0,1], ArrowLeft: [-1,0], ArrowRight: [1,0] };
@@ -98,12 +99,14 @@ export default function SnakeGame() {
     const head = { x: s.snake[0].x + s.dir.x, y: s.snake[0].y + s.dir.y };
     if (head.x < 0 || head.x >= W || head.y < 0 || head.y >= H || s.snake.some(seg => seg.x === head.x && seg.y === head.y)) {
       s.running = false; s.over = true;
+      playSound('over');
       setStatus('over');
       return;
     }
     s.snake.unshift(head);
     if (head.x === s.food.x && head.y === s.food.y) {
       s.score++;
+      playSound('score');
       setScore(s.score);
       setBest(prev => { const nb = Math.max(prev, s.score); localStorage.setItem('snakebest', nb); return nb; });
       let fx, fy;
@@ -115,6 +118,7 @@ export default function SnakeGame() {
   }, [draw]);
 
   const startGame = () => {
+    initAudio();
     const s = stateRef.current;
     s.snake = [{ x: 10, y: 10 }]; s.dir = { x: 1, y: 0 }; s.nextDir = { x: 1, y: 0 };
     s.food = { x: rand(W), y: rand(H) }; s.score = 0; s.running = true; s.over = false;
@@ -132,7 +136,10 @@ export default function SnakeGame() {
       const s = stateRef.current;
       if (!s.running && !s.over) { startGame(); return; }
       const [dx, dy] = d;
-      if (dx !== -s.dir.x || dy !== -s.dir.y) s.nextDir = { x: dx, y: dy };
+      if (dx !== -s.dir.x || dy !== -s.dir.y) {
+        s.nextDir = { x: dx, y: dy };
+        playSound('move');
+      }
     };
     window.addEventListener('keydown', onKey);
     return () => { window.removeEventListener('keydown', onKey); if (animRef.current) cancelAnimationFrame(animRef.current); };
@@ -251,8 +258,11 @@ export default function SnakeGame() {
               </div>
 
               {status !== 'idle' && (
-                <button onClick={() => setStatus('idle')} className="mt-6 mx-auto block text-slate-400 hover:text-white font-semibold underline">
-                  Exit Fullscreen
+                <button 
+                  onClick={() => setStatus('idle')} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
                 </button>
               )}
             </div>

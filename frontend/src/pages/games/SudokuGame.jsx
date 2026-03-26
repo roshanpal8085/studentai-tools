@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { initAudio, playSound } from '../../utils/gameAudio';
 
 // --- Sudoku Generator ---
 function generateSudoku(difficulty = 'Medium') {
@@ -63,10 +64,11 @@ export default function SudokuGame() {
   const [status, setStatus] = useState('idle'); // idle, playing, solved
   const [moves, setMoves] = useState(0);
 
-  const start = () => setStatus('playing');
+  const start = () => { initAudio(); setStatus('playing'); };
   const exit = () => setStatus('idle');
 
   const newGame = (diff = difficulty) => {
+    initAudio();
     const g = generateSudoku(diff);
     setGame(g);
     setBoard(g.puzzle.map(r => [...r]));
@@ -84,12 +86,25 @@ export default function SudokuGame() {
     setMoves(m => m + 1);
     if (autoCheck) {
       const errs = new Set();
+      let hasNewError = false;
       for (let i = 0; i < 9; i++) for (let j = 0; j < 9; j++) {
-        if (nb[i][j] !== 0 && nb[i][j] !== solution[i][j]) errs.add(`${i},${j}`);
+        if (nb[i][j] !== 0 && nb[i][j] !== solution[i][j]) {
+          errs.add(`${i},${j}`);
+          if (i === r && j === c) hasNewError = true;
+        }
       }
       setErrors(errs);
+      if (num !== 0) {
+        if (hasNewError) playSound('error');
+        else playSound('move');
+      } else {
+        playSound('move');
+      }
+    } else {
+      if (num !== 0) playSound('move');
     }
     if (nb.flat().every((v, i) => v === solution[Math.floor(i / 9)][i % 9])) {
+      playSound('win');
       setSolved(true);
       setStatus('solved');
     }
@@ -180,7 +195,7 @@ export default function SudokuGame() {
                   {board.map((row, r) => row.map((val, c) => (
                     <div
                       key={`${r}-${c}`}
-                      onClick={() => { if (!isFixed(r, c) && status !== 'solved') { setSelected([r, c]); if (status === 'idle') setStatus('playing'); } }}
+                      onClick={() => { if (!isFixed(r, c) && status !== 'solved') { initAudio(); setSelected([r, c]); if (status === 'idle') setStatus('playing'); } }}
                       className={`aspect-square flex items-center justify-center text-sm md:text-base font-semibold border border-slate-600 transition-colors select-none ${cellColor(r, c)} ${borderClass(r, c)}`}
                     >
                       {val || ''}
@@ -214,7 +229,12 @@ export default function SudokuGame() {
               )}
 
               {status !== 'idle' && (
-                <button onClick={exit} className="mx-auto block text-slate-400 hover:text-white font-semibold underline">Exit Fullscreen</button>
+                <button 
+                  onClick={exit} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
+                </button>
               )}
             </div>
           </div>

@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { initAudio, playSound } from '../../utils/gameAudio';
 
 const W = 360, H = 550;
 const COLORS = ['#ef4444','#f97316','#eab308','#22c55e','#3b82f6','#a855f7'];
@@ -110,6 +111,7 @@ export default function ColorSwitchGame() {
           const angle = (Math.atan2(dy, dx) - ring.angle + Math.PI * 4) % (Math.PI * 2);
           const seg = Math.floor(angle / (Math.PI / 2));
           if (seg !== s.ball.colorIdx % 4) {
+             playSound('crash');
              s.over = true; setStatus('over');
              const nb = s.score;
              if (nb > best) { setBest(nb); localStorage.setItem('colorbest', nb); }
@@ -122,6 +124,7 @@ export default function ColorSwitchGame() {
 
     if (s.rings.length > 0 && s.ball.y < s.rings[0].y - RING_R) {
       s.score++;
+      playSound('score');
       setScore(s.score);
       s.ball.colorIdx = Math.floor(Math.random() * 4);
       s.rings.shift();
@@ -130,6 +133,7 @@ export default function ColorSwitchGame() {
     }
 
     if (s.ball.y + s.camY > H + 50) { // Off bottom
+      playSound('crash');
       s.over = true; setStatus('over');
       const nb = s.score;
       if (nb > best) { setBest(nb); localStorage.setItem('colorbest', nb); }
@@ -140,12 +144,15 @@ export default function ColorSwitchGame() {
   };
 
   const jump = () => {
+    initAudio();
     if (status !== 'running') { start(); return; }
     if (!stateRef.current || stateRef.current.over) { start(); return; }
     stateRef.current.ball.vy = stateRef.current.jump;
+    playSound('flap');
   };
 
   const start = () => {
+    initAudio();
     if (animRef.current) cancelAnimationFrame(animRef.current);
     stateRef.current = initState();
     setScore(0); setStatus('running');
@@ -243,8 +250,11 @@ export default function ColorSwitchGame() {
               <p className="text-slate-500 text-sm text-center mt-3">Tap / <kbd className="bg-slate-700 px-2 py-0.5 rounded text-slate-300">Space</kbd> to jump</p>
 
               {status !== 'idle' && (
-                <button onClick={() => setStatus('idle')} className="mt-6 mx-auto block text-slate-400 hover:text-white font-semibold underline">
-                  Exit Fullscreen
+                <button 
+                  onClick={() => setStatus('idle')} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
                 </button>
               )}
             </div>

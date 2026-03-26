@@ -86,7 +86,13 @@ const itemListSchema = {
   ]
 };
 
+import { initAudio } from '../../utils/gameAudio';
+
 export default function FreeGames() {
+  const handleGameClick = () => {
+    initAudio();
+  };
+
   return (
     <>
       <Helmet>
@@ -98,65 +104,76 @@ export default function FreeGames() {
         <script type="application/ld+json">{JSON.stringify(itemListSchema)}</script>
       </Helmet>
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900">
+      <div className="min-h-screen bg-[#0f172a] text-slate-200 selection:bg-purple-500/30">
+        {/* Animated Background */}
+        <div className="fixed inset-0 overflow-hidden pointer-events-none">
+          <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-purple-600/10 rounded-full blur-[120px] animate-pulse" />
+          <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-blue-600/10 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '2s' }} />
+        </div>
+
         {/* Hero */}
-        <div className="relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wMyI+PHBhdGggZD0iTTM2IDM0djZoLTZ2LTZoNnptMCAwdi02aDZ2Nmgtfm0tMTIgMHY2aC02di02aDZ6bTAgMHYtNmg2djZoLTZ6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-40" />
-          <div className="relative max-w-6xl mx-auto px-4 py-20 text-center">
-            <div className="inline-flex items-center gap-2 bg-purple-500/20 border border-purple-400/30 rounded-full px-4 py-2 text-purple-300 text-sm font-medium mb-6">
-              🎮 100% Free · No Download · Browser Playable
+        <div className="relative pt-20 pb-16 px-4">
+          <div className="max-w-6xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500/10 to-blue-500/10 border border-white/10 rounded-full px-4 py-2 text-white/80 text-sm font-medium mb-8 backdrop-blur-md">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-purple-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-purple-500"></span>
+              </span>
+              Gaming Console Hub v2.0
             </div>
-            <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight">
-              Free Games for{' '}
-              <span className="bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-                Students
+            <h1 className="text-5xl md:text-7xl font-black text-white mb-6 tracking-tight">
+              Level Up Your <br/>
+              <span className="bg-gradient-to-r from-purple-400 via-pink-400 to-blue-400 bg-clip-text text-transparent italic">
+                Study Breaks
               </span>
             </h1>
-            <p className="text-xl text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed">
-              Play 12 handpicked <strong className="text-white">free browser games</strong> — brain training, classic arcade, and study break games. 
-              Zero downloads, instant play, mobile-friendly. Perfect for a <strong className="text-white">5-minute study break</strong>!
+            <p className="text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed font-medium">
+              A curated collection of pixel-perfect browser games designed to sharpen your mind and refresh your focus.
             </p>
-            <div className="flex flex-wrap justify-center gap-3">
-              {['🧠 Brain Training', '🕹️ Classic Games', '☕ Study Break', '📱 Mobile Friendly'].map(tag => (
-                <span key={tag} className="bg-white/10 border border-white/20 rounded-full px-4 py-1.5 text-white/80 text-sm">{tag}</span>
-              ))}
+            <div className="flex flex-wrap justify-center gap-4">
+               <a href="#brain-training" className="bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95">🧠 Brain</a>
+               <a href="#classic-games" className="bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95">🕹️ Classic</a>
+               <a href="#study-break" className="bg-white/5 hover:bg-white/10 border border-white/10 px-6 py-3 rounded-2xl font-bold transition-all hover:scale-105 active:scale-95">☕ Break</a>
             </div>
           </div>
         </div>
 
-        {/* All Games Quick Grid */}
-        <div className="max-w-6xl mx-auto px-4 pb-8">
-          <div className="bg-white/5 border border-white/10 rounded-2xl p-6 mb-12 backdrop-blur-sm">
-            <h2 className="text-white font-bold text-lg mb-4">⚡ Quick Play — All {allGames.length} Games</h2>
-            <div className="flex flex-wrap gap-2">
-              {allGames.map(g => (
-                <Link key={g.path} to={g.path} className="bg-white/10 hover:bg-purple-500/30 border border-white/15 hover:border-purple-400/50 rounded-xl px-3 py-2 text-white/90 text-sm font-medium transition-all duration-200 hover:-translate-y-0.5">
-                  {g.emoji} {g.name}
-                </Link>
-              ))}
-            </div>
-          </div>
-
+        <div className="max-w-7xl mx-auto px-4 pb-20 relative z-10">
           {/* Category Sections */}
           {gameCategories.map(cat => (
-            <section key={cat.id} id={cat.id} className="mb-16">
-              <div className="mb-8">
-                <h2 className="text-3xl font-bold text-white mb-2">{cat.title}</h2>
-                <p className="text-slate-400 text-lg">{cat.description}</p>
+            <section key={cat.id} id={cat.id} className="mb-24 scroll-mt-24">
+              <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4 border-l-4 border-purple-500 pl-6">
+                <div>
+                  <h2 className="text-3xl font-black text-white tracking-tight">{cat.title.split(' ')[1] + ' ' + cat.title.split(' ')[2]}</h2>
+                  <p className="text-slate-400 font-medium max-w-xl">{cat.description}</p>
+                </div>
+                <div className="text-xs font-black text-purple-500/50 uppercase tracking-[0.2em]">{cat.games.length} Titles Loaded</div>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {cat.games.map(game => (
                   <Link
                     key={game.path}
                     to={game.path}
-                    className="group bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-400/40 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-purple-900/30 backdrop-blur-sm"
+                    onClick={handleGameClick}
+                    className="group relative bg-[#1e293b]/40 hover:bg-[#1e293b]/60 border border-white/5 hover:border-purple-500/40 rounded-[2.5rem] p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(168,85,247,0.15)] backdrop-blur-xl overflow-hidden"
                   >
-                    <div className="text-4xl mb-3">{game.emoji}</div>
-                    <h3 className="text-white font-bold text-lg mb-2 group-hover:text-purple-300 transition-colors">{game.name}</h3>
-                    <p className="text-slate-400 text-sm leading-relaxed mb-4">{game.desc}</p>
-                    <span className="inline-flex items-center gap-1 text-purple-400 text-sm font-medium group-hover:gap-2 transition-all">
-                      Play Now <span>→</span>
-                    </span>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-purple-500/5 blur-3xl rounded-full translate-x-10 -translate-y-10 group-hover:bg-purple-500/10 transition-colors" />
+                    
+                    <div className="relative z-10">
+                      <div className="text-5xl mb-6 transform group-hover:scale-110 group-hover:rotate-12 transition-transform duration-500 inline-block">{game.emoji}</div>
+                      <h3 className="text-2xl font-black text-white mb-3 group-hover:text-purple-300 transition-colors tracking-tight">{game.name}</h3>
+                      <p className="text-slate-400 text-sm leading-relaxed mb-8 font-medium line-clamp-2">{game.desc}</p>
+                      
+                      <div className="flex items-center justify-between">
+                         <div className="flex items-center gap-2 text-purple-400 text-xs font-black uppercase tracking-wider group-hover:translate-x-2 transition-transform">
+                            Start Game <span className="text-lg">→</span>
+                         </div>
+                         <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center border border-white/5 group-hover:bg-purple-500 group-hover:text-white transition-all duration-500">
+                            <span className="text-xl">🎮</span>
+                         </div>
+                      </div>
+                    </div>
                   </Link>
                 ))}
               </div>

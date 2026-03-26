@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { initAudio, playSound } from '../../utils/gameAudio';
 
 function gen(difficulty) {
   const ops = difficulty === 'easy' ? ['+', '-'] : difficulty === 'medium' ? ['+', '-', '×'] : ['+', '-', '×', '÷'];
@@ -61,10 +62,12 @@ export default function MathQuizGame() {
     if (!running || finished) return;
     setTotal(t => t + 1);
     if (opt === q.answer) {
+      playSound('score');
       setScore(s => s + 10 + streak * 2);
       setStreak(s => s + 1);
       setFeedback('correct');
     } else {
+      playSound('error');
       setStreak(0);
       setFeedback('wrong');
     }
@@ -72,6 +75,7 @@ export default function MathQuizGame() {
   };
 
   const start = () => {
+    initAudio();
     setScore(0); setStreak(0); setTotal(0); setTime(30);
     setRunning(true); setFinished(false); setFeedback(null); setQ(gen(difficulty));
   };
@@ -81,6 +85,7 @@ export default function MathQuizGame() {
       if (!running || finished || feedback) return;
       const keyMap = { '1': 0, '2': 1, '3': 2, '4': 3 };
       if (keyMap[e.key] !== undefined && q?.options[keyMap[e.key]] !== undefined) {
+        initAudio();
         answer(q.options[keyMap[e.key]]);
       }
     };
@@ -89,7 +94,13 @@ export default function MathQuizGame() {
   }, [running, finished, feedback, q, answer]);
 
   useEffect(() => {
-    if (finished && score > best) { setBest(score); localStorage.setItem('mathbest', score); }
+    if (finished && score > best) { 
+      playSound('win');
+      setBest(score); 
+      localStorage.setItem('mathbest', score); 
+    } else if (finished) {
+      playSound('over');
+    }
   }, [finished]);
 
   return (
@@ -165,8 +176,11 @@ export default function MathQuizGame() {
               )}
 
               {(running || finished) && (
-                <button onClick={() => { setRunning(false); setFinished(false); }} className="mt-8 mx-auto block text-slate-400 hover:text-white font-semibold underline text-center touch-none">
-                  Exit Fullscreen
+                <button 
+                  onClick={() => { setRunning(false); setFinished(false); }} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
                 </button>
               )}
             </div>

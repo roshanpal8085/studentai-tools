@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { initAudio, playSound } from '../../utils/gameAudio';
 
 const CANVAS_W = 360, CANVAS_H = 500;
 const BLOCK_H = 20, BLOCK_START_W = 160;
@@ -85,7 +86,18 @@ export default function StackGame() {
     const overlapStart = Math.max(cur.x, top.x);
     const overlapEnd = Math.min(cur.x + cur.width, top.x + top.width);
     const overlapW = overlapEnd - overlapStart;
-    if (overlapW <= 0) { s.over = true; setStatus('over'); const nb = s.score; if (nb > best) { setBest(nb); localStorage.setItem('stackbest', nb); } return; }
+    if (overlapW <= 0) { 
+      playSound('crash');
+      s.over = true; setStatus('over'); const nb = s.score; if (nb > best) { setBest(nb); localStorage.setItem('stackbest', nb); } return; 
+    }
+    
+    // Check if it's a perfect stack (or very close)
+    if (Math.abs(overlapW - cur.width) < 2) {
+      playSound('perfect');
+    } else {
+      playSound('drop');
+    }
+
     s.blocks.push({ x: overlapStart, width: overlapW, y: CANVAS_H - BLOCK_H });
     s.score++;
     setScore(s.score);
@@ -106,6 +118,7 @@ export default function StackGame() {
   };
 
   const start = () => {
+    initAudio();
     if (animRef.current) cancelAnimationFrame(animRef.current);
     stateRef.current = initState();
     setScore(0); setStatus('running');
@@ -205,8 +218,11 @@ export default function StackGame() {
               <p className="text-slate-500 text-sm text-center mt-3">Press <kbd className="bg-slate-700 px-2 py-0.5 rounded text-slate-300">Space</kbd> or tap the board to drop</p>
 
               {status !== 'idle' && (
-                <button onClick={() => setStatus('idle')} className="mt-6 mx-auto block text-slate-400 hover:text-white font-semibold underline">
-                  Exit Fullscreen
+                <button 
+                  onClick={() => setStatus('idle')} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
                 </button>
               )}
             </div>

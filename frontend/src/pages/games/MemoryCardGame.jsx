@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { initAudio, playSound } from '../../utils/gameAudio';
 
 const EMOJIS = ['🐶','🐱','🦊','🐸','🦄','🐧','🦋','🌸','⭐','🎸','🍕','🎯','🚀','🌈','💎','🔥'];
 
@@ -51,7 +52,7 @@ export default function MemoryCardGame() {
   const [running, setRunning] = useState(false);
   const [status, setStatus] = useState('idle'); // idle, playing, won
 
-  const start = () => setStatus('playing');
+  const start = () => { initAudio(); setStatus('playing'); };
   const exit = () => setStatus('idle');
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function MemoryCardGame() {
   const handleFlip = useCallback((id) => {
     if (locked || cards[id].flipped || cards[id].matched) return;
     if (!running) setRunning(true);
+    playSound('move');
     const newCards = cards.map(c => c.id === id ? { ...c, flipped: true } : c);
     const newFlipped = [...flipped, id];
     setCards(newCards);
@@ -77,12 +79,16 @@ export default function MemoryCardGame() {
         setTimeout(() => { setCards(final); setFlipped([]); setLocked(false); setMatched(m => m + 1); }, 400);
         if (matched + 1 === pairs) {
           setRunning(false);
+          playSound('win');
           const total = moves + 1;
           if (total < best) { setBest(total); localStorage.setItem('memorybest', total); }
           setStatus('won');
+        } else {
+          playSound('match');
         }
       } else {
         setTimeout(() => {
+          playSound('error');
           setCards(c => c.map(card => newFlipped.includes(card.id) ? { ...card, flipped: false } : card));
           setFlipped([]); setLocked(false);
         }, 900);
@@ -203,7 +209,12 @@ export default function MemoryCardGame() {
               )}
 
               {status !== 'idle' && (
-                <button onClick={exit} className="mx-auto block text-slate-400 hover:text-white font-semibold underline">Exit Fullscreen</button>
+                <button 
+                  onClick={exit} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
+                </button>
               )}
             </div>
           </div>

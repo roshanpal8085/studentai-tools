@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { initAudio, playSound } from '../../utils/gameAudio';
 
 const PUZZLES = [
   { question: 'What comes next in the sequence: 2, 4, 8, 16, ?', options: ['24', '32', '30', '28'], answer: '32', explanation: 'Each number doubles. 16 × 2 = 32.' },
@@ -50,7 +51,7 @@ export default function LogicPuzzleGame() {
     setPuzzles([...PUZZLES].sort(() => Math.random() - 0.5));
   }, []);
 
-  const start = () => setStatus('playing');
+  const start = () => { initAudio(); setStatus('playing'); };
   const exit = () => setStatus('idle');
 
   const current = puzzles[idx];
@@ -59,13 +60,23 @@ export default function LogicPuzzleGame() {
     if (selected || !current) return;
     setSelected(opt);
     const correct = opt === current.answer;
-    if (correct) setScore(s => s + 10);
+    if (correct) {
+      playSound('score');
+      setScore(s => s + 10);
+    } else {
+      playSound('error');
+    }
     setAnswers(a => [...a, { q: current.question, chosen: opt, correct, answer: current.answer }]);
     setShowExp(true);
   }, [selected, current]);
 
   const next = useCallback(() => {
-    if (idx + 1 >= puzzles.length) { setDone(true); return; }
+    playSound('move');
+    if (idx + 1 >= puzzles.length) { 
+      playSound('win');
+      setDone(true); 
+      return; 
+    }
     setIdx(i => i + 1); setSelected(null); setShowExp(false);
   }, [idx, puzzles.length]);
 
@@ -85,6 +96,7 @@ export default function LogicPuzzleGame() {
       const keyStr = e.key.toUpperCase();
       const keyMap = { 'A': 0, '1': 0, 'B': 1, '2': 1, 'C': 2, '3': 2, 'D': 3, '4': 3 };
       if (keyMap[keyStr] !== undefined && current?.options[keyMap[keyStr]] !== undefined) {
+        initAudio();
         choose(current.options[keyMap[keyStr]]);
       }
     };
@@ -181,7 +193,12 @@ export default function LogicPuzzleGame() {
               )}
 
               {status !== 'idle' && (
-                <button onClick={exit} className="mx-auto block text-slate-400 hover:text-white font-semibold underline">Exit Fullscreen</button>
+                <button 
+                  onClick={exit} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
+                </button>
               )}
             </div>
           </div>

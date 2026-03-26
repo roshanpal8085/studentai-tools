@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { initAudio, playSound } from '../../utils/gameAudio';
 
 const SAMPLE_TEXTS = [
   "The quick brown fox jumps over the lazy dog. Practice makes perfect and typing faster will help you in every part of your academic journey.",
@@ -71,9 +72,17 @@ export default function TypingSpeedTest() {
     setWpm(Math.round(words / elapsedMin));
     // Accuracy
     let correct = 0;
-    for (let i = 0; i < val.length; i++) { if (val[i] === text[i]) correct++; }
+    let hasError = false;
+    for (let i = 0; i < val.length; i++) { 
+      if (val[i] === text[i]) correct++; 
+      else hasError = true;
+    }
+    if (hasError && val.length > input.length) playSound('error');
+    else if (val.length > input.length) playSound('move');
+
     setAccuracy(val.length > 0 ? Math.round((correct / val.length) * 100) : 100);
     if (val === text) {
+      playSound('win');
       clearInterval(timerRef.current);
       setFinished(true);
     }
@@ -90,6 +99,7 @@ export default function TypingSpeedTest() {
   useEffect(() => () => clearInterval(timerRef.current), []);
 
   const reset = () => {
+    initAudio();
     clearInterval(timerRef.current);
     setInput(''); setStarted(false); setFinished(false); setElapsed(0); setWpm(0); setAccuracy(100);
     setTextIdx(Math.floor(Math.random() * SAMPLE_TEXTS.length));
@@ -159,7 +169,7 @@ export default function TypingSpeedTest() {
                 disabled={finished}
                 placeholder={started ? '' : '🖊️ Click here and start typing...'}
                 className="w-full bg-slate-800 border-2 border-slate-600 focus:border-cyan-500 rounded-xl p-4 text-white font-mono text-lg outline-none resize-none h-28 transition-colors disabled:opacity-50 mb-4"
-                onFocus={() => !started && !finished && inputRef.current?.focus()}
+                onFocus={() => { if (!started && !finished) { initAudio(); inputRef.current?.focus(); } }}
               />
 
               <div className="flex gap-3 mb-2">
@@ -190,8 +200,11 @@ export default function TypingSpeedTest() {
               )}
 
               {started && (
-                <button onClick={() => { setStarted(false); setFinished(false); }} className="mt-8 mx-auto block text-slate-400 hover:text-white font-semibold underline">
-                  Exit Fullscreen
+                <button 
+                  onClick={() => { setStarted(false); setFinished(false); clearInterval(timerRef.current); }} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
                 </button>
               )}
             </div>

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { initAudio, playSound } from '../../utils/gameAudio';
 
 // Word categories
 const CATEGORIES = [
@@ -62,7 +63,7 @@ export default function WordPuzzleGame() {
   const [solved, setSolved] = useState(0);
   const [status, setStatus] = useState('idle'); // idle, playing
 
-  const start = () => setStatus('playing');
+  const start = () => { initAudio(); setStatus('playing'); };
   const exit = () => setStatus('idle');
 
   const cat = CATEGORIES[catIdx];
@@ -86,12 +87,14 @@ export default function WordPuzzleGame() {
   const check = useCallback(() => {
     if (!input.trim()) return;
     if (input.trim().toUpperCase() === word) {
+      playSound('score');
       setFeedback('correct');
       setScore(s => s + (hintUsed ? 5 : 10) + streak * 2);
       setStreak(s => s + 1);
       setSolved(s => s + 1);
       setTimeout(next, 800);
     } else {
+      playSound('error');
       setFeedback('wrong');
       setStreak(0);
       setTimeout(() => setFeedback(null), 600);
@@ -158,8 +161,8 @@ export default function WordPuzzleGame() {
 
               <input
                 value={input}
-                onChange={e => setInput(e.target.value.toUpperCase())}
-                onFocus={() => { if (status === 'idle') setStatus('playing'); }}
+                onChange={e => { setInput(e.target.value.toUpperCase()); playSound('move'); }}
+                onFocus={() => { if (status === 'idle') { initAudio(); setStatus('playing'); } }}
                 onKeyDown={e => e.key === 'Enter' && check()}
                 placeholder="Type your answer..."
                 maxLength={word.length + 2}
@@ -174,7 +177,12 @@ export default function WordPuzzleGame() {
               </div>
 
               {status !== 'idle' && (
-                <button onClick={exit} className="mx-auto block text-slate-400 hover:text-white font-semibold underline">Exit Fullscreen</button>
+                <button 
+                  onClick={exit} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
+                </button>
               )}
             </div>
           </div>

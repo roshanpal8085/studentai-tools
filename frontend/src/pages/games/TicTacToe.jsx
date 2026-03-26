@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
+import { initAudio, playSound } from '../../utils/gameAudio';
 
 const WIN = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
 
@@ -77,7 +78,7 @@ export default function TicTacToe() {
   const [step, setStep] = useState(0);
   const [status, setStatus] = useState('idle'); // idle, playing, over
 
-  const start = () => setStatus('playing');
+  const start = () => { initAudio(); setStatus('playing'); };
   const exit = () => setStatus('idle');
 
   const current = history[step];
@@ -105,12 +106,13 @@ export default function TicTacToe() {
       const m = bestMove(nb, difficulty);
       if (m !== -1) setTimeout(() => {
         const nb2 = [...nb]; nb2[m] = 'O';
+        playSound('move');
         const h2 = [...newHistory, nb2];
         setHistory(h2); setStep(h2.length - 1);
         const r2 = checkWinner(nb2);
         if (r2) {
-          if (r2.winner === 'O') setScores(s => ({ ...s, O: s.O+1 }));
-          else setScores(s => ({ ...s, D: s.D+1 }));
+          if (r2.winner === 'O') { playSound('over'); setScores(s => ({ ...s, O: s.O+1 })); }
+          else { playSound('move'); setScores(s => ({ ...s, D: s.D+1 })); }
         }
       }, 300);
     }
@@ -205,7 +207,12 @@ export default function TicTacToe() {
               </div>
 
               {status !== 'idle' && (
-                <button onClick={exit} className="mx-auto block text-slate-400 hover:text-white font-semibold underline">Exit Fullscreen</button>
+                <button 
+                  onClick={exit} 
+                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                >
+                  <span>✕</span> Exit Game
+                </button>
               )}
             </div>
           </div>
