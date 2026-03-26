@@ -105,8 +105,11 @@ export default function InternetSpeedTest() {
                 lastUpdate.current = now;
             }
             if (type === 'UPLOAD_RESULT') { 
-                setUpload(value); setProgress(100); setStatus('finished'); 
-                setHistory(h => [{ down: value.toFixed(1), up: value.toFixed(1), date: new Date().toLocaleTimeString() }, ...h].slice(0, 3));
+                setUpload(prev => {
+                    setProgress(100); setStatus('finished');
+                    setHistory(h => [{ down: (download || 0).toFixed(1), up: value.toFixed(1), date: new Date().toLocaleTimeString() }, ...h].slice(0, 3));
+                    return value;
+                });
                 workerRef.current.terminate();
             }
         };
@@ -227,7 +230,7 @@ export default function InternetSpeedTest() {
                         <div className="flex justify-between items-center bg-white/5 px-10 py-7 rounded-[3.5rem] border border-white/5 backdrop-blur-2xl">
                             <div className="flex flex-col items-center"><span className="text-[9px] font-black text-slate-600 uppercase mb-2 tracking-widest">Latency</span><span className="text-xl font-black text-blue-500 tabular-nums">{ping}<span className="text-[9px] ml-1 opacity-40 italic">ms</span></span></div>
                             <div className="flex flex-col items-center"><span className="text-[9px] font-black text-slate-600 uppercase mb-2 tracking-widest">Jitter</span><span className="text-xl font-black text-emerald-500 tabular-nums">2<span className="text-[9px] ml-1 opacity-40 italic">ms</span></span></div>
-                            <div className="flex flex-col items-center"><span className="text-[9px] font-black text-slate-600 uppercase mb-2 tracking-widest">Engine</span><span className="text-xl font-black text-white italic uppercase">{isTesting ? '...' : 'v7.ULTRA'}</span></div>
+                            <div className="flex flex-col items-center"><span className="text-[9px] font-black text-slate-600 uppercase mb-2 tracking-widest">Engine</span><span className="text-xl font-black text-white italic uppercase">v8.ULTRA</span></div>
                         </div>
 
                         <div className="flex gap-4">

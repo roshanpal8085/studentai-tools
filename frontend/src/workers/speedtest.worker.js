@@ -1,101 +1,170 @@
-// v7 Refined Web Worker (95th-Percentile Peak Engine)
-const DOWNLOAD_CONCURRENCY = 8;
-const UPLOAD_CONCURRENCY = 4;
-const WARM_UP_TIME = 1500; // 1.5s warmup
-const SAMPLE_INTERVAL = 50; // 50ms (20x per sec)
+// v9 Speed Test Worker — Accurate Download + Upload
+// Download: parallel streams from Cloudflare CDN
+// Upload: sequential timed chunks, bytes counted on completion
+
+const DOWNLOAD_CONCURRENCY = 4;
+const UPLOAD_CONCURRENCY = 3;
+const SAMPLE_INTERVAL = 200; // ms
+
+const CLOUDFLARE_BASE = 'https://speed.cloudflare.com';
 
 self.onmessage = async (e) => {
     const { type } = e.data;
-    
+
+    // ─── PING ──────────────────────────────────────────────────────────────────
     if (type === 'PING') {
         const pings = [];
-        for (let i = 0; i < 12; i++) {
+        for (let i = 0; i < 10; i++) {
             const start = performance.now();
             try {
-                await fetch('/api/ping?t=' + Math.random(), { cache: 'no-store' });
+                await fetch(`${CLOUDFLARE_BASE}/__down?bytes=1&t=${Date.now()}`, {
+                    cache: 'no-store',
+                    mode: 'cors'
+                });
                 pings.push(performance.now() - start);
-            } catch (err) {}
+            } catch (_) {}
         }
-        const avg = pings.sort((a,b)=>a-b).slice(1, -1).reduce((a,b)=>a+b, 0) / (pings.length - 2);
+        if (pings.length === 0) {
+            self.postMessage({ type: 'PING_RESULT', value: '999' });
+            return;
+        }
+        pings.sort((a, b) => a - b);
+        const trimmed = pings.slice(1, Math.max(2, pings.length - 1));
+        const avg = trimmed.reduce((a, b) => a + b, 0) / trimmed.length;
         self.postMessage({ type: 'PING_RESULT', value: avg.toFixed(0) });
     }
 
+    // ─── DOWNLOAD ──────────────────────────────────────────────────────────────
     if (type === 'DOWNLOAD') {
+        const TEST_DURATION = 10000; // ms
+        const WARMUP = 1500;         // ms
         const startTime = performance.now();
         let totalBytes = 0;
+        let warmupBytes = 0;
+        let warmupDone = false;
         const samples = [];
-        const controllers = Array.from({ length: DOWNLOAD_CONCURRENCY }).map(() => new AbortController());
+        const controllers = [];
+        let stopped = false;
 
-        const spawnStream = async (id) => {
-            try {
-                const res = await fetch(`/api/speed-test/20mb.bin?cache=${Math.random()}`, {
-                    signal: controllers[id].signal,
-                    cache: 'no-store'
-                });
-                const reader = res.body.getReader();
-                while (true) {
-                    const { done, value } = await reader.read();
-                    if (done) break;
-                    totalBytes += value.length;
+        const spawnStream = async () => {
+            while (!stopped) {
+                const ctrl = new AbortController();
+                controllers.push(ctrl);
+                try {
+                    const res = await fetch(
+                        `${CLOUDFLARE_BASE}/__down?bytes=25000000&r=${Math.random()}`,
+                        { signal: ctrl.signal, cache: 'no-store', mode: 'cors' }
+                    );
+                    const reader = res.body.getReader();
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done || stopped) break;
+                        totalBytes += value.length;
+                    }
+                } catch (_) {
+                    if (stopped) break;
                 }
-            } catch (err) {}
+            }
         };
 
-        // Aggregator loop
         const sampleTimer = setInterval(() => {
             const elapsed = performance.now() - startTime;
-            if (elapsed > WARM_UP_TIME) {
-                const mbps = (totalBytes * 8) / ((elapsed - WARM_UP_TIME) / 1000 * 1024 * 1024);
-                samples.push(mbps);
-                self.postMessage({ type: 'DOWNLOAD_UPDATE', mbps, progress: Math.min(100, (elapsed / 10000) * 100) });
+            const progress = Math.min(100, (elapsed / TEST_DURATION) * 100);
+
+            if (!warmupDone && elapsed >= WARMUP) {
+                warmupDone = true;
+                warmupBytes = totalBytes;
+            }
+
+            if (warmupDone) {
+                const measuredBytes = totalBytes - warmupBytes;
+                const measuredTimeSec = (elapsed - WARMUP) / 1000;
+                if (measuredTimeSec > 0) {
+                    const mbps = (measuredBytes * 8) / (measuredTimeSec * 1024 * 1024);
+                    samples.push(mbps);
+                    self.postMessage({ type: 'DOWNLOAD_UPDATE', mbps, progress });
+                }
+            } else {
+                self.postMessage({ type: 'DOWNLOAD_UPDATE', mbps: 0, progress: progress * 0.15 });
+            }
+
+            if (elapsed >= TEST_DURATION) {
+                clearInterval(sampleTimer);
+                stopped = true;
+                controllers.forEach(c => { try { c.abort(); } catch (_) {} });
+                const sorted = [...samples].sort((a, b) => a - b);
+                const p90 = sorted[Math.floor(sorted.length * 0.90)] || 0;
+                self.postMessage({ type: 'DOWNLOAD_RESULT', value: p90 });
             }
         }, SAMPLE_INTERVAL);
 
-        const downloadPromises = Array.from({ length: DOWNLOAD_CONCURRENCY }).map((_, i) => spawnStream(i));
-        
-        await new Promise(resolve => setTimeout(resolve, 8000)); // 8s collection
-        clearInterval(sampleTimer);
-        controllers.forEach(c => c.abort());
-        
-        // Final: 95th Percentile Filter
-        const sorted = samples.sort((a,b) => a - b);
-        const peak = sorted[Math.floor(sorted.length * 0.95)] || 0;
-        self.postMessage({ type: 'DOWNLOAD_RESULT', value: peak });
+        // Spawn concurrent download streams
+        await Promise.allSettled(
+            Array.from({ length: DOWNLOAD_CONCURRENCY }, () => spawnStream())
+        );
     }
 
+    // ─── UPLOAD ────────────────────────────────────────────────────────────────
     if (type === 'UPLOAD') {
+        const TEST_DURATION = 8000; // ms
+        const CHUNK_SIZE = 2 * 1024 * 1024; // 2MB per chunk (smaller = more completions = better accuracy)
         const startTime = performance.now();
-        let totalBytes = 0;
         const samples = [];
-        const UPLOAD_SIZE = 8 * 1024 * 1024; // 8MB
-        const blob = new Blob([new Uint8Array(UPLOAD_SIZE)]);
+        let totalBytes = 0;
+        let stopped = false;
+
+        // Pre-generate random chunk
+        const chunkData = new Uint8Array(CHUNK_SIZE);
+        for (let i = 0; i < 256; i++) chunkData[i] = i; // fill start, rest is zeros — fine for throughput
 
         const sampleTimer = setInterval(() => {
-            const elapsed = (performance.now() - startTime);
-            if (elapsed > 500) {
-                const mbps = (totalBytes * 8) / (elapsed / 1000 * 1024 * 1024);
+            const elapsed = performance.now() - startTime;
+            const progress = Math.min(100, (elapsed / TEST_DURATION) * 100);
+
+            if (elapsed > 300 && totalBytes > 0) {
+                const mbps = (totalBytes * 8) / ((elapsed / 1000) * 1024 * 1024);
                 samples.push(mbps);
-                self.postMessage({ type: 'UPLOAD_UPDATE', mbps });
+                self.postMessage({ type: 'UPLOAD_UPDATE', mbps, progress });
+            }
+
+            if (elapsed >= TEST_DURATION) {
+                clearInterval(sampleTimer);
+                stopped = true;
+                const sorted = [...samples].sort((a, b) => a - b);
+                const p90 = sorted[Math.floor(sorted.length * 0.90)] || 0;
+                self.postMessage({ type: 'UPLOAD_RESULT', value: p90 });
             }
         }, SAMPLE_INTERVAL);
 
-        const spawnUpload = async () => {
-            while (performance.now() - startTime < 6000) { // 6s upload phase
+        // Each "worker" does back-to-back chunk uploads
+        const uploadWorker = async () => {
+            while (!stopped) {
+                const chunkStart = performance.now();
                 try {
-                    await fetch('/api/upload-test?t=' + Math.random(), {
-                        method: 'POST',
-                        body: blob
-                    });
-                    totalBytes += UPLOAD_SIZE;
-                } catch (err) { break; }
+                    const blob = new Blob([chunkData]);
+                    const res = await fetch(
+                        `${CLOUDFLARE_BASE}/__up?t=${Date.now()}`,
+                        {
+                            method: 'POST',
+                            body: blob,
+                            mode: 'cors',
+                            cache: 'no-store',
+                        }
+                    );
+                    if (res.ok || res.status === 200) {
+                        // Only count bytes AFTER successful upload
+                        totalBytes += CHUNK_SIZE;
+                    }
+                } catch (_) {
+                    // network error — ignore and retry
+                }
+                // Tiny yield to allow sampleTimer to fire
+                await new Promise(r => setTimeout(r, 0));
             }
         };
 
-        await Promise.all(Array.from({ length: UPLOAD_CONCURRENCY }).map(spawnUpload));
-        clearInterval(sampleTimer);
-
-        const sorted = samples.sort((a,b) => a - b);
-        const peak = sorted[Math.floor(sorted.length * 0.95)] || 0;
-        self.postMessage({ type: 'UPLOAD_RESULT', value: peak });
+        await Promise.allSettled(
+            Array.from({ length: UPLOAD_CONCURRENCY }, () => uploadWorker())
+        );
     }
 };
