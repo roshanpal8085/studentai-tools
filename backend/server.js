@@ -28,41 +28,35 @@ app.use('/api/ai', require('./routes/ai'));
 app.use('/api/pdf', require('./routes/pdf'));
 app.use('/api/upload', require('./routes/upload'));
 
-// --- Optimized Reality Speed Test Endpoints ---
+// --- Industry-Standard Multi-Stream Endpoints (LibreSpeed Optimized) ---
 const crypto = require('crypto');
-const RANDOM_POOL = crypto.randomBytes(1024 * 1024 * 50); // 50MB random pool for CPU-efficient bandwidth saturate
+const STATIC_POOL = crypto.randomBytes(1024 * 1024 * 10); // 10MB static random pool for zero-overhead serving
 
 app.get('/api/ping', (req, res) => {
   res.status(200).json({ timestamp: Date.now() });
 });
 
 app.get('/api/download-test', (req, res) => {
-    // Sabse pehle compression disable karein
-    res.setHeader('Content-Encoding', 'none');
+    // Disable compression and cache
+    res.setHeader('Content-Encoding', 'identity'); // Force no-compression
     res.setHeader('Content-Type', 'application/octet-stream');
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     res.setHeader('Content-Disposition', 'attachment; filename=speedtest.bin');
 
-    // 100MB ka garbage data stream karein
-    const totalSize = 100 * 1024 * 1024; 
-    let sentSize = 0;
-    const chunkSize = 64 * 1024; // 64KB chunks
-
-    const stream = () => {
-        while (sentSize < totalSize) {
-            const buffer = crypto.randomBytes(chunkSize);
-            sentSize += chunkSize;
-            
-            // Agar buffer full ho jaye, toh wait karein (Backpressure handle karein)
-            if (!res.write(buffer)) {
-                res.once('drain', stream);
-                return;
-            }
+    // Repeatedly write the static pool to the response (Zero CPU entropy cost)
+    const writeLoop = () => {
+        if (res.writableEnded) return;
+        const canWrite = res.write(STATIC_POOL);
+        if (canWrite) {
+            setImmediate(writeLoop);
+        } else {
+            res.once('drain', writeLoop);
         }
-        res.end();
     };
-
-    stream();
+    writeLoop();
+    
+    // Safety timeout: Auto-terminate stream after 20 seconds to prevent hanging connections
+    setTimeout(() => { if (!res.writableEnded) res.end(); }, 20000);
 });
 
 app.post('/api/upload-test', (req, res) => {
