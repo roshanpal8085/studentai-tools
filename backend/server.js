@@ -28,34 +28,35 @@ app.use('/api/ai', require('./routes/ai'));
 app.use('/api/pdf', require('./routes/pdf'));
 app.use('/api/upload', require('./routes/upload'));
 
-// --- Speed Test Endpoints ---
+// --- Optimized Reality Speed Test Endpoints ---
 const crypto = require('crypto');
+const RANDOM_POOL = crypto.randomBytes(1024 * 1024 * 50); // 50MB random pool for CPU-efficient bandwidth saturate
 
 app.get('/api/ping', (req, res) => {
   res.status(200).json({ timestamp: Date.now() });
 });
 
 app.get('/api/download-test', (req, res) => {
-    const sizeInMb = parseInt(req.query.size) || 10; // Default 10MB
-    const chunkSize = 1024 * 1024; // 1MB chunk
-    let bytesSent = 0;
-
+    // Single-Stream continuous download
     res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
     res.setHeader('Content-Disposition', 'attachment; filename=speedtest.bin');
-    res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
-
-    const sendChunk = () => {
-        if (bytesSent < sizeInMb * 1024 * 1024) {
-            const buffer = crypto.randomBytes(chunkSize);
-            res.write(buffer);
-            bytesSent += chunkSize;
-            setImmediate(sendChunk); 
-        } else {
-            res.end();
+    
+    // Send pool repeatedly (Fast & No CPU bottleneck)
+    const writeLoop = () => {
+        if (!res.writableEnded) {
+            const canWrite = res.write(RANDOM_POOL);
+            if (canWrite) {
+                setImmediate(writeLoop);
+            } else {
+                res.once('drain', writeLoop);
+            }
         }
     };
-
-    sendChunk();
+    writeLoop();
+    
+    // Close after 15 seconds max to prevent accidental hangs
+    setTimeout(() => { if (!res.writableEnded) res.end(); }, 15000);
 });
 
 app.post('/api/upload-test', (req, res) => {
@@ -67,18 +68,10 @@ app.post('/api/upload-test', (req, res) => {
     });
 
     req.on('end', () => {
-        let endTime = Date.now();
-        let durationInSeconds = (endTime - startTime) / 1000;
-        if (durationInSeconds === 0) durationInSeconds = 0.001; // Avoid division by zero
-        let speedBps = (byteCount * 8) / durationInSeconds; // Bits per second
-        let speedMbps = (speedBps / (1024 * 1024)).toFixed(2);
-
-        res.json({
-            received: byteCount,
-            duration: durationInSeconds,
-            speedMbps: speedMbps,
-            success: true
-        });
+        let duration = (Date.now() - startTime) / 1000;
+        if (duration < 0.001) duration = 0.001;
+        const mbps = ((byteCount * 8) / (duration * 1024 * 1024)).toFixed(2);
+        res.json({ received: byteCount, speedMbps: mbps, success: true });
     });
 });
 // ------------------------------

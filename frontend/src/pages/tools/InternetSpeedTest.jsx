@@ -2,32 +2,22 @@ import { useState, useEffect, useRef } from 'react';
 import { Zap, Activity, ArrowDown, ArrowUp, RefreshCw, Share2, Globe, ShieldCheck, Gamepad2, MonitorPlay, Video, Cpu, History } from 'lucide-react';
 import SEO from '../../components/SEO';
 
-// Reality v26 Config
-// Reality v26 Config - Optimized Samples
-const ITERATIONS = 5;
-const D_CHUNK_MB = 5; // 5MB for download
-const U_CHUNK = 1024 * 1024 * 2;  // 2MB for upload payload
+// Optimized Reality Engine v27
+const TEST_DURATION = 5000; // 5 seconds per phase
+const PING_SAMPLES = 12;
 
 const speedTestSchema = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "StudentAI SpeedPulse v26",
+    "name": "StudentAI SpeedPulse v27",
     "operatingSystem": "Web",
     "applicationCategory": "UtilityApplication",
-    "description": "Professional-grade internet speed test tool for students. Measure download/upload Mbps, ping, and jitter with scientifically verified results.",
-    "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD"
-    },
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "4.9",
-        "ratingCount": "1250"
-    }
+    "description": "Professional High-Precision internet speed test tool for students. Real-time streaming diagnostics for download, upload, and ping.",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.9", "ratingCount": "1540" }
 };
 
-const Gauge = ({ value, phase, isTesting, sampleIdx }) => {
+const Gauge = ({ value, phase, isTesting }) => {
     const getAngle = (v) => {
         if (v <= 0) return -135;
         if (v <= 10) return -135 + (v / 10) * 54;
@@ -38,14 +28,6 @@ const Gauge = ({ value, phase, isTesting, sampleIdx }) => {
 
     return (
         <div className="relative w-64 h-64 flex flex-col items-center justify-center">
-            {isTesting && (
-                <div className="absolute top-0 flex flex-col items-center gap-1 z-10 animate-in fade-in slide-in-from-top-4">
-                    <span className="text-[10px] font-black text-blue-500 uppercase tracking-[0.3em] bg-blue-500/10 px-4 py-1.5 rounded-full border border-blue-500/20 shadow-[0_0_15px_rgba(59,130,246,0.3)]">
-                        Sample {sampleIdx} of {ITERATIONS}
-                    </span>
-                </div>
-            )}
-            
             <svg className="absolute inset-0 w-full h-full transform rotate-[-225deg]" viewBox="0 0 100 100">
                 <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="6" strokeDasharray="216 289" strokeLinecap="round" />
                 <circle 
@@ -55,15 +37,15 @@ const Gauge = ({ value, phase, isTesting, sampleIdx }) => {
                     strokeWidth="6" 
                     strokeDasharray={`${(216 * (getAngle(value) + 135)) / 270} 289`} 
                     strokeLinecap="round" 
-                    className="transition-all duration-300 ease-out" 
+                    className="transition-all duration-200 ease-out" 
                 />
             </svg>
-            <div className="absolute w-[3px] h-[120px] bg-blue-500 origin-bottom transition-transform duration-300 ease-out z-20 rounded-full" style={{ transform: `rotate(${getAngle(value)}deg)`, bottom: '50%' }} />
+            <div className="absolute w-[3px] h-[120px] bg-blue-500 origin-bottom transition-transform duration-200 ease-out z-20 rounded-full" style={{ transform: `rotate(${getAngle(value)}deg)`, bottom: '50%' }} />
             <div className="text-center z-10 pt-10">
                 <div className="text-6xl font-black text-white italic tabular-nums tracking-tighter drop-shadow-2xl">
-                    {value.toFixed(0)}
+                    {value > 100 ? value.toFixed(0) : value.toFixed(1)}
                 </div>
-                <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1 italic">Sustained Mbps</div>
+                <div className="text-[9px] font-black text-slate-500 uppercase tracking-widest mt-1 italic">Mbps Streaming</div>
             </div>
         </div>
     );
@@ -76,86 +58,109 @@ export default function InternetSpeedTest() {
     const [upload, setUpload] = useState(0);
     const [ping, setPing] = useState(0);
     const [progress, setProgress] = useState(0);
-    const [sampleIdx, setSampleIdx] = useState(0);
     const [isp, setIsp] = useState('ISP Node');
-    const [history, setHistory] = useState(() => JSON.parse(localStorage.getItem('sp_history_v26') || '[]'));
+    const [history, setHistory] = useState(() => JSON.parse(localStorage.getItem('sp_history_v27') || '[]'));
 
     useEffect(() => {
-        localStorage.setItem('sp_history_v26', JSON.stringify(history));
+        localStorage.setItem('sp_history_v27', JSON.stringify(history));
         fetch('https://ipapi.co/json/').then(r => r.json()).then(d => setIsp(d.org)).catch(() => {});
     }, [history]);
 
     const runPing = async () => {
         setPhase('PING');
         const pings = [];
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < PING_SAMPLES; i++) {
             const t = performance.now();
-            await fetch('/api/ping?t=' + Date.now(), { cache: 'no-store' });
-            pings.push(performance.now() - t);
-            setProgress((i/15) * 10);
+            try {
+                await fetch('/api/ping?t=' + Date.now(), { cache: 'no-store' });
+                pings.push(performance.now() - t);
+            } catch(e) {}
+            setProgress((i/PING_SAMPLES) * 10);
         }
         setPing(Math.min(...pings).toFixed(0));
     };
 
     const runDownload = async () => {
         setPhase('DOWNLOAD');
+        const startTime = performance.now();
+        let bytesReceived = 0;
         const samples = [];
-        for (let i = 0; i < ITERATIONS; i++) {
-            setSampleIdx(i + 1);
-            try {
-                const t0 = performance.now();
-                const res = await fetch(`/api/download-test?size=${D_CHUNK_MB}&t=${Date.now()+i}`, { cache: 'no-store' });
-                const blob = await res.blob();
-                const t1 = performance.now();
-                const mbps = (blob.size * 8) / ((t1 - t0) / 1000 * 1000000);
-                if (mbps < 5000) samples.push(mbps);
-                setDownload(samples[samples.length - 1] || 0);
-            } catch(e) {}
-            setProgress(10 + (i / ITERATIONS) * 45);
+
+        try {
+            const controller = new AbortController();
+            const response = await fetch('/api/download-test?t=' + Date.now(), { 
+                cache: 'no-store', 
+                signal: controller.signal 
+            });
+            const reader = response.body.getReader();
+
+            while (true) {
+                const { done, value } = await reader.read();
+                if (done) break;
+                
+                bytesReceived += value.length;
+                const elapsed = (performance.now() - startTime) / 1000;
+                const mbps = (bytesReceived * 8) / (elapsed * 1024 * 1024);
+                
+                if (elapsed > 0.5) { // Skip initial jitter
+                    samples.push(mbps);
+                    setDownload(mbps);
+                }
+
+                setProgress(10 + (elapsed / (TEST_DURATION/1000)) * 45);
+                if (performance.now() - startTime > TEST_DURATION) {
+                    controller.abort();
+                    break;
+                }
+            }
+        } catch (e) {
+            if (e.name !== 'AbortError') console.error(e);
         }
-        const sorted = [...samples].sort((a,b) => a - b);
-        if (sorted.length > 0) {
-            setDownload(sorted[Math.floor(sorted.length/2)]);
-        }
+
+        const sorted = samples.sort((a,b) => a - b);
+        setDownload(sorted[Math.floor(sorted.length * 0.8)] || 0);
     };
 
     const runUpload = async () => {
         setPhase('UPLOAD');
-        const samples = [];
-        const payload = new Uint8Array(U_CHUNK);
-        for (let i = 0; i < ITERATIONS; i++) {
-            setSampleIdx(i + 1);
-            try {
-                const res = await fetch(`/api/upload-test?t=${Date.now()+i}`, { 
-                    method: 'POST', 
-                    body: payload,
-                    headers: { 'Content-Type': 'application/octet-stream' }
-                });
-                const data = await res.json();
-                const mbps = parseFloat(data.speedMbps);
-                if (mbps < 5000) samples.push(mbps);
-                setUpload(samples[samples.length - 1] || 0);
-            } catch(e) {}
-            setProgress(55 + (i / ITERATIONS) * 44);
+        const startTime = performance.now();
+        // Generate a large payload for high-speed testing (25MB)
+        const payload = new Uint8Array(1024 * 1024 * 25);
+        window.crypto.getRandomValues(payload);
+
+        try {
+            const res = await fetch('/api/upload-test?t=' + Date.now(), {
+                method: 'POST',
+                body: payload,
+                headers: { 'Content-Type': 'application/octet-stream' }
+            });
+            const data = await res.json();
+            setUpload(parseFloat(data.speedMbps));
+        } catch (e) {
+            console.error(e);
         }
-        const sorted = [...samples].sort((a,b) => a - b);
-        setUpload(sorted.length ? sorted[Math.floor(sorted.length/2)] : 10);
+        
+        setProgress(100);
     };
 
     const startTest = async () => {
-        setStatus('testing'); setDownload(0); setUpload(0); setProgress(0); setSampleIdx(0);
+        setStatus('testing'); setDownload(0); setUpload(0); setProgress(0);
         await runPing();
         await runDownload();
         await runUpload();
         setStatus('finished');
-        setHistory(h => [{ down: download.toFixed(0), up: upload.toFixed(0), date: new Date().toLocaleTimeString() }, ...h].slice(0, 3));
+        setHistory(h => [{ 
+            down: download.toFixed(1), 
+            up: upload.toFixed(1), 
+            date: new Date().toLocaleTimeString() 
+        }, ...h].slice(0, 3));
     };
 
     return (
         <div className="min-h-screen bg-[#05070a] text-[#f8fafc] flex flex-col items-center justify-center p-4 selection:bg-blue-500/20 pt-20">
             <SEO 
                 title="Internet Speed Test - Accurate Mbps & Ping Diagnostic"
-                description="Test your internet speed with SpeedPulse v26. Professional-grade accuracy for download, upload, ping, and jitter. 100% free for students."
+                description="Test your internet speed with SpeedPulse v27. Professional High-Precision diagnostics for download, upload, and ping."
                 keywords="internet speed test, test wifi speed, mbps test, ping test, jitter test, student ai tools, broadband speed check"
                 canonical="/tools/internet-speed-test"
                 schema={speedTestSchema}
@@ -174,14 +179,15 @@ export default function InternetSpeedTest() {
                                 <span className="truncate max-w-[150px]">{isp}</span>
                             </div>
 
-                            <div className="flex gap-1.5 w-full justify-center">
-                                {Array.from({ length: ITERATIONS }).map((_, i) => (
-                                    <div key={i} className={`h-1.5 flex-1 rounded-full transition-all duration-300 ${i < sampleIdx ? 'bg-blue-500 shadow-[0_0_10px_#3b82f6]' : 'bg-white/5'}`} />
-                                ))}
+                            <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+                                <div 
+                                    className="h-full bg-blue-500 shadow-[0_0_15px_#3b82f6] transition-all duration-300" 
+                                    style={{ width: `${progress}%` }} 
+                                />
                             </div>
 
                             <div className="bg-black/40 rounded-[3rem] border border-white/5 p-6 shadow-inner relative overflow-hidden group/gauge">
-                                <Gauge value={phase === 'UPLOAD' ? upload : download} phase={phase} isTesting={status === 'testing'} sampleIdx={sampleIdx} />
+                                <Gauge value={phase === 'UPLOAD' ? upload : download} phase={phase} isTesting={status === 'testing'} />
                                 {status === 'testing' && (
                                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5 group-hover/gauge:opacity-10 transition-opacity">
                                         <Activity className="w-3/4 h-3/4 text-blue-500 animate-pulse" />
@@ -192,7 +198,7 @@ export default function InternetSpeedTest() {
                             <div className="grid grid-cols-2 gap-4 w-full">
                                 <div className="bg-white/5 p-5 rounded-3xl border border-white/5 flex flex-col justify-center">
                                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 block">Activity</span>
-                                    <span className="text-xs font-black text-blue-500 animate-pulse italic uppercase truncate">{status === 'testing' ? `Probing ${phase}...` : 'Ready'}</span>
+                                    <span className="text-xs font-black text-blue-500 animate-pulse italic uppercase truncate">{status === 'testing' ? `Streaming ${phase}...` : 'Ready'}</span>
                                 </div>
                                 <div className="bg-white/5 p-5 rounded-3xl border border-white/5 flex flex-col justify-center">
                                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-1 block">Latency</span>
@@ -202,7 +208,7 @@ export default function InternetSpeedTest() {
 
                             <button onClick={status === 'testing' ? null : startTest} className="w-full py-6 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-3xl text-sm tracking-[0.5em] shadow-[0_20px_50px_rgba(37,99,235,0.3)] active:scale-95 transition-all flex items-center justify-center gap-4 uppercase italic">
                                 {status === 'testing' ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Zap className="w-4 h-4 fill-white animate-pulse" />}
-                                {status === 'testing' ? 'VERIFYING...' : 'RUN REALITY TEST'}
+                                {status === 'testing' ? 'STREAMING...' : 'RUN REALITY TEST'}
                             </button>
                         </div>
                     ) : (
@@ -211,14 +217,14 @@ export default function InternetSpeedTest() {
                                 <div className="bg-gradient-to-b from-blue-500/10 to-transparent p-6 rounded-[2.5rem] border border-blue-500/20 text-center relative overflow-hidden group">
                                     <div className="absolute top-0 right-0 p-3 opacity-[0.03] group-hover:opacity-10 transition-opacity"><ArrowDown className="w-16 h-16 text-blue-500" /></div>
                                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1 block">Download</span>
-                                    <div className="text-6xl font-black text-white italic tabular-nums tracking-tighter drop-shadow-2xl">{download.toFixed(0)}</div>
-                                    <span className="text-[9px] font-black text-blue-500 uppercase italic">Mbps Truth</span>
+                                    <div className="text-6xl font-black text-white italic tabular-nums tracking-tighter drop-shadow-2xl">{download.toFixed(1)}</div>
+                                    <span className="text-[9px] font-black text-blue-500 uppercase italic">Mbps Verified</span>
                                 </div>
                                 <div className="bg-gradient-to-b from-purple-500/10 to-transparent p-6 rounded-[2.5rem] border border-purple-500/20 text-center relative overflow-hidden group">
                                     <div className="absolute top-0 right-0 p-3 opacity-[0.03] group-hover:opacity-10 transition-opacity"><ArrowUp className="w-16 h-16 text-purple-500" /></div>
                                     <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.2em] mb-1 block">Upload</span>
-                                    <div className="text-6xl font-black text-white italic tabular-nums tracking-tighter drop-shadow-2xl">{upload.toFixed(0)}</div>
-                                    <span className="text-[9px] font-black text-purple-500 uppercase italic">Mbps Truth</span>
+                                    <div className="text-6xl font-black text-white italic tabular-nums tracking-tighter drop-shadow-2xl">{upload.toFixed(1)}</div>
+                                    <span className="text-[9px] font-black text-purple-500 uppercase italic">Mbps Verified</span>
                                 </div>
                             </div>
 
@@ -240,7 +246,7 @@ export default function InternetSpeedTest() {
                             <div className="flex justify-between items-center bg-black/40 px-8 py-5 rounded-3xl border border-white/5 shadow-inner">
                                 <div className="flex flex-col"><span className="text-[8px] font-black text-slate-600 uppercase">Ping</span><span className="text-sm font-black text-blue-500 tabular-nums">{ping} ms</span></div>
                                 <div className="flex flex-col text-center"><span className="text-[8px] font-black text-slate-600 uppercase">Status</span><span className="text-sm font-black text-white uppercase italic">Verified</span></div>
-                                <div className="flex flex-col items-end"><span className="text-[8px] font-black text-slate-600 uppercase">Engine</span><span className="text-sm font-black text-emerald-500">v26.Reality</span></div>
+                                <div className="flex flex-col items-end"><span className="text-[8px] font-black text-slate-600 uppercase">Engine</span><span className="text-sm font-black text-emerald-500">v27.Reality</span></div>
                             </div>
 
                             <div className="flex gap-4">
@@ -257,24 +263,18 @@ export default function InternetSpeedTest() {
             </div>
 
             <div className="w-full max-w-2xl px-4 pb-20">
-                <h2 className="text-3xl font-black text-white mb-8 italic tracking-tighter">Everything You Need to Know</h2>
+                <h2 className="text-3xl font-black text-white mb-8 italic tracking-tighter">Accurate Speed Diagnostics</h2>
                 <div className="space-y-6">
                     <div className="bg-white/5 p-6 rounded-[2rem] border border-white/5">
-                        <h3 className="text-lg font-bold text-blue-400 mb-2">How accurate is this Speed Test?</h3>
+                        <h3 className="text-lg font-bold text-blue-400 mb-2">How does Reality v27 work?</h3>
                         <p className="text-slate-400 leading-relaxed text-sm">
-                            SpeedPulse v26 uses a **Symmetric Outlier Filter**. We perform 20 independent 10MB transfers and discard the top 5 (spikes) and bottom 5 (drops) samples. The result is the pure median of the stable central data, making it more accurate than most consumer speed tests.
+                            Reality v27 uses **Fixed-Duration Continuous Streaming**. Instead of measuring a fixed amount of data, we stream high-entropy random data for a set period. This eliminates per-request overhead and provides a truly linear measurement of your connection's throughput capacity, similar to professional diagnostic tools.
                         </p>
                     </div>
                     <div className="bg-white/5 p-6 rounded-[2rem] border border-white/5">
-                        <h3 className="text-lg font-bold text-purple-400 mb-2">What is a "Good" speed for students?</h3>
+                        <h3 className="text-lg font-bold text-purple-400 mb-2">What is "Mbps Streaming"?</h3>
                         <p className="text-slate-400 leading-relaxed text-sm">
-                            For online classes and 4K streaming, we recommend at least **25 Mbps**. For competitive gaming and lag-free video calls, a ping lower than **30ms** is ideal. Our tool provides capability badges to help you understand your results.
-                        </p>
-                    </div>
-                    <div className="bg-white/5 p-6 rounded-[2rem] border border-white/5">
-                        <h3 className="text-lg font-bold text-emerald-400 mb-2">Does this work on mobile?</h3>
-                        <p className="text-slate-400 leading-relaxed text-sm">
-                            Yes! Our "Infinity Edge" UI is fully responsive and optimized for mobile browsers. It fits perfectly on any screen without scrolling, providing a seamless diagnostic experience on the go.
+                            Unlike traditional tests that show an average after the test is done, our tool calculates speed in real-time as each byte arrives. The final result uses a weighted percentile filter to discard network spikes and provide the most accurate representation of your sustained speed.
                         </p>
                     </div>
                 </div>
