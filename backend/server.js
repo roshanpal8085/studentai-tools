@@ -28,32 +28,58 @@ app.use('/api/ai', require('./routes/ai'));
 app.use('/api/pdf', require('./routes/pdf'));
 app.use('/api/upload', require('./routes/upload'));
 
-// --- Speed Test v7 Endpoints ---
+// --- Speed Test Endpoints ---
 const crypto = require('crypto');
-const RANDOM_POOL = crypto.randomBytes(1024 * 1024 * 100); // 100MB random pool
 
 app.get('/api/ping', (req, res) => {
   res.status(200).json({ timestamp: Date.now() });
 });
 
 app.get('/api/download-test', (req, res) => {
-  const size = Math.min(parseInt(req.query.size) || 1024 * 1024 * 5, RANDOM_POOL.length);
-  res.set({
-    'Content-Type': 'application/octet-stream',
-    'Cache-Control': 'no-store, no-cache, must-revalidate',
-    'X-Random-Node': Math.random().toString(36).substring(2)
-  });
-  // Send slice of pre-generated random pool to ensure high-speed delivery WITHOUT re-computing entropy
-  const start = Math.floor(Math.random() * (RANDOM_POOL.length - size));
-  res.send(RANDOM_POOL.slice(start, start + size));
+    const sizeInMb = parseInt(req.query.size) || 10; // Default 10MB
+    const chunkSize = 1024 * 1024; // 1MB chunk
+    let bytesSent = 0;
+
+    res.setHeader('Content-Type', 'application/octet-stream');
+    res.setHeader('Content-Disposition', 'attachment; filename=speedtest.bin');
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+
+    const sendChunk = () => {
+        if (bytesSent < sizeInMb * 1024 * 1024) {
+            const buffer = crypto.randomBytes(chunkSize);
+            res.write(buffer);
+            bytesSent += chunkSize;
+            setImmediate(sendChunk); 
+        } else {
+            res.end();
+        }
+    };
+
+    sendChunk();
 });
 
 app.post('/api/upload-test', (req, res) => {
-  let bytesReceived = 0;
-  req.on('data', (chunk) => { bytesReceived += chunk.length; });
-  req.on('end', () => {
-    res.status(200).json({ received: bytesReceived, success: true });
-  });
+    let startTime = Date.now();
+    let byteCount = 0;
+
+    req.on('data', (chunk) => {
+        byteCount += chunk.length;
+    });
+
+    req.on('end', () => {
+        let endTime = Date.now();
+        let durationInSeconds = (endTime - startTime) / 1000;
+        if (durationInSeconds === 0) durationInSeconds = 0.001; // Avoid division by zero
+        let speedBps = (byteCount * 8) / durationInSeconds; // Bits per second
+        let speedMbps = (speedBps / (1024 * 1024)).toFixed(2);
+
+        res.json({
+            received: byteCount,
+            duration: durationInSeconds,
+            speedMbps: speedMbps,
+            success: true
+        });
+    });
 });
 // ------------------------------
 

@@ -3,9 +3,10 @@ import { Zap, Activity, ArrowDown, ArrowUp, RefreshCw, Share2, Globe, ShieldChec
 import SEO from '../../components/SEO';
 
 // Reality v26 Config
-const ITERATIONS = 20;
-const D_CHUNK = 1024 * 1024 * 10; // 10MB
-const U_CHUNK = 1024 * 1024 * 4;  // 4MB
+// Reality v26 Config - Optimized Samples
+const ITERATIONS = 5;
+const D_CHUNK_MB = 5; // 5MB for download
+const U_CHUNK = 1024 * 1024 * 2;  // 2MB for upload payload
 
 const speedTestSchema = {
     "@context": "https://schema.org",
@@ -103,20 +104,17 @@ export default function InternetSpeedTest() {
             setSampleIdx(i + 1);
             try {
                 const t0 = performance.now();
-                const res = await fetch(`/api/download-test?size=${D_CHUNK}&t=${Date.now()+i}`, { cache: 'no-store' });
-                await res.blob();
+                const res = await fetch(`/api/download-test?size=${D_CHUNK_MB}&t=${Date.now()+i}`, { cache: 'no-store' });
+                const blob = await res.blob();
                 const t1 = performance.now();
-                const mbps = (D_CHUNK * 8) / ((t1 - t0) / 1000 * 1000000);
-                if (mbps < 2000) samples.push(mbps);
+                const mbps = (blob.size * 8) / ((t1 - t0) / 1000 * 1000000);
+                if (mbps < 5000) samples.push(mbps);
                 setDownload(samples[samples.length - 1] || 0);
             } catch(e) {}
             setProgress(10 + (i / ITERATIONS) * 45);
         }
         const sorted = [...samples].sort((a,b) => a - b);
-        if (sorted.length >= 10) {
-            const central = sorted.slice(5, -5);
-            setDownload(central[Math.floor(central.length/2)]);
-        } else if (sorted.length > 0) {
+        if (sorted.length > 0) {
             setDownload(sorted[Math.floor(sorted.length/2)]);
         }
     };
@@ -128,11 +126,14 @@ export default function InternetSpeedTest() {
         for (let i = 0; i < ITERATIONS; i++) {
             setSampleIdx(i + 1);
             try {
-                const t0 = performance.now();
-                await fetch(`/api/upload-test?t=${Date.now()+i}`, { method: 'POST', body: payload });
-                const t1 = performance.now();
-                const mbps = (U_CHUNK * 8) / ((t1 - t0) / 1000 * 1000000);
-                if (mbps < 2000) samples.push(mbps);
+                const res = await fetch(`/api/upload-test?t=${Date.now()+i}`, { 
+                    method: 'POST', 
+                    body: payload,
+                    headers: { 'Content-Type': 'application/octet-stream' }
+                });
+                const data = await res.json();
+                const mbps = parseFloat(data.speedMbps);
+                if (mbps < 5000) samples.push(mbps);
                 setUpload(samples[samples.length - 1] || 0);
             } catch(e) {}
             setProgress(55 + (i / ITERATIONS) * 44);
