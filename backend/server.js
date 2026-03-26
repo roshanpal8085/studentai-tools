@@ -37,26 +37,32 @@ app.get('/api/ping', (req, res) => {
 });
 
 app.get('/api/download-test', (req, res) => {
-    // Single-Stream continuous download
+    // Sabse pehle compression disable karein
+    res.setHeader('Content-Encoding', 'none');
     res.setHeader('Content-Type', 'application/octet-stream');
-    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
     res.setHeader('Content-Disposition', 'attachment; filename=speedtest.bin');
-    
-    // Send pool repeatedly (Fast & No CPU bottleneck)
-    const writeLoop = () => {
-        if (!res.writableEnded) {
-            const canWrite = res.write(RANDOM_POOL);
-            if (canWrite) {
-                setImmediate(writeLoop);
-            } else {
-                res.once('drain', writeLoop);
+
+    // 100MB ka garbage data stream karein
+    const totalSize = 100 * 1024 * 1024; 
+    let sentSize = 0;
+    const chunkSize = 64 * 1024; // 64KB chunks
+
+    const stream = () => {
+        while (sentSize < totalSize) {
+            const buffer = crypto.randomBytes(chunkSize);
+            sentSize += chunkSize;
+            
+            // Agar buffer full ho jaye, toh wait karein (Backpressure handle karein)
+            if (!res.write(buffer)) {
+                res.once('drain', stream);
+                return;
             }
         }
+        res.end();
     };
-    writeLoop();
-    
-    // Close after 15 seconds max to prevent accidental hangs
-    setTimeout(() => { if (!res.writableEnded) res.end(); }, 15000);
+
+    stream();
 });
 
 app.post('/api/upload-test', (req, res) => {
