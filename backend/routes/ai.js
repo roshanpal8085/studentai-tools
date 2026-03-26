@@ -3,6 +3,10 @@ const router = express.Router();
 const rateLimit = require('express-rate-limit');
 const { GoogleGenAI } = require('@google/genai');
 const axios = require('axios');
+const crypto = require('crypto');
+const NodeCache = require('node-cache');
+
+const aiCache = new NodeCache({ stdTTL: 86400 }); // 24H Cache
 
 const providers = [];
 
@@ -20,7 +24,7 @@ if (providers.length === 0) { console.warn("WARNING: No API keys configured in e
 
 let currentKeyIndex = 0;
 
-const generateWithRotation = async (prompt, isJson = false) => {
+const generateRaw = async (prompt, isJson = false) => {
     let attempts = 0;
     while (attempts < providers.length) {
         const provider = providers[currentKeyIndex];
@@ -59,6 +63,20 @@ const generateWithRotation = async (prompt, isJson = false) => {
         }
     }
     throw new Error('429_ALL_KEYS_EXHAUSTED');
+};
+
+const generateWithRotation = async (prompt, isJson = false) => {
+    const hash = crypto.createHash('md5').update(prompt).digest('hex');
+    const cachedResponse = aiCache.get(hash);
+    
+    if (cachedResponse) {
+        console.log('[API Cache] HIT: Serving response from memory cache instantly.');
+        return cachedResponse;
+    }
+    
+    const response = await generateRaw(prompt, isJson);
+    aiCache.set(hash, response);
+    return response;
 };
 
 const aiLimiter = rateLimit({

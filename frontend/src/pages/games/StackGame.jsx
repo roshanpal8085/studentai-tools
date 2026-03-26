@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 const CANVAS_W = 360, CANVAS_H = 500;
-const BLOCK_H = 20, BLOCK_START_W = 160, BLOCK_SPEED_INIT = 2;
+const BLOCK_H = 20, BLOCK_START_W = 160;
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -33,14 +33,26 @@ export default function StackGame() {
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(() => parseInt(localStorage.getItem('stackbest') || '0'));
   const [status, setStatus] = useState('idle');
+  const [difficulty, setDifficulty] = useState('Medium');
 
-  const initState = () => ({
-    blocks: [{ x: (CANVAS_W - BLOCK_START_W) / 2, width: BLOCK_START_W, y: CANVAS_H - BLOCK_H }],
-    current: { x: 0, width: BLOCK_START_W, dir: 1 },
-    speed: BLOCK_SPEED_INIT,
-    score: 0,
-    over: false,
-  });
+  const getSettings = (diff) => {
+    switch (diff) {
+      case 'Easy': return { initSpeed: 1.5, inc: 0.3 };
+      case 'Hard': return { initSpeed: 3.0, inc: 0.8 };
+      default: return { initSpeed: 2.0, inc: 0.5 }; // Medium
+    }
+  };
+
+  const initState = () => {
+    const s = getSettings(difficulty);
+    return {
+      blocks: [{ x: (CANVAS_W - BLOCK_START_W) / 2, width: BLOCK_START_W, y: CANVAS_H - BLOCK_H }],
+      current: { x: 0, width: BLOCK_START_W, dir: 1 },
+      speed: s.initSpeed,
+      score: 0,
+      over: false,
+    };
+  };
 
   const drawGame = (ctx, s) => {
     ctx.fillStyle = '#0f172a';
@@ -77,7 +89,8 @@ export default function StackGame() {
     s.blocks.push({ x: overlapStart, width: overlapW, y: CANVAS_H - BLOCK_H });
     s.score++;
     setScore(s.score);
-    s.speed = BLOCK_SPEED_INIT + Math.floor(s.score / 5) * 0.5;
+    const setts = getSettings(difficulty);
+    s.speed = setts.initSpeed + Math.floor(s.score / 5) * setts.inc;
     s.current = { x: -overlapW, width: overlapW, dir: 1 };
   };
 
@@ -132,12 +145,38 @@ export default function StackGame() {
 
           <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
             <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex gap-3">
-                  <div className="bg-violet-800 rounded-xl px-4 py-2 text-center"><div className="text-violet-200 text-xs">Score</div><div className="text-white text-xl font-bold">{score}</div></div>
-                  <div className="bg-slate-700 rounded-xl px-4 py-2 text-center"><div className="text-slate-400 text-xs">Best</div><div className="text-white text-xl font-bold">{best}</div></div>
+              <div className="flex flex-col gap-3 mb-4">
+                <div className="flex justify-between items-center gap-3">
+                  <div className="flex gap-3 flex-1">
+                    <div className="bg-violet-800 rounded-xl px-4 py-2 text-center flex-1">
+                      <div className="text-violet-200 text-xs">Score</div>
+                      <div className="text-white text-xl font-bold">{score}</div>
+                    </div>
+                    <div className="bg-slate-700 rounded-xl px-4 py-2 text-center flex-1">
+                      <div className="text-slate-400 text-xs">Best</div>
+                      <div className="text-white text-xl font-bold">{best}</div>
+                    </div>
+                  </div>
+                  <button onClick={start} className="bg-violet-500 hover:bg-violet-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors h-full">↺ Restart</button>
                 </div>
-                <button onClick={start} className="bg-violet-500 hover:bg-violet-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
+                
+                {status === 'idle' && (
+                  <div className="flex gap-2 justify-center">
+                    {['Easy', 'Medium', 'Hard'].map(d => (
+                      <button 
+                        key={d} 
+                        onClick={() => setDifficulty(d)}
+                        className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
+                          difficulty === d 
+                            ? 'bg-violet-500 text-white shadow-[0_0_15px_rgba(139,92,246,0.4)]' 
+                            : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700'
+                        }`}
+                      >
+                        {d}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={handleTap}>
@@ -152,7 +191,7 @@ export default function StackGame() {
                   </div>
                 )}
                 {status === 'over' && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/60" onClick={e => { e.stopPropagation(); start(); }}>
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/60 z-10" onClick={e => { e.stopPropagation(); start(); }}>
                     <div className="text-center">
                       <div className="text-5xl mb-3">💥</div>
                       <h2 className="text-2xl font-bold text-white mb-1">Game Over</h2>

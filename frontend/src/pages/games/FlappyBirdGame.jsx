@@ -3,9 +3,15 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 const W = 360, H = 550;
-const GRAVITY = 0.35, JUMP = -7.5;
-const PIPE_W = 65, PIPE_GAP = 155, PIPE_SPEED = 2.8;
 const BIRD_X = 80, BIRD_R = 15;
+
+const getDifficultySettings = (diff) => {
+  switch(diff) {
+    case 'Easy': return { gravity: 0.25, jump: -6.5, pipeSpeed: 2.0, pipeGap: 180 };
+    case 'Hard': return { gravity: 0.45, jump: -8.5, pipeSpeed: 3.5, pipeGap: 130 };
+    default: return { gravity: 0.35, jump: -7.5, pipeSpeed: 2.8, pipeGap: 155 }; // Medium
+  }
+};
 
 const faqSchema = {
   '@context': 'https://schema.org',
@@ -35,6 +41,7 @@ export default function FlappyBirdGame() {
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(() => parseInt(localStorage.getItem('flappybest') || '0'));
   const [status, setStatus] = useState('idle');
+  const [difficulty, setDifficulty] = useState('Medium');
 
   const initState = () => ({
     bird: { y: H / 2, vy: 0 },
@@ -85,13 +92,27 @@ export default function FlappyBirdGame() {
     ctx.fillStyle = '#4ade80';
     ctx.fillRect(0, H - 45, W, 15);
     // Pipes
+    const settings = getDifficultySettings(difficulty);
     s.pipes.forEach(p => {
-      ctx.fillStyle = '#16a34a';
+      // Pipe gradient for 3D effect
+      const pipeGrad = ctx.createLinearGradient(p.x, 0, p.x + PIPE_W, 0);
+      pipeGrad.addColorStop(0, '#16a34a');
+      pipeGrad.addColorStop(0.5, '#4ade80');
+      pipeGrad.addColorStop(1, '#15803d');
+      ctx.fillStyle = pipeGrad;
+      
       ctx.fillRect(p.x, 0, PIPE_W, p.gapY);
-      ctx.fillRect(p.x, p.gapY + PIPE_GAP, PIPE_W, H);
-      ctx.fillStyle = '#15803d';
+      ctx.fillRect(p.x, p.gapY + settings.pipeGap, PIPE_W, H);
+      
+      // Pipe Caps
+      const capGrad = ctx.createLinearGradient(p.x - 5, 0, p.x + PIPE_W + 5, 0);
+      capGrad.addColorStop(0, '#15803d');
+      capGrad.addColorStop(0.5, '#4ade80');
+      capGrad.addColorStop(1, '#14532d');
+      ctx.fillStyle = capGrad;
+      
       ctx.fillRect(p.x - 5, p.gapY - 25, PIPE_W + 10, 25);
-      ctx.fillRect(p.x - 5, p.gapY + PIPE_GAP, PIPE_W + 10, 25);
+      ctx.fillRect(p.x - 5, p.gapY + settings.pipeGap, PIPE_W + 10, 25);
     });
     drawBird(ctx, s.bird.y, s.frame);
     // Score
@@ -107,11 +128,15 @@ export default function FlappyBirdGame() {
   const loop = () => {
     const s = stateRef.current;
     if (!s || s.over) return;
+    
+    // Use dynamic settings based on difficulty state
+    const settings = getDifficultySettings(difficulty);
+    
     s.frame++;
-    s.bird.vy += GRAVITY;
+    s.bird.vy += settings.gravity;
     s.bird.y += s.bird.vy;
     // Move pipes
-    s.pipes.forEach(p => { p.x -= PIPE_SPEED; });
+    s.pipes.forEach(p => { p.x -= settings.pipeSpeed; });
     if (s.pipes[0].x + PIPE_W < 0) {
       s.pipes.shift();
       s.pipes.push({ x: W + 50, gapY: 100 + Math.random() * 250 });
@@ -135,7 +160,7 @@ export default function FlappyBirdGame() {
     }
     for (const p of s.pipes) {
       if (BIRD_X + BIRD_R > p.x && BIRD_X - BIRD_R < p.x + PIPE_W) {
-        if (bird.y - BIRD_R < p.gapY || bird.y + BIRD_R > p.gapY + PIPE_GAP) {
+        if (bird.y - BIRD_R < p.gapY || bird.y + BIRD_R > p.gapY + settings.pipeGap) {
           s.over = true; setStatus('over');
           if (s.score > best) { setBest(s.score); localStorage.setItem('flappybest', s.score); }
         }
@@ -149,7 +174,8 @@ export default function FlappyBirdGame() {
   const flap = () => {
     if (status !== 'running') { start(); return; }
     if (stateRef.current?.over) { start(); return; }
-    if (stateRef.current) stateRef.current.bird.vy = JUMP;
+    const settings = getDifficultySettings(difficulty);
+    if (stateRef.current) stateRef.current.bird.vy = settings.jump;
   };
 
   const start = () => {
@@ -190,12 +216,32 @@ export default function FlappyBirdGame() {
 
           <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
             <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex gap-3">
-                  <div className="bg-sky-900/60 rounded-xl px-4 py-2 text-center"><div className="text-sky-300 text-xs">Score</div><div className="text-white text-xl font-bold">{score}</div></div>
-                  <div className="bg-slate-700 rounded-xl px-4 py-2 text-center"><div className="text-slate-400 text-xs">Best</div><div className="text-white text-xl font-bold">{best}</div></div>
+              <div className="flex flex-col gap-3 mb-4">
+                <div className="flex justify-between items-center">
+                  <div className="flex gap-3">
+                    <div className="bg-sky-900/60 rounded-xl px-4 py-2 text-center"><div className="text-sky-300 text-xs">Score</div><div className="text-white text-xl font-bold">{score}</div></div>
+                    <div className="bg-slate-700 rounded-xl px-4 py-2 text-center"><div className="text-slate-400 text-xs">Best</div><div className="text-white text-xl font-bold">{best}</div></div>
+                  </div>
+                  <button onClick={start} className="bg-sky-500 hover:bg-sky-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
                 </div>
-                <button onClick={start} className="bg-sky-500 hover:bg-sky-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
+                
+                {status === 'idle' && (
+                  <div className="flex gap-2 justify-center">
+                    {['Easy', 'Medium', 'Hard'].map(d => (
+                      <button 
+                        key={d} 
+                        onClick={() => setDifficulty(d)}
+                        className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
+                          difficulty === d 
+                            ? 'bg-sky-500 text-white shadow-[0_0_15px_rgba(14,165,233,0.4)]' 
+                            : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700'
+                        }`}
+                      >
+                        {d}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={flap} onTouchStart={e => { e.preventDefault(); flap(); }}>

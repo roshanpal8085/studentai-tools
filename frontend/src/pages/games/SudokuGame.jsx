@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 
 // --- Sudoku Generator ---
-function generateSudoku() {
+function generateSudoku(difficulty = 'Medium') {
   const base = 3, side = 9;
   const range = (start, stop, step = 1) => Array.from({ length: (stop - start) / step }, (_, i) => start + i * step);
   const shuffle = (arr) => {
@@ -21,8 +21,9 @@ function generateSudoku() {
   const puzzle = board.map(r => [...r]);
   const cells = shuffle(range(0, 81));
   let removed = 0;
+  const maxRemoved = difficulty === 'Easy' ? 30 : difficulty === 'Hard' ? 55 : 45;
   for (const cell of cells) {
-    if (removed >= 45) break;
+    if (removed >= maxRemoved) break;
     const r = Math.floor(cell / 9), c = cell % 9;
     puzzle[r][c] = 0;
     removed++;
@@ -52,7 +53,8 @@ const gameSchema = {
 };
 
 export default function SudokuGame() {
-  const [{ puzzle, solution }, setGame] = useState(() => generateSudoku());
+  const [difficulty, setDifficulty] = useState('Medium');
+  const [{ puzzle, solution }, setGame] = useState(() => generateSudoku('Medium'));
   const [board, setBoard] = useState(() => puzzle.map(r => [...r]));
   const [selected, setSelected] = useState(null);
   const [errors, setErrors] = useState(new Set());
@@ -64,11 +66,11 @@ export default function SudokuGame() {
   const start = () => setStatus('playing');
   const exit = () => setStatus('idle');
 
-  const newGame = () => {
-    const g = generateSudoku();
+  const newGame = (diff = difficulty) => {
+    const g = generateSudoku(diff);
     setGame(g);
     setBoard(g.puzzle.map(r => [...r]));
-    setSelected(null); setErrors(new Set()); setSolved(false); setMoves(0);
+    setSelected(null); setErrors(new Set()); setSolved(false); setMoves(0); setStatus('playing');
   };
 
   const isFixed = useCallback((r, c) => puzzle[r][c] !== 0, [puzzle]);
@@ -156,8 +158,21 @@ export default function SudokuGame() {
                     <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${autoCheck ? 'left-5' : 'left-0.5'}`} />
                   </button>
                 </div>
+                <div className="flex gap-1 bg-slate-800 p-1 rounded-lg">
+                  {['Easy', 'Medium', 'Hard'].map(d => (
+                    <button 
+                      key={d} 
+                      onClick={() => { setDifficulty(d); newGame(d); }} 
+                      className={`px-2 py-1 text-xs font-bold rounded-md transition-colors ${difficulty === d ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-white'}`}
+                    >
+                      {d}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex justify-between items-center mb-4">
                 <div className="text-slate-400 text-sm">Moves: <span className="text-white font-bold">{moves}</span></div>
-                <button onClick={newGame} className="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">New Game</button>
+                <button onClick={() => newGame(difficulty)} className="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">New Puzzle</button>
               </div>
 
               <div className="bg-slate-700 rounded-2xl p-2 border-2 border-slate-500 mb-4 relative overflow-hidden">

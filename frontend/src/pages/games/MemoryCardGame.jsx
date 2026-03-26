@@ -37,7 +37,11 @@ const gameSchema = {
 };
 
 export default function MemoryCardGame() {
-  const [cards, setCards] = useState(() => makeCards(8));
+  const [difficulty, setDifficulty] = useState('Medium');
+  const getPairs = (diff) => ({ 'Easy': 6, 'Medium': 8, 'Hard': 10 }[diff] || 8);
+  const pairs = getPairs(difficulty);
+
+  const [cards, setCards] = useState(() => makeCards(pairs));
   const [flipped, setFlipped] = useState([]);
   const [moves, setMoves] = useState(0);
   const [matched, setMatched] = useState(0);
@@ -71,7 +75,7 @@ export default function MemoryCardGame() {
       if (newCards[a].emoji === newCards[b].emoji) {
         const final = newCards.map(c => newFlipped.includes(c.id) ? { ...c, matched: true } : c);
         setTimeout(() => { setCards(final); setFlipped([]); setLocked(false); setMatched(m => m + 1); }, 400);
-        if (matched + 1 === 8) {
+        if (matched + 1 === pairs) {
           setRunning(false);
           const total = moves + 1;
           if (total < best) { setBest(total); localStorage.setItem('memorybest', total); }
@@ -87,11 +91,11 @@ export default function MemoryCardGame() {
   }, [cards, flipped, locked, running, moves, matched, best]);
 
   const restart = () => {
-    setCards(makeCards(8)); setFlipped([]); setMoves(0); setMatched(0);
+    setCards(makeCards(getPairs(difficulty))); setFlipped([]); setMoves(0); setMatched(0);
     setLocked(false); setTime(0); setRunning(false);
   };
 
-  const won = matched === 8;
+  const won = matched === pairs;
   const fmt = (s) => `${String(Math.floor(s/60)).padStart(2,'0')}:${String(s%60).padStart(2,'0')}`;
 
   return (
@@ -115,40 +119,72 @@ export default function MemoryCardGame() {
           <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
             <div className={status !== 'idle' ? "w-full max-w-xl" : ""}>
               <div className="flex justify-between items-center mb-4 gap-2">
-                <div className="flex gap-2">
-                  <div className="bg-pink-900/50 border border-pink-400/20 rounded-xl px-3 py-2 text-center">
-                    <div className="text-pink-300 text-xs">Moves</div>
-                    <div className="text-white font-bold">{moves}</div>
+                <div className="flex flex-col w-full gap-2">
+                  <div className="flex gap-2 w-full">
+                    <div className="bg-pink-900/50 border border-pink-400/20 rounded-xl px-2 py-1.5 text-center flex-1">
+                      <div className="text-pink-300 text-[10px] uppercase">Moves</div>
+                      <div className="text-white font-bold text-sm">{moves}</div>
+                    </div>
+                    <div className="bg-slate-700/80 rounded-xl px-2 py-1.5 text-center flex-1">
+                      <div className="text-slate-400 text-[10px] uppercase">Time</div>
+                      <div className="text-white font-bold text-sm font-mono">{fmt(time)}</div>
+                    </div>
                   </div>
-                  <div className="bg-slate-700 rounded-xl px-3 py-2 text-center">
-                    <div className="text-slate-400 text-xs">Time</div>
-                    <div className="text-white font-bold font-mono">{fmt(time)}</div>
-                  </div>
-                  <div className="bg-slate-700 rounded-xl px-3 py-2 text-center">
-                    <div className="text-slate-400 text-xs">Pairs</div>
-                    <div className="text-white font-bold">{matched}/8</div>
-                  </div>
-                  <div className="bg-slate-700 rounded-xl px-3 py-2 text-center">
-                    <div className="text-slate-400 text-xs">Best</div>
-                    <div className="text-white font-bold">{best === 9999 ? '--' : best}</div>
+                  <div className="flex gap-2 w-full">
+                    <div className="bg-slate-700/50 rounded-xl px-2 py-1.5 text-center flex-1">
+                      <div className="text-slate-400 text-[10px] uppercase">Pairs</div>
+                      <div className="text-white font-bold text-sm">{matched}/{pairs}</div>
+                    </div>
+                    <div className="bg-slate-700/50 rounded-xl px-2 py-1.5 text-center flex-1">
+                      <div className="text-slate-400 text-[10px] uppercase">Best</div>
+                      <div className="text-white font-bold text-sm">{best === 9999 ? '--' : best}</div>
+                    </div>
                   </div>
                 </div>
-                <button onClick={restart} className="bg-pink-500 hover:bg-pink-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">Restart</button>
+                <button onClick={restart} className="bg-pink-500 hover:bg-pink-400 text-white text-sm font-bold px-4 py-3 rounded-xl transition-colors h-full">Restart</button>
               </div>
+              
+              {status === 'idle' && (
+                <div className="flex gap-2 justify-center mb-4">
+                  {['Easy', 'Medium', 'Hard'].map(d => (
+                    <button 
+                      key={d} 
+                      onClick={() => {
+                        setDifficulty(d);
+                        setCards(makeCards(getPairs(d)));
+                      }}
+                      className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
+                        difficulty === d 
+                          ? 'bg-pink-500 text-white shadow-[0_0_15px_rgba(236,72,153,0.4)]' 
+                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700'
+                      }`}
+                    >
+                      {d}
+                    </button>
+                  ))}
+                </div>
+              )}
 
-              <div className="grid grid-cols-4 gap-2 md:gap-3 mb-6 relative overflow-hidden rounded-2xl">
+              <div className={`grid gap-2 md:gap-3 mb-6 relative overflow-hidden rounded-2xl ${
+                difficulty === 'Easy' ? 'grid-cols-3 md:grid-cols-4 max-w-sm mx-auto' : 
+                difficulty === 'Hard' ? 'grid-cols-4 md:grid-cols-5' : 'grid-cols-4'
+              }`} style={{ perspective: '1000px' }}>
                 {cards.map(card => (
-                  <button
-                    key={card.id}
+                  <div 
+                    key={card.id} 
+                    className="aspect-square relative cursor-pointer" 
                     onClick={() => { if (status === 'idle') setStatus('playing'); handleFlip(card.id); }}
-                    className={`aspect-square rounded-xl md:rounded-2xl text-3xl md:text-4xl font-bold transition-all duration-300 flex items-center justify-center ${
-                      card.flipped || card.matched
-                        ? card.matched ? 'bg-green-500/30 border-2 border-green-400/50 scale-95' : 'bg-pink-500/20 border-2 border-pink-400/50'
-                        : 'bg-slate-700 hover:bg-slate-600 border border-slate-600 hover:-translate-y-0.5 cursor-pointer'
-                    }`}
+                    style={{ transformStyle: 'preserve-3d', transition: 'transform 0.5s', transform: card.flipped || card.matched ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
                   >
-                    {card.flipped || card.matched ? card.emoji : '?'}
-                  </button>
+                    <div className={`absolute inset-0 backface-hidden rounded-xl md:rounded-2xl transition-all duration-300 flex items-center justify-center bg-slate-700 hover:bg-slate-600 border border-slate-600`} style={{ backfaceVisibility: 'hidden' }}>
+                      <span className="text-3xl text-slate-500 select-none">?</span>
+                    </div>
+                    <div className={`absolute inset-0 backface-hidden rounded-xl md:rounded-2xl transition-all duration-300 flex items-center justify-center ${
+                      card.matched ? 'bg-green-500/30 border-2 border-green-400/50' : 'bg-pink-500/20 border-2 border-pink-400/50'
+                    }`} style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}>
+                      <span className="text-3xl md:text-4xl select-none">{card.emoji}</span>
+                    </div>
+                  </div>
                 ))}
                 {status === 'idle' && (
                   <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">

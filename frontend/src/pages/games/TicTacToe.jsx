@@ -23,7 +23,18 @@ function minimax(b, isX) {
   return isX ? Math.max(...scores) : Math.min(...scores);
 }
 
-function bestMove(b) {
+function bestMove(b, difficulty = 'Hard') {
+  // Hard = 100% Minimax, Medium = 60% Minimax, Easy = 20% Minimax
+  const threshold = difficulty === 'Hard' ? 1.0 : difficulty === 'Medium' ? 0.6 : 0.2;
+  
+  if (Math.random() > threshold) {
+    // Random move
+    const emptyIndices = [];
+    for (let i = 0; i < 9; i++) if (!b[i]) emptyIndices.push(i);
+    if (emptyIndices.length > 0) return emptyIndices[Math.floor(Math.random() * emptyIndices.length)];
+  }
+  
+  // Minimax move
   let best = -Infinity, move = -1;
   for (let i = 0; i < 9; i++) {
     if (!b[i]) {
@@ -59,7 +70,8 @@ const gameSchema = {
 export default function TicTacToe() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [xIsHuman, setXIsHuman] = useState(true);
-  const [mode, setMode] = useState('pvai'); // pvc | pvp
+  const [mode, setMode] = useState('pvai'); // pvai | pvp
+  const [difficulty, setDifficulty] = useState('Medium'); // Easy | Medium | Hard
   const [scores, setScores] = useState({ X: 0, O: 0, D: 0 });
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [step, setStep] = useState(0);
@@ -90,7 +102,7 @@ export default function TicTacToe() {
       return;
     }
     if (mode === 'pvai' && !fromAI) {
-      const m = bestMove(nb);
+      const m = bestMove(nb, difficulty);
       if (m !== -1) setTimeout(() => {
         const nb2 = [...nb]; nb2[m] = 'O';
         const h2 = [...newHistory, nb2];
@@ -137,9 +149,27 @@ export default function TicTacToe() {
             <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
               {/* Mode & Score */}
               <div className="flex gap-2 mb-4 justify-center">
-                <button onClick={() => { setMode('pvai'); reset(); }} className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${mode === 'pvai' ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>🤖 vs AI</button>
-                <button onClick={() => { setMode('pvp'); reset(); }} className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${mode === 'pvp' ? 'bg-blue-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>👥 2 Players</button>
+                <button onClick={() => { setMode('pvai'); reset(); }} className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${mode === 'pvai' ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}>🤖 vs AI</button>
+                <button onClick={() => { setMode('pvp'); reset(); }} className={`px-4 py-2 rounded-xl text-sm font-bold transition-colors ${mode === 'pvp' ? 'bg-blue-500 text-white' : 'bg-slate-800 text-slate-300 hover:bg-slate-700'}`}>👥 2 Players</button>
               </div>
+
+              {mode === 'pvai' && status === 'idle' && (
+                <div className="flex gap-2 justify-center mb-4">
+                  {['Easy', 'Medium', 'Hard'].map(d => (
+                    <button 
+                      key={d} 
+                      onClick={() => setDifficulty(d)}
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold transition-all ${
+                        difficulty === d 
+                          ? 'bg-blue-500 text-white shadow-[0_0_10px_rgba(59,130,246,0.3)]' 
+                          : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700'
+                      }`}
+                    >
+                      {d}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               <div className="flex justify-between items-center mb-4">
                 <div className="flex gap-3">

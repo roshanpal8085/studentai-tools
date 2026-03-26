@@ -164,6 +164,7 @@ export default function WordPuzzleGame() {
                 placeholder="Type your answer..."
                 maxLength={word.length + 2}
                 className="w-full bg-slate-800 border-2 border-slate-600 focus:border-teal-500 rounded-xl px-5 py-4 text-white text-xl font-bold text-center uppercase tracking-widest outline-none mb-3 transition-colors"
+                autoFocus={status === 'playing'}
               />
 
               <div className="flex gap-3 mb-6">

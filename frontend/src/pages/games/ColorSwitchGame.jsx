@@ -35,12 +35,25 @@ export default function ColorSwitchGame() {
   const [best, setBest] = useState(() => parseInt(localStorage.getItem('colorbest') || '0'));
   const [status, setStatus] = useState('idle');
 
-  const initState = () => ({
-    ball: { x: W / 2, y: H - 80, vy: 0, colorIdx: 0 },
-    rings: [{ y: H / 2, angle: 0, speed: 0.02 }, { y: 0, angle: Math.PI / 2, speed: 0.025 }],
-    score: 0, over: false, gravity: 0.25, jump: -7,
-    camY: 0
-  });
+  const [difficulty, setDifficulty] = useState('Medium');
+
+  const getSettings = (diff) => {
+    switch(diff) {
+      case 'Easy': return { baseSpeed: 0.012, incSpeed: 0.0005, gravity: 0.20, jump: -6.5 };
+      case 'Hard': return { baseSpeed: 0.025, incSpeed: 0.0015, gravity: 0.30, jump: -7.5 };
+      default: return { baseSpeed: 0.018, incSpeed: 0.001, gravity: 0.25, jump: -7.0 }; // Medium
+    }
+  };
+
+  const initState = () => {
+    const s = getSettings(difficulty);
+    return {
+      ball: { x: W / 2, y: H - 80, vy: 0, colorIdx: 0 },
+      rings: [{ y: H / 2, angle: 0, speed: s.baseSpeed }, { y: 0, angle: Math.PI / 2, speed: s.baseSpeed * 1.2 }],
+      score: 0, over: false, gravity: s.gravity, jump: s.jump,
+      camY: 0
+    };
+  };
 
   const draw = (ctx, s) => {
     ctx.fillStyle = '#0f172a';
@@ -112,7 +125,8 @@ export default function ColorSwitchGame() {
       setScore(s.score);
       s.ball.colorIdx = Math.floor(Math.random() * 4);
       s.rings.shift();
-      s.rings.push({ y: s.rings[s.rings.length - 1].y - 300, angle: Math.random() * Math.PI, speed: 0.02 + s.score * 0.001 });
+      const settings = getSettings(difficulty);
+      s.rings.push({ y: s.rings[s.rings.length - 1].y - 300, angle: Math.random() * Math.PI, speed: settings.baseSpeed + s.score * settings.incSpeed });
     }
 
     if (s.ball.y + s.camY > H + 50) { // Off bottom
@@ -169,12 +183,38 @@ export default function ColorSwitchGame() {
 
           <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
             <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
-              <div className="flex justify-between items-center mb-4">
-                <div className="flex gap-3">
-                  <div className="bg-pink-900/60 rounded-xl px-4 py-2 text-center"><div className="text-pink-300 text-xs">Score</div><div className="text-white text-xl font-bold">{score}</div></div>
-                  <div className="bg-slate-700 rounded-xl px-4 py-2 text-center"><div className="text-slate-400 text-xs">Best</div><div className="text-white text-xl font-bold">{best}</div></div>
+              <div className="flex flex-col gap-3 mb-4">
+                <div className="flex justify-between items-center gap-3">
+                  <div className="flex gap-3 flex-1">
+                    <div className="bg-pink-900/60 rounded-xl px-4 py-2 text-center flex-1">
+                      <div className="text-pink-300 text-xs">Score</div>
+                      <div className="text-white text-xl font-bold">{score}</div>
+                    </div>
+                    <div className="bg-slate-700 rounded-xl px-4 py-2 text-center flex-1">
+                      <div className="text-slate-400 text-xs">Best</div>
+                      <div className="text-white text-xl font-bold">{best}</div>
+                    </div>
+                  </div>
+                  <button onClick={start} className="bg-pink-500 hover:bg-pink-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors h-full">↺ Restart</button>
                 </div>
-                <button onClick={start} className="bg-pink-500 hover:bg-pink-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
+                
+                {status === 'idle' && (
+                  <div className="flex gap-2 justify-center">
+                    {['Easy', 'Medium', 'Hard'].map(d => (
+                      <button 
+                        key={d} 
+                        onClick={() => setDifficulty(d)}
+                        className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
+                          difficulty === d 
+                            ? 'bg-pink-500 text-white shadow-[0_0_15px_rgba(236,72,153,0.4)]' 
+                            : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700'
+                        }`}
+                      >
+                        {d}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={jump}>

@@ -43,9 +43,17 @@ export default function SnakeGame() {
   const [score, setScore] = useState(0);
   const [best, setBest] = useState(() => parseInt(localStorage.getItem('snakebest') || '0'));
   const [status, setStatus] = useState('idle'); // idle | running | over
+  const [difficulty, setDifficulty] = useState('Medium');
   const animRef = useRef(null);
   const lastTime = useRef(0);
-  const SPEED = 130;
+  
+  const getSpeed = () => {
+    switch(difficulty) {
+      case 'Easy': return 160;
+      case 'Hard': return 80;
+      default: return 120;
+    }
+  };
 
   const touchStart = useRef(null);
 
@@ -61,22 +69,28 @@ export default function SnakeGame() {
     ctx.lineWidth = 0.5;
     for (let x = 0; x <= W; x++) { ctx.beginPath(); ctx.moveTo(x * SIZE, 0); ctx.lineTo(x * SIZE, H * SIZE); ctx.stroke(); }
     for (let y = 0; y <= H; y++) { ctx.beginPath(); ctx.moveTo(0, y * SIZE); ctx.lineTo(W * SIZE, y * SIZE); ctx.stroke(); }
+    // Glow Setup
+    ctx.shadowBlur = 10;
     // Food
     ctx.fillStyle = '#ef4444';
+    ctx.shadowColor = '#ef4444';
     ctx.beginPath();
     ctx.arc(s.food.x * SIZE + SIZE / 2, s.food.y * SIZE + SIZE / 2, SIZE / 2 - 2, 0, Math.PI * 2);
     ctx.fill();
     // Snake
     s.snake.forEach((seg, i) => {
-      ctx.fillStyle = i === 0 ? '#22c55e' : '#16a34a';
+      ctx.fillStyle = i === 0 ? '#4ade80' : '#22c55e';
+      ctx.shadowColor = i === 0 ? '#4ade80' : 'transparent';
       ctx.beginPath();
-      ctx.roundRect(seg.x * SIZE + 1, seg.y * SIZE + 1, SIZE - 2, SIZE - 2, 4);
+      ctx.roundRect(seg.x * SIZE + 1, seg.y * SIZE + 1, SIZE - 2, SIZE - 2, i === 0 ? 6 : 4);
       ctx.fill();
     });
+    // Reset shadow
+    ctx.shadowBlur = 0;
   }, []);
 
   const tick = useCallback((ts) => {
-    if (ts - lastTime.current < SPEED) { animRef.current = requestAnimationFrame(tick); return; }
+    if (ts - lastTime.current < getSpeed()) { animRef.current = requestAnimationFrame(tick); return; }
     lastTime.current = ts;
     const s = stateRef.current;
     if (!s.running) return;
@@ -137,7 +151,7 @@ export default function SnakeGame() {
       if (dy > 20 && s.dir.y !== -1) s.nextDir = { x: 0, y: 1 };
       else if (dy < -20 && s.dir.y !== 1) s.nextDir = { x: 0, y: -1 };
     }
-    if (!s.running) startGame();
+    if (!s.running && status !== 'over') startGame();
     touchStart.current = null;
   };
 
@@ -161,20 +175,40 @@ export default function SnakeGame() {
 
           <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 flex flex-col items-center justify-center p-4 touch-none overflow-hidden" : ""}>
             <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
-              <div className="flex justify-between items-center mb-4 gap-3">
-                <div className="flex gap-3 flex-1">
-                  <div className="bg-green-800 rounded-xl p-3 text-center flex-1">
-                    <div className="text-green-200 text-xs uppercase">Score</div>
-                    <div className="text-white text-xl font-bold">{score}</div>
+              <div className="flex flex-col gap-3 mb-4">
+                <div className="flex justify-between items-center gap-3">
+                  <div className="flex gap-3 flex-1">
+                    <div className="bg-green-800 rounded-xl p-3 text-center flex-1">
+                      <div className="text-green-200 text-xs uppercase">Score</div>
+                      <div className="text-white text-xl font-bold">{score}</div>
+                    </div>
+                    <div className="bg-slate-700 rounded-xl p-3 text-center flex-1">
+                      <div className="text-slate-400 text-xs uppercase">Best</div>
+                      <div className="text-white text-xl font-bold">{best}</div>
+                    </div>
                   </div>
-                  <div className="bg-slate-700 rounded-xl p-3 text-center flex-1">
-                    <div className="text-slate-400 text-xs uppercase">Best</div>
-                    <div className="text-white text-xl font-bold">{best}</div>
-                  </div>
+                  <button onClick={startGame} className="bg-green-500 hover:bg-green-400 text-white font-bold px-5 py-3 rounded-xl transition-colors h-full">
+                    {status === 'idle' ? 'Start' : 'Restart'}
+                  </button>
                 </div>
-                <button onClick={startGame} className="bg-green-500 hover:bg-green-400 text-white font-bold px-5 py-3 rounded-xl transition-colors">
-                  {status === 'idle' ? 'Start' : 'Restart'}
-                </button>
+                
+                {status === 'idle' && (
+                  <div className="flex gap-2 justify-center">
+                    {['Easy', 'Medium', 'Hard'].map(d => (
+                      <button 
+                        key={d} 
+                        onClick={() => setDifficulty(d)}
+                        className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
+                          difficulty === d 
+                            ? 'bg-green-500 text-white shadow-[0_0_15px_rgba(34,197,94,0.4)]' 
+                            : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700'
+                        }`}
+                      >
+                        {d}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
 
               <div className="relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-700">
