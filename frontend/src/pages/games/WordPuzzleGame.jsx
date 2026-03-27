@@ -123,18 +123,54 @@ export default function WordPuzzleGame() {
             <p className="text-slate-400">Unscramble the letters to form the hidden word!</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
-            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
-              <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
-              {/* Category selector */}
-              <div className="flex gap-2 flex-wrap justify-center mb-4">
-                {CATEGORIES.map((c, i) => (
-                  <button key={i} onClick={() => { setCatIdx(i); setWordIdx(0); setInput(''); setFeedback(null); setHintUsed(false); setShowHint(false); }}
-                    className={`px-3 py-1.5 rounded-xl text-sm font-bold transition-colors ${catIdx === i ? 'bg-teal-500 text-white' : 'bg-slate-700 text-slate-300 hover:bg-slate-600'}`}>
-                    {c.name}
-                  </button>
-                ))}
-              </div>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto lg:overflow-hidden" : "max-w-md mx-auto"}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center h-screen py-4 px-4" : "relative flex flex-col bg-slate-800/50 rounded-3xl p-4 border border-white/10 shadow-2xl overflow-hidden min-h-[600px]"}>
+              <div className={status !== 'idle' ? "w-full max-w-lg h-full max-h-[95vh] flex flex-col" : "w-full flex-1 flex flex-col"}>
+                {status === 'idle' && (
+                  <div className="absolute inset-0 z-10 bg-[#080c14]/90 backdrop-blur-2xl flex flex-col items-center justify-center p-6 text-center rounded-3xl border border-white/10 overflow-hidden">
+                    {/* Animated Glow */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-teal-600/20 rounded-full blur-[80px] animate-pulse pointer-events-none" />
+
+                    <div className="relative z-20 flex flex-col items-center">
+                      <div className="w-24 h-24 bg-gradient-to-br from-teal-500 to-cyan-600 rounded-[2rem] flex items-center justify-center text-5xl shadow-2xl shadow-teal-500/20 mb-6 animate-bounce">
+                        🔠
+                      </div>
+                      <h2 className="text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">Word Unscramble</h2>
+                      <p className="text-slate-400 mb-8 max-w-sm text-sm sm:text-base font-medium leading-relaxed">
+                        Decode the scrambled letters. Pick a category to begin generating words!
+                      </p>
+                      
+                      {/* Category Selector */}
+                      <div className="flex gap-2 flex-wrap justify-center mb-10 bg-white/[0.03] p-2 rounded-2xl border border-white/[0.08] backdrop-blur-md max-w-sm">
+                        {CATEGORIES.map((c, i) => (
+                          <button 
+                            key={i} 
+                            onClick={() => setCatIdx(i)} 
+                            className={`px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 flex items-center gap-1.5 ${
+                              catIdx === i 
+                                ? 'bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg shadow-teal-500/25' 
+                                : 'bg-white/5 text-slate-400 hover:text-white hover:bg-white/10'
+                            }`}
+                          >
+                            <span>{i === 0 ? '🦁' : i === 1 ? '🌍' : i === 2 ? '🔬' : '🍎'}</span> {c.name}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Play Button */}
+                      <button 
+                        onClick={() => setStatus('playing')} 
+                        className="group relative w-full sm:w-auto bg-gradient-to-r from-teal-500 to-cyan-600 hover:from-teal-400 hover:to-cyan-500 text-white font-black px-12 py-4 rounded-2xl shadow-[0_0_40px_rgba(20,184,166,0.3)] hover:shadow-[0_0_50px_rgba(20,184,166,0.4)] transform hover:-translate-y-1 active:scale-95 transition-all duration-300 text-lg flex items-center justify-center gap-3 overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                        <span className="relative z-10 flex items-center gap-2">
+                          ▶ Start Game
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
+
 
               <div className="grid grid-cols-3 gap-2 mb-6">
                 {[{ l: 'Score', v: score, c: 'text-teal-400' }, { l: '🔥 Streak', v: streak, c: 'text-yellow-400' }, { l: 'Solved', v: solved, c: 'text-green-400' }].map((s, i) => (
@@ -145,19 +181,21 @@ export default function WordPuzzleGame() {
                 ))}
               </div>
 
-              <div className={`bg-slate-800 border-2 rounded-2xl p-8 text-center mb-5 transition-colors relative overflow-hidden ${feedback === 'correct' ? 'border-green-500' : feedback === 'wrong' ? 'border-red-500' : 'border-slate-700'}`}>
-                <div className="text-slate-400 text-sm mb-2 uppercase tracking-wider">{cat.name}</div>
-                <div className="text-5xl font-extrabold tracking-widest text-white mb-2 flex justify-center gap-2 flex-wrap">
-                  {currentScrambled.split('').map((ch, i) => (
-                    <span key={i} className="bg-teal-500/20 border border-teal-400/30 rounded-xl w-12 h-14 inline-flex items-center justify-center">{ch}</span>
-                  ))}
-                </div>
-                {showHint && <p className="text-yellow-400 text-sm mt-3">💡 Hint: Starts with <strong>{word[0]}</strong>, has <strong>{word.length}</strong> letters</p>}
-                {status === 'idle' && (
-                  <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
-                    <button onClick={start} className="bg-teal-500 hover:bg-teal-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Start Puzzle</button>
+              <div className="flex-1 min-h-0 flex items-center justify-center overflow-hidden">
+                <div className={`bg-slate-800 border-2 rounded-2xl p-4 md:p-8 text-center w-full max-w-full max-h-full overflow-y-auto transition-colors relative ${feedback === 'correct' ? 'border-green-500' : feedback === 'wrong' ? 'border-red-500' : 'border-slate-700'}`}>
+                  <div className="text-slate-400 text-sm mb-2 uppercase tracking-wider">{cat.name}</div>
+                  <div className="text-3xl md:text-5xl font-extrabold tracking-widest text-white mb-2 flex justify-center gap-2 flex-wrap">
+                    {currentScrambled.split('').map((ch, i) => (
+                      <span key={i} className="bg-teal-500/20 border border-teal-400/30 rounded-xl w-10 h-12 md:w-12 md:h-14 inline-flex items-center justify-center">{ch}</span>
+                    ))}
                   </div>
-                )}
+                  {showHint && <p className="text-yellow-400 text-sm mt-3">💡 Hint: Starts with <strong>{word[0]}</strong>, has <strong>{word.length}</strong> letters</p>}
+                  {status === 'idle' && (
+                    <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center rounded-2xl">
+                      <button onClick={start} className="bg-teal-500 hover:bg-teal-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Start Puzzle</button>
+                    </div>
+                  )}
+                </div>
               </div>
 
               <input
@@ -180,7 +218,7 @@ export default function WordPuzzleGame() {
               {status !== 'idle' && (
                 <button 
                   onClick={exit} 
-                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                  className="mt-4 mb-2 flex-shrink-0 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
                 >
                   <span>✕</span> Exit Game
                 </button>

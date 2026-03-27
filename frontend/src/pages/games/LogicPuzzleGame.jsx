@@ -129,9 +129,36 @@ export default function LogicPuzzleGame() {
             <p className="text-slate-400">10 mind-bending logic challenges. Think carefully!</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
-            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
-              <div className={status !== 'idle' ? "w-full max-w-2xl" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto lg:overflow-hidden" : "max-w-md mx-auto"}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center h-screen py-4 px-4" : "relative flex flex-col bg-slate-800/50 rounded-3xl p-4 border border-white/10 shadow-2xl overflow-hidden min-h-[600px]"}>
+              <div className={status !== 'idle' ? "w-full max-w-2xl h-full max-h-[95vh] flex flex-col" : "w-full flex-1 flex flex-col"}>
+                {status === 'idle' && (
+                  <div className="absolute inset-0 z-10 bg-[#080c14]/90 backdrop-blur-2xl flex flex-col items-center justify-center p-6 text-center rounded-3xl border border-white/10 overflow-hidden">
+                    {/* Animated Glow */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-fuchsia-600/20 rounded-full blur-[80px] animate-pulse pointer-events-none" />
+
+                    <div className="relative z-20 flex flex-col items-center">
+                      <div className="w-24 h-24 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-[2rem] flex items-center justify-center text-5xl shadow-2xl shadow-fuchsia-500/20 mb-6 animate-bounce">
+                        🧠
+                      </div>
+                      <h2 className="text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">Logic Brainiac</h2>
+                      <p className="text-slate-400 mb-10 max-w-sm text-sm sm:text-base font-medium leading-relaxed">
+                        10 mind-bending logic challenges to test your IQ and deduction skills. Are you ready?
+                      </p>
+
+                      {/* Play Button */}
+                      <button 
+                        onClick={() => setStatus('playing')} 
+                        className="group relative w-full sm:w-auto bg-gradient-to-r from-fuchsia-600 to-purple-600 hover:from-fuchsia-500 hover:to-purple-500 text-white font-black px-12 py-4 rounded-2xl shadow-[0_0_40px_rgba(217,70,239,0.3)] hover:shadow-[0_0_50px_rgba(217,70,239,0.4)] transform hover:-translate-y-1 active:scale-95 transition-all duration-300 text-lg flex items-center justify-center gap-3 overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                        <span className="relative z-10 flex items-center gap-2">
+                          ▶ Begin Quest
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               {!done ? (
                 <>
                   {current && (
@@ -145,14 +172,16 @@ export default function LogicPuzzleGame() {
                         <div className="h-full bg-purple-500 rounded-full transition-all" style={{ width: `${((idx) / puzzles.length) * 100}%` }} />
                       </div>
 
-                      <div className="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-5 relative overflow-hidden min-h-[140px] flex flex-col justify-center">
-                        <div className="text-slate-400 text-sm mb-3 uppercase tracking-wider">🧠 Puzzle {idx + 1}</div>
-                        <p className="text-white text-lg font-semibold leading-relaxed">{current.question}</p>
-                        {status === 'idle' && (
-                          <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
-                            <button onClick={start} className="bg-purple-500 hover:bg-purple-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Start Puzzle</button>
-                          </div>
-                        )}
+                      <div className="flex-1 min-h-0 flex items-center justify-center overflow-hidden">
+                        <div className="bg-slate-800 border border-slate-700 rounded-2xl p-4 md:p-6 mb-2 relative overflow-y-auto max-h-full w-full max-w-full shadow-2xl">
+                          <div className="text-slate-400 text-xs uppercase mb-2 tracking-wider">🧠 Puzzle {idx + 1}</div>
+                          <p className="text-white text-lg md:text-xl font-semibold leading-relaxed line-clamp-4">{current.question}</p>
+                          {status === 'idle' && (
+                            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center rounded-2xl shadow-xl">
+                              <button onClick={start} className="bg-purple-500 hover:bg-purple-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Start Puzzle</button>
+                            </div>
+                          )}
+                        </div>
                       </div>
 
                       <div className="space-y-3 mb-5">
@@ -196,7 +225,7 @@ export default function LogicPuzzleGame() {
               {status !== 'idle' && (
                 <button 
                   onClick={exit} 
-                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                  className="mt-4 mb-2 flex-shrink-0 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
                 >
                   <span>✕</span> Exit Game
                 </button>

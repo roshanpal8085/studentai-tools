@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800;900&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -32,31 +32,108 @@
   }
 }
 
+/* ── Glassmorphism ── */
 .glass-card {
   @apply bg-white/70 dark:bg-slate-800/70 backdrop-blur-xl border border-white/20 dark:border-slate-700/50 shadow-2xl shadow-indigo-500/5;
 }
 
+.navbar-glass {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.75);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+.dark .navbar-glass {
+  background: rgba(15, 23, 42, 0.75);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ── Typography ── */
 .text-gradient {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400;
 }
 
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+/* ── Tool Cards ── */
+.tool-card {
+  @apply relative bg-white dark:bg-slate-800/60 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-2 transition-all duration-300 cursor-pointer overflow-hidden;
 }
-::-webkit-scrollbar-track {
-  background: transparent;
+
+/* ── Buttons ── */
+.btn-primary {
+  @apply bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-bold shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:-translate-y-0.5 active:scale-95 transition-all rounded-xl;
 }
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 10px;
+.btn-glow {
+  box-shadow: 0 0 20px rgba(79, 70, 229, 0.4), 0 8px 30px rgba(79, 70, 229, 0.2);
 }
-.dark ::-webkit-scrollbar-thumb {
-  background: #334155;
+.btn-glow:hover {
+  box-shadow: 0 0 30px rgba(79, 70, 229, 0.6), 0 12px 40px rgba(79, 70, 229, 0.3);
 }
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
+
+/* ── Badges ── */
+.badge-new {
+  @apply inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-extrabold tracking-wide;
+  background: linear-gradient(135deg, #4f46e5, #9333ea);
+  color: white;
+  animation: badge-pulse 2s ease-in-out infinite;
 }
-.dark ::-webkit-scrollbar-thumb:hover {
-  background: #475569;
+
+/* ── Animations ── */
+@keyframes badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(79, 70, 229, 0.4); }
+  50%       { box-shadow: 0 0 0 6px rgba(79, 70, 229, 0); }
 }
+
+@keyframes float-up {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.animate-float { animation: float-up 3s ease-in-out infinite; }
+.animate-fade-in-up { animation: fade-in-up 0.5s ease both; }
+.animate-scale-in { animation: scale-in 0.3s ease both; }
+.animate-spin-slow { animation: spin-slow 8s linear infinite; }
+
+/* ── Hero Gradient Orbs ── */
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  animation: float-up 6s ease-in-out infinite;
+}
+
+/* ── Trending Carousel ── */
+.trending-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.trending-scroll::-webkit-scrollbar { display: none; }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+.dark ::-webkit-scrollbar-thumb { background: #334155; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
+

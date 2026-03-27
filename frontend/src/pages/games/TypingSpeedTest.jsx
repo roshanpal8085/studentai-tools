@@ -134,9 +134,19 @@ export default function TypingSpeedTest() {
             <p className="text-slate-400">Type the text below as fast and accurately as you can!</p>
           </div>
 
-          <div className={started || finished ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
-            <div className={started || finished ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
-              <div className={started || finished ? "w-full max-w-2xl" : ""}>
+          <div className={started || finished ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto lg:overflow-hidden" : "max-w-md mx-auto"}>
+            <div className={started || finished ? "flex flex-col items-center justify-center h-screen py-4 px-4" : "relative flex flex-col bg-slate-800/50 rounded-3xl p-4 border border-white/10 shadow-2xl overflow-hidden min-h-[600px]"}>
+              <div className={started || finished ? "w-full max-w-2xl h-full max-h-[95vh] flex flex-col" : "w-full flex-1 flex flex-col"}>
+                {!started && !finished && (
+                  <div className="absolute inset-0 z-10 bg-slate-900/90 backdrop-blur-xl flex flex-col items-center justify-center p-6 text-center rounded-3xl border border-white/10">
+                    <div className="text-6xl mb-4 animate-bounce">⌨️</div>
+                    <h2 className="text-3xl font-extrabold text-white mb-2">Typing Speed Test</h2>
+                    <p className="text-slate-400 mb-8 max-w-xs text-sm">How fast can you type? Test your WPM and accuracy in this 60-second challenge.</p>
+                    <button onClick={start} className="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-10 py-4 rounded-2xl shadow-2xl transform hover:scale-110 active:scale-95 transition-all text-lg">
+                      Start Test
+                    </button>
+                  </div>
+                )}
               {/* Stats */}
               <div className="grid grid-cols-4 gap-2 mb-4">
                 {[
@@ -158,20 +168,20 @@ export default function TypingSpeedTest() {
               </div>
 
               {/* Text display */}
-              <div className="bg-slate-800 border border-slate-700 rounded-2xl p-5 mb-4 font-mono text-lg leading-relaxed tracking-wide min-h-24">
-                {renderText()}
+              <div className="flex-1 min-h-0 flex flex-col justify-center overflow-hidden">
+                <div className="bg-slate-800 border border-slate-700 rounded-2xl p-4 md:p-5 mb-2 font-mono text-base md:text-lg leading-relaxed tracking-wide min-h-24 overflow-y-auto max-h-48 md:max-h-none">
+                  {renderText()}
+                </div>
+                <textarea
+                  ref={inputRef}
+                  value={input}
+                  onChange={handleInput}
+                  disabled={finished}
+                  placeholder={started ? '' : '🖊️ Click here and start typing...'}
+                  className="w-full bg-slate-800 border-2 border-slate-600 focus:border-cyan-500 rounded-xl p-3 md:p-4 text-white font-mono text-base md:text-lg outline-none resize-none h-24 md:h-28 transition-colors disabled:opacity-50 mb-2"
+                  onFocus={() => { if (!started && !finished) { initAudio(); inputRef.current?.focus(); } }}
+                />
               </div>
-
-              {/* Input */}
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={handleInput}
-                disabled={finished}
-                placeholder={started ? '' : '🖊️ Click here and start typing...'}
-                className="w-full bg-slate-800 border-2 border-slate-600 focus:border-cyan-500 rounded-xl p-4 text-white font-mono text-lg outline-none resize-none h-28 transition-colors disabled:opacity-50 mb-4"
-                onFocus={() => { if (!started && !finished) { initAudio(); inputRef.current?.focus(); } }}
-              />
 
               <div className="flex gap-3 mb-2">
                 <select onChange={e => setTime(parseInt(e.target.value))} value={time} className="bg-slate-700 border border-slate-600 text-white rounded-xl px-3 py-2 text-sm flex-1">
@@ -203,7 +213,7 @@ export default function TypingSpeedTest() {
               {started && (
                 <button 
                   onClick={() => { setStarted(false); setFinished(false); clearInterval(timerRef.current); }} 
-                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                  className="mt-4 mb-2 flex-shrink-0 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
                 >
                   <span>✕</span> Exit Game
                 </button>

@@ -180,63 +180,79 @@ export default function SnakeGame() {
             <p className="text-slate-400">Eat food, grow longer, avoid walls! Arrow keys or swipe to play.</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
-            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
-              <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto lg:overflow-hidden" : "max-w-md mx-auto"}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center h-screen py-4 px-4" : "relative flex flex-col bg-slate-800/50 rounded-3xl p-4 border border-white/10 shadow-2xl overflow-hidden min-h-[600px]"}>
+              <div className={status !== 'idle' ? "w-full max-w-lg h-full max-h-[95vh] flex flex-col" : "w-full flex-1 flex flex-col"}>
+                {status === 'idle' && (
+                  <div className="absolute inset-0 z-10 bg-[#080c14]/90 backdrop-blur-2xl flex flex-col items-center justify-center p-6 text-center rounded-3xl border border-white/10 overflow-hidden">
+                    {/* Animated Glow */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-emerald-600/20 rounded-full blur-[80px] animate-pulse pointer-events-none" />
+
+                    <div className="relative z-20 flex flex-col items-center">
+                      <div className="w-24 h-24 bg-gradient-to-br from-emerald-500 to-green-600 rounded-[2rem] flex items-center justify-center text-5xl shadow-2xl shadow-emerald-500/20 mb-6 animate-bounce">
+                        🐍
+                      </div>
+                      <h2 className="text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">Classic Snake</h2>
+                      <p className="text-slate-400 mb-10 max-w-sm text-sm sm:text-base font-medium leading-relaxed">
+                        Select your speed to begin the hunt. How long can you slither without crashing?
+                      </p>
+                      
+                      {/* Difficulty Selector */}
+                      <div className="flex gap-2 mb-10 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.08] backdrop-blur-md">
+                        {['Easy', 'Medium', 'Hard'].map(d => (
+                          <button 
+                            key={d} 
+                            onClick={() => setDifficulty(d)} 
+                            className={`px-6 py-2.5 text-sm font-bold rounded-xl transition-all duration-300 ${
+                              difficulty === d 
+                                ? 'bg-gradient-to-r from-emerald-500 to-green-600 text-white shadow-lg shadow-emerald-500/25' 
+                                : 'text-slate-400 hover:text-white hover:bg-white/10'
+                            }`}
+                          >
+                            {d}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Play Button */}
+                      <button 
+                        onClick={startGame} 
+                        className="group relative w-full sm:w-auto bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 text-white font-black px-12 py-4 rounded-2xl shadow-[0_0_40px_rgba(16,185,129,0.3)] hover:shadow-[0_0_50px_rgba(16,185,129,0.4)] transform hover:-translate-y-1 active:scale-95 transition-all duration-300 text-lg flex items-center justify-center gap-3 overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                        <span className="relative z-10 flex items-center gap-2">
+                          ▶ Start Slithering
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               <div className="flex flex-col gap-3 mb-4">
                 <div className="flex justify-between items-center gap-3">
                   <div className="flex gap-3 flex-1">
                     <div className="bg-green-800 rounded-xl p-3 text-center flex-1">
-                      <div className="text-green-200 text-xs uppercase">Score</div>
-                      <div className="text-white text-xl font-bold">{score}</div>
+                      <div className="text-green-200 text-xs uppercase tracking-widest font-bold">Score</div>
+                      <div className="text-white text-2xl font-black">{score}</div>
                     </div>
-                    <div className="bg-slate-700 rounded-xl p-3 text-center flex-1">
-                      <div className="text-slate-400 text-xs uppercase">Best</div>
-                      <div className="text-white text-xl font-bold">{best}</div>
+                    <div className="bg-slate-700/50 rounded-xl p-3 text-center flex-1">
+                      <div className="text-slate-400 text-xs uppercase tracking-widest font-bold">Best</div>
+                      <div className="text-white text-2xl font-black">{best}</div>
                     </div>
                   </div>
-                  <button onClick={startGame} className="bg-green-500 hover:bg-green-400 text-white font-bold px-5 py-3 rounded-xl transition-colors h-full">
-                    {status === 'idle' ? 'Start' : 'Restart'}
-                  </button>
                 </div>
-                
-                {status === 'idle' && (
-                  <div className="flex gap-2 justify-center">
-                    {['Easy', 'Medium', 'Hard'].map(d => (
-                      <button 
-                        key={d} 
-                        onClick={() => setDifficulty(d)}
-                        className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
-                          difficulty === d 
-                            ? 'bg-green-500 text-white shadow-[0_0_15px_rgba(34,197,94,0.4)]' 
-                            : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700'
-                        }`}
-                      >
-                        {d}
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
 
-              <div className="relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-700">
-                <canvas
-                  ref={canvasRef}
-                  width={W * SIZE}
-                  height={H * SIZE}
-                  className="w-full block touch-none"
-                  onTouchStart={onTouchStart}
-                  onTouchEnd={onTouchEnd}
-                />
-                {status === 'idle' && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-                    <div className="text-center">
-                      <div className="text-6xl mb-3">🐍</div>
-                      <p className="text-white text-lg font-bold mb-2">Press Start or Arrow Key</p>
-                      <p className="text-slate-400 text-sm">Swipe on mobile</p>
-                    </div>
-                  </div>
-                )}
+              <div className="flex-1 min-h-0 flex items-center justify-center relative">
+                <div className="relative bg-slate-900 rounded-2xl overflow-hidden border border-slate-700/50 aspect-square max-h-full w-full max-w-full shadow-2xl">
+                  <canvas
+                    ref={canvasRef}
+                    width={W * SIZE}
+                    height={H * SIZE}
+                    className="w-full h-full object-contain block touch-none"
+                    onTouchStart={onTouchStart}
+                    onTouchEnd={onTouchEnd}
+                  />
+
                 {status === 'over' && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/60" onClick={startGame}>
                     <div className="text-center">
@@ -248,6 +264,7 @@ export default function SnakeGame() {
                   </div>
                 )}
               </div>
+            </div>
 
               <div className="grid grid-cols-3 gap-2 mt-4 max-w-36 mx-auto">
                 <div />
@@ -261,7 +278,7 @@ export default function SnakeGame() {
               {status !== 'idle' && (
                 <button 
                   onClick={() => setStatus('idle')} 
-                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                  className="mt-4 mb-2 flex-shrink-0 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
                 >
                   <span>✕</span> Exit Game
                 </button>

@@ -164,9 +164,53 @@ export default function SudokuGame() {
             <p className="text-slate-400">Fill every row, column, and 3×3 box with digits 1–9.</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
-            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
-              <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto lg:overflow-hidden" : "max-w-md mx-auto"}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center h-screen py-4 px-4" : "relative flex flex-col bg-slate-800/50 rounded-3xl p-4 border border-white/10 shadow-2xl overflow-hidden min-h-[600px]"}>
+              <div className={status !== 'idle' ? "w-full max-w-lg h-full max-h-[95vh] flex flex-col" : "w-full flex-1 flex flex-col"}>
+                {status === 'idle' && (
+                  <div className="absolute inset-0 z-10 bg-[#080c14]/90 backdrop-blur-2xl flex flex-col items-center justify-center p-6 text-center rounded-3xl border border-white/10 overflow-hidden">
+                    {/* Animated Glow */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-600/20 rounded-full blur-[80px] animate-pulse pointer-events-none" />
+
+                    <div className="relative z-20 flex flex-col items-center">
+                      <div className="w-24 h-24 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-[2rem] flex items-center justify-center text-5xl shadow-2xl shadow-indigo-500/20 mb-6 animate-bounce">
+                        🔍
+                      </div>
+                      <h2 className="text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">Sudoku Challenge</h2>
+                      <p className="text-slate-400 mb-10 max-w-sm text-sm sm:text-base font-medium leading-relaxed">
+                        Sharpen your mind with the classic logic puzzle. Select your difficulty to begin solving!
+                      </p>
+                      
+                      {/* Difficulty Selector */}
+                      <div className="flex gap-2 mb-10 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.08] backdrop-blur-md">
+                        {['Easy', 'Medium', 'Hard'].map(d => (
+                          <button 
+                            key={d} 
+                            onClick={() => { setDifficulty(d); newGame(d); }} 
+                            className={`px-6 py-2.5 text-sm font-bold rounded-xl transition-all duration-300 ${
+                              difficulty === d 
+                                ? 'bg-gradient-to-r from-indigo-500 to-violet-600 text-white shadow-lg shadow-indigo-500/25' 
+                                : 'text-slate-400 hover:text-white hover:bg-white/10'
+                            }`}
+                          >
+                            {d}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Play Button */}
+                      <button 
+                        onClick={start} 
+                        className="group relative w-full sm:w-auto bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-black px-12 py-4 rounded-2xl shadow-[0_0_40px_rgba(79,70,229,0.3)] hover:shadow-[0_0_50px_rgba(79,70,229,0.4)] transform hover:-translate-y-1 active:scale-95 transition-all duration-300 text-lg flex items-center justify-center gap-3 overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                        <span className="relative z-10 flex items-center gap-2">
+                          ▶ Play Now
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               <div className="flex justify-between items-center mb-4">
                 <div className="flex items-center gap-2">
                   <label className="text-slate-400 text-sm">Auto-Check</label>
@@ -174,16 +218,8 @@ export default function SudokuGame() {
                     <span className={`absolute top-0.5 w-4 h-4 bg-white rounded-full transition-all ${autoCheck ? 'left-5' : 'left-0.5'}`} />
                   </button>
                 </div>
-                <div className="flex gap-1 bg-slate-800 p-1 rounded-lg">
-                  {['Easy', 'Medium', 'Hard'].map(d => (
-                    <button 
-                      key={d} 
-                      onClick={() => { setDifficulty(d); newGame(d); }} 
-                      className={`px-2 py-1 text-xs font-bold rounded-md transition-colors ${difficulty === d ? 'bg-indigo-500 text-white' : 'text-slate-400 hover:text-white'}`}
-                    >
-                      {d}
-                    </button>
-                  ))}
+                <div className="text-slate-400 text-xs font-bold px-3 py-1 bg-slate-800 rounded-lg border border-white/5 uppercase tracking-wider">
+                  {difficulty}
                 </div>
               </div>
               <div className="flex justify-between items-center mb-4">
@@ -191,23 +227,20 @@ export default function SudokuGame() {
                 <button onClick={() => newGame(difficulty)} className="bg-indigo-500 hover:bg-indigo-400 text-white text-sm font-bold px-4 py-2 rounded-xl transition-colors">New Puzzle</button>
               </div>
 
-              <div className="bg-slate-700 rounded-2xl p-2 border-2 border-slate-500 mb-4 relative overflow-hidden">
-                <div className="grid grid-cols-9 border-2 border-slate-400">
-                  {board.map((row, r) => row.map((val, c) => (
-                    <div
-                      key={`${r}-${c}`}
-                      onClick={() => { if (!isFixed(r, c) && status !== 'solved') { initAudio(); setSelected([r, c]); if (status === 'idle') setStatus('playing'); } }}
-                      className={`aspect-square flex items-center justify-center text-sm md:text-base font-semibold border border-slate-600 transition-colors select-none ${cellColor(r, c)} ${borderClass(r, c)}`}
-                    >
-                      {val || ''}
-                    </div>
-                  )))}
-                </div>
-                {status === 'idle' && (
-                  <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center">
-                    <button onClick={start} className="bg-indigo-500 hover:bg-indigo-400 text-white font-bold px-8 py-3 rounded-2xl shadow-xl transform active:scale-95 transition-all">Play Sudoku</button>
+              <div className="flex-1 min-h-0 w-full flex items-center justify-center p-2">
+                <div className="bg-slate-700 rounded-2xl p-1 border-2 border-slate-500 relative overflow-hidden aspect-square h-full max-h-full w-auto mx-auto shadow-2xl">
+                  <div className="grid grid-cols-9 border-2 border-slate-400 h-full w-full">
+                    {board.map((row, r) => row.map((val, c) => (
+                      <div
+                        key={`${r}-${c}`}
+                        onClick={() => { if (!isFixed(r, c) && status !== 'solved') { initAudio(); setSelected([r, c]); if (status === 'idle') setStatus('playing'); } }}
+                        className={`aspect-square flex items-center justify-center text-[10px] md:text-sm font-semibold border border-slate-600 transition-colors select-none ${cellColor(r, c)} ${borderClass(r, c)}`}
+                      >
+                        {val || ''}
+                      </div>
+                    )))}
                   </div>
-                )}
+                </div>
               </div>
 
               <div className="grid grid-cols-9 gap-1 mb-4">

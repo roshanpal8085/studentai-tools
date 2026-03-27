@@ -265,9 +265,53 @@ export default function FlappyBirdGame() {
             <p className="text-slate-400">Tap to flap through the pipes. How far can you go?</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
-            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
-              <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto lg:overflow-hidden" : "max-w-md mx-auto"}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center h-screen py-4 px-4" : "relative flex flex-col bg-slate-800/50 rounded-3xl p-4 border border-white/10 shadow-2xl overflow-hidden min-h-[600px]"}>
+              <div className={status !== 'idle' ? "w-full max-w-lg h-full max-h-[95vh] flex flex-col" : "w-full flex-1 flex flex-col"}>
+                {status === 'idle' && (
+                  <div className="absolute inset-0 z-10 bg-[#080c14]/90 backdrop-blur-2xl flex flex-col items-center justify-center p-6 text-center rounded-3xl border border-white/10 overflow-hidden">
+                    {/* Animated Glow */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-sky-500/20 rounded-full blur-[80px] animate-pulse pointer-events-none" />
+
+                    <div className="relative z-20 flex flex-col items-center">
+                      <div className="w-24 h-24 bg-gradient-to-br from-sky-400 to-blue-600 rounded-[2rem] flex items-center justify-center text-5xl shadow-2xl shadow-sky-500/20 mb-6 animate-bounce">
+                        🐦
+                      </div>
+                      <h2 className="text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">Flappy Bird</h2>
+                      <p className="text-slate-400 mb-10 max-w-sm text-sm sm:text-base font-medium leading-relaxed">
+                        Tap to flap through the pipes. Test your timing and focus! Can you beat the high score?
+                      </p>
+                      
+                      {/* Difficulty Selector */}
+                      <div className="flex gap-2 mb-10 bg-white/[0.03] p-1.5 rounded-2xl border border-white/[0.08] backdrop-blur-md">
+                        {['Easy', 'Medium', 'Hard'].map(d => (
+                          <button 
+                            key={d} 
+                            onClick={() => setDifficulty(d)} 
+                            className={`px-6 py-2.5 text-sm font-bold rounded-xl transition-all duration-300 ${
+                              difficulty === d 
+                                ? 'bg-gradient-to-r from-sky-400 to-blue-600 text-white shadow-lg shadow-sky-500/25' 
+                                : 'text-slate-400 hover:text-white hover:bg-white/10'
+                            }`}
+                          >
+                            {d}
+                          </button>
+                        ))}
+                      </div>
+
+                      {/* Play Button */}
+                      <button 
+                        onClick={start} 
+                        className="group relative w-full sm:w-auto bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white font-black px-12 py-4 rounded-2xl shadow-[0_0_40px_rgba(14,165,233,0.3)] hover:shadow-[0_0_50px_rgba(14,165,233,0.4)] transform hover:-translate-y-1 active:scale-95 transition-all duration-300 text-lg flex items-center justify-center gap-3 overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                        <span className="relative z-10 flex items-center gap-2">
+                          ▶ Take Flight
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               <div className="flex flex-col gap-3 mb-4">
                 <div className="flex justify-between items-center">
                   <div className="flex gap-3">
@@ -276,28 +320,11 @@ export default function FlappyBirdGame() {
                   </div>
                   <button onClick={start} className="bg-sky-500 hover:bg-sky-400 text-white font-bold px-5 py-2.5 rounded-xl transition-colors">↺ Restart</button>
                 </div>
-                
-                {status === 'idle' && (
-                  <div className="flex gap-2 justify-center">
-                    {['Easy', 'Medium', 'Hard'].map(d => (
-                      <button 
-                        key={d} 
-                        onClick={() => setDifficulty(d)}
-                        className={`px-4 py-1.5 rounded-full text-sm font-bold transition-all ${
-                          difficulty === d 
-                            ? 'bg-sky-500 text-white shadow-[0_0_15px_rgba(14,165,233,0.4)]' 
-                            : 'bg-slate-800 text-slate-400 hover:bg-slate-700 hover:text-white border border-slate-700'
-                        }`}
-                      >
-                        {d}
-                      </button>
-                    ))}
-                  </div>
-                )}
               </div>
 
-              <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={flap} onTouchStart={e => { e.preventDefault(); flap(); }}>
-                <canvas ref={canvasRef} width={W} height={H} className="w-full block" />
+              <div className="flex-1 min-h-0 flex items-center justify-center">
+                <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none aspect-[2/3] max-h-full" onClick={flap} onTouchStart={e => { e.preventDefault(); flap(); }}>
+                  <canvas ref={canvasRef} width={W} height={H} className="w-full h-full object-contain block shadow-2xl" />
                 {status === 'idle' && (
                   <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                     <div className="text-center">
@@ -319,13 +346,14 @@ export default function FlappyBirdGame() {
                   </div>
                 )}
               </div>
+            </div>
 
               <p className="text-slate-500 text-sm text-center mt-3">Tap / <kbd className="bg-slate-700 px-2 py-0.5 rounded text-slate-300">Space</kbd> to flap</p>
 
-               {status !== 'idle' && (
+              {status !== 'idle' && (
                 <button 
                   onClick={() => setStatus('idle')} 
-                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                  className="mt-4 mb-2 flex-shrink-0 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
                 >
                   <span>✕</span> Exit Game
                 </button>

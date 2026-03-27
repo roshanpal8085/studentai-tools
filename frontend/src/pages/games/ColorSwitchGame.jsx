@@ -188,9 +188,36 @@ export default function ColorSwitchGame() {
             <p className="text-slate-400">Pass through the ring only where your ball color matches!</p>
           </div>
 
-          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto" : ""}>
-            <div className={status !== 'idle' ? "flex flex-col items-center justify-center min-h-full py-10 px-4" : ""}>
-              <div className={status !== 'idle' ? "w-full max-w-lg" : ""}>
+          <div className={status !== 'idle' ? "fixed inset-0 z-[100] bg-slate-900 overflow-y-auto lg:overflow-hidden" : "max-w-md mx-auto"}>
+            <div className={status !== 'idle' ? "flex flex-col items-center justify-center h-screen py-4 px-4" : "relative flex flex-col bg-slate-800/50 rounded-3xl p-4 border border-white/10 shadow-2xl overflow-hidden min-h-[600px]"}>
+              <div className={status !== 'idle' ? "w-full max-w-lg h-full max-h-[95vh] flex flex-col" : "w-full flex-1 flex flex-col"}>
+                {status === 'idle' && (
+                  <div className="absolute inset-0 z-10 bg-[#080c14]/90 backdrop-blur-2xl flex flex-col items-center justify-center p-6 text-center rounded-3xl border border-white/10 overflow-hidden">
+                    {/* Animated Glow */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-rose-600/20 rounded-full blur-[80px] animate-pulse pointer-events-none" />
+
+                    <div className="relative z-20 flex flex-col items-center">
+                      <div className="w-24 h-24 bg-gradient-to-br from-rose-500 to-pink-600 rounded-[2rem] flex items-center justify-center text-5xl shadow-2xl shadow-rose-500/20 mb-6 animate-bounce">
+                        🌈
+                      </div>
+                      <h2 className="text-4xl sm:text-5xl font-black text-white mb-4 tracking-tight">Color Switch</h2>
+                      <p className="text-slate-400 mb-10 max-w-sm text-sm sm:text-base font-medium leading-relaxed">
+                        Match the ball's color to the obstacles. Tap to jump and see how far you can go!
+                      </p>
+
+                      {/* Play Button */}
+                      <button 
+                        onClick={start} 
+                        className="group relative w-full sm:w-auto bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-400 hover:to-pink-500 text-white font-black px-12 py-4 rounded-2xl shadow-[0_0_40px_rgba(244,63,94,0.3)] hover:shadow-[0_0_50px_rgba(244,63,94,0.4)] transform hover:-translate-y-1 active:scale-95 transition-all duration-300 text-lg flex items-center justify-center gap-3 overflow-hidden"
+                      >
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+                        <span className="relative z-10 flex items-center gap-2">
+                          ▶ Start Hop
+                        </span>
+                      </button>
+                    </div>
+                  </div>
+                )}
               <div className="flex flex-col gap-3 mb-4">
                 <div className="flex justify-between items-center gap-3">
                   <div className="flex gap-3 flex-1">
@@ -225,27 +252,29 @@ export default function ColorSwitchGame() {
                 )}
               </div>
 
-              <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none" onClick={jump}>
-                <canvas ref={canvasRef} width={W} height={H} className="w-full block touch-none" />
-                {status === 'idle' && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-                    <div className="text-center">
-                      <div className="text-6xl mb-3">🎨</div>
-                      <p className="text-white text-xl font-bold mb-2">Tap to Start</p>
-                      <p className="text-slate-400 text-sm">Match ball color to ring section</p>
+              <div className="flex-1 min-h-0 flex items-center justify-center">
+                <div className="relative rounded-2xl overflow-hidden border border-slate-700 cursor-pointer touch-none aspect-[4/5] max-h-full w-full max-w-full" onClick={jump}>
+                  <canvas ref={canvasRef} width={W} height={H} className="w-full h-full object-contain block touch-none" />
+                  {status === 'idle' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                      <div className="text-center">
+                        <div className="text-6xl mb-3">🎨</div>
+                        <p className="text-white text-xl font-bold mb-2">Tap to Start</p>
+                        <p className="text-slate-400 text-sm">Match ball color to ring section</p>
+                      </div>
                     </div>
-                  </div>
-                )}
-                {status === 'over' && (
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/60">
-                    <div className="text-center">
-                      <div className="text-5xl mb-3">💥</div>
-                      <h2 className="text-2xl font-bold text-white mb-1">Game Over!</h2>
-                      <p className="text-slate-400 mb-3">Score: <span className="text-pink-400 font-bold">{score}</span></p>
-                      <button onClick={start} className="bg-pink-500 text-white font-bold px-5 py-2.5 rounded-xl">Play Again</button>
+                  )}
+                  {status === 'over' && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/60">
+                      <div className="text-center">
+                        <div className="text-5xl mb-3">💥</div>
+                        <h2 className="text-2xl font-bold text-white mb-1">Game Over!</h2>
+                        <p className="text-slate-400 mb-3">Score: <span className="text-pink-400 font-bold">{score}</span></p>
+                        <button onClick={start} className="bg-pink-500 text-white font-bold px-5 py-2.5 rounded-xl">Play Again</button>
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
 
               <p className="text-slate-500 text-sm text-center mt-3">Tap / <kbd className="bg-slate-700 px-2 py-0.5 rounded text-slate-300">Space</kbd> to jump</p>
@@ -253,7 +282,7 @@ export default function ColorSwitchGame() {
               {status !== 'idle' && (
                 <button 
                   onClick={() => setStatus('idle')} 
-                  className="mt-8 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
+                  className="mt-4 mb-2 flex-shrink-0 mx-auto flex items-center gap-2 bg-red-500/10 hover:bg-red-500/20 border border-red-500/20 px-6 py-2.5 rounded-2xl text-red-400 font-bold transition-all hover:scale-105 active:scale-95"
                 >
                   <span>✕</span> Exit Game
                 </button>
