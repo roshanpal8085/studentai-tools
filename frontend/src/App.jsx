@@ -1,5 +1,5 @@
 import { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -96,6 +96,7 @@ function App() {
                 <Route path="/email-writer" element={<EmailWriter />} />
                 <Route path="/instagram-caption-generator" element={<CaptionGen />} />
                 <Route path="/free-pdf-tools" element={<PdfTools />} />
+                <Route path="/free-pdf-tool" element={<Navigate to="/free-pdf-tools" replace />} />
                 
                 {/* AI Tools Expansion */}
                 <Route path="/ai-homework-helper" element={<HomeworkHelper />} />
