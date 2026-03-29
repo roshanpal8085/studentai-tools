@@ -4,8 +4,14 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 
-// Load env vars
-dotenv.config();
+const path = require('path');
+// Load env vars from the current directory
+dotenv.config({ path: path.join(__dirname, '.env') });
+
+console.log(`[Backend] Environment loaded. Port: ${process.env.PORT || 5000}`);
+if (!process.env.GEMINI_API_KEY) {
+    console.error("[Backend] CRITICAL: GEMINI_API_KEY is missing from .env!");
+}
 
 const app = express();
 

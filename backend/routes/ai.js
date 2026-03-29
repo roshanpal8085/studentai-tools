@@ -12,34 +12,55 @@ const providers = [];
 
 const rawKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY || '';
 const API_KEYS = rawKeys.split(',').map(k => k.trim()).filter(k => k.length > 0);
-API_KEYS.forEach(key => providers.push({ type: 'gemini', name: 'Google Gemini', instance: new GoogleGenAI({ apiKey: key }) }));
+
+API_KEYS.forEach((key, index) => {
+    providers.push({ 
+        type: 'gemini', 
+        name: `Google Gemini (Key ${index + 1})`, 
+        instance: new GoogleGenAI({ apiKey: key }) 
+    });
+});
 
 if (process.env.OPENROUTER_API_KEY) {
-    providers.push({ type: 'openrouter', name: 'OpenRouter Core', key: process.env.OPENROUTER_API_KEY });
+    providers.push({ type: 'openrouter', name: 'OpenRouter Fallback', key: process.env.OPENROUTER_API_KEY });
 }
 if (process.env.HUGGINGFACE_API_KEY) {
-    providers.push({ type: 'huggingface', name: 'HuggingFace Inference', key: process.env.HUGGINGFACE_API_KEY });
+    providers.push({ type: 'huggingface', name: 'HuggingFace Fallback', key: process.env.HUGGINGFACE_API_KEY });
 }
-if (providers.length === 0) { console.warn("WARNING: No API keys configured in environment variables."); }
+
+if (providers.length === 0) { 
+    console.error("CRITICAL ERROR: No API keys configured (Gemini, OpenRouter, or HuggingFace)."); 
+}
 
 let currentKeyIndex = 0;
 
 const generateRaw = async (prompt, isJson = false) => {
+    if (providers.length === 0) {
+        throw new Error('NO_API_PROVIDERS_CONFIGURED');
+    }
+
     let attempts = 0;
     while (attempts < providers.length) {
         const provider = providers[currentKeyIndex];
         try {
-            console.log(`[API Engine] Attempting request using: ${provider.name}`);
+            console.log(`[AI Engine] Attempting request using: ${provider.name}`);
             let outputText = "";
 
             if (provider.type === 'gemini') {
                 const config = isJson ? { responseMimeType: "application/json" } : {};
-                const response = await provider.instance.models.generateContent({ model: 'gemini-2.5-flash', contents: prompt, config });
-                outputText = response.text;
+                // Using gemini-1.5-flash for maximum reliability on free tier
+                const response = await provider.instance.models.generateContent({ 
+                    model: 'gemini-1.5-flash', 
+                    contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                    config 
+                });
+                
+                // New SDK response structure
+                outputText = response.candidates?.[0]?.content?.parts?.[0]?.text || response.text || "";
                 
             } else if (provider.type === 'openrouter') {
                 const res = await axios.post("https://openrouter.ai/api/v1/chat/completions", {
-                    model: "google/gemini-2.5-flash", // Route it back to identical Gemini logic format strings
+                    model: "google/gemini-flash-1.5", 
                     messages: [{ role: "user", content: prompt }]
                 }, { headers: { "Authorization": `Bearer ${provider.key}` } });
                 outputText = res.data.choices[0].message.content;
@@ -51,18 +72,23 @@ const generateRaw = async (prompt, isJson = false) => {
                 outputText = res.data[0]?.generated_text || res.data?.generated_text || "";
             }
 
-            if (isJson && outputText) {
+            if (!outputText) throw new Error('EMPTY_RESPONSE');
+
+            if (isJson) {
                 outputText = outputText.replace(/```json/gi, '').replace(/```/g, '').trim();
             }
             return { text: outputText };
             
         } catch (error) {
-            console.log(`[API Rotator] Provider '${provider.name}' failed testing. Catching error natively. Shifting to next fallback provider...`);
+            console.error(`[API Rotator] Provider '${provider.name}' failed: ${error.message}`);
+            // Move to next provider
             currentKeyIndex = (currentKeyIndex + 1) % providers.length;
             attempts++;
+            // Small delay before next attempt
+            await new Promise(resolve => setTimeout(resolve, 500));
         }
     }
-    throw new Error('429_ALL_KEYS_EXHAUSTED');
+    throw new Error('429_ALL_KEYS_EXHAUSTED_OR_FAILED');
 };
 
 const generateWithRotation = async (prompt, isJson = false) => {
