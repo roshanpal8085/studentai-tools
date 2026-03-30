@@ -17,6 +17,7 @@ const utilityCategories = [
       { name: 'Citation Generator', path: '/tools/citation-generator', desc: 'Generate APA, MLA, and Chicago style citations in seconds.' },
       { name: 'Essay Topic Generator', path: '/tools/essay-topic-generator', desc: 'Get 10 fresh essay ideas tailored to your subject.' },
       { name: 'Random Name Generator', path: '/tools/random-name-generator', desc: 'Generate names for creative projects and personas.' },
+      { name: 'AI Paraphrasing Tool', path: '/tools/paraphrasing-tool', desc: 'Rewrite text in 6 AI modes with synonym intensity control.' },
     ]
   },
   {
@@ -72,7 +73,8 @@ const itemListSchema = {
     { "@type": "ListItem", "position": 7, "item": { "@type": "SoftwareApplication", "name": "AI Quiz Generator", "url": "https://studentaitools.in/ai-quiz-generator" } },
     { "@type": "ListItem", "position": 8, "item": { "@type": "SoftwareApplication", "name": "AI Assignment Generator", "url": "https://studentaitools.in/ai-assignment-generator" } },
     { "@type": "ListItem", "position": 9, "item": { "@type": "SoftwareApplication", "name": "Presentation Builder", "url": "https://studentaitools.in/presentation-generator" } },
-    { "@type": "ListItem", "position": 10, "item": { "@type": "SoftwareApplication", "name": "Internet Speed Test", "url": "https://studentaitools.in/tools/internet-speed-test" } }
+    { "@type": "ListItem", "position": 10, "item": { "@type": "SoftwareApplication", "name": "Internet Speed Test", "url": "https://studentaitools.in/tools/internet-speed-test" } },
+    { "@type": "ListItem", "position": 11, "item": { "@type": "SoftwareApplication", "name": "Paraphrasing Tool", "url": "https://studentaitools.in/tools/paraphrasing-tool" } }
   ]
 };
 
