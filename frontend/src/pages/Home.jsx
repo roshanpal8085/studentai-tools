@@ -4,7 +4,7 @@ import {
   FileText, MonitorPlay, Image as ImageIcon, LayoutTemplate, MessageSquare, 
   Mail, Zap, CheckCircle2, TrendingUp, Users, ShieldCheck, Search, 
   Calendar, Clock, Hash, Type, QrCode, Lock, Ruler, Percent, Flame,
-  User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator, FileEdit, Wifi, Gamepad2, LayoutGrid, FileMinus, FilePlus, Star, Sparkles, ArrowRight
+  User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator, FileEdit, Wifi, Gamepad2, LayoutGrid, FileMinus, FilePlus, Star, Sparkles, ArrowRight, Wand2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useState, useMemo } from 'react';
@@ -14,7 +14,8 @@ const allTools = [
   { name: 'AI Text Summarizer', description: 'Turn long articles and documents into concise, readable summaries.', icon: BookOpen, to: '/ai-text-summarizer', category: 'AI Tools' },
   { name: 'AI Resume Builder', description: 'Create professional, ATS-friendly resumes in seconds with AI.', icon: LayoutTemplate, to: '/ai-resume-generator', category: 'AI Tools', hot: true },
   { name: 'AI Homework Helper', description: 'Get instant help and explanations for any homework problem.', icon: Zap, to: '/ai-homework-helper', category: 'AI Tools' },
-  { name: 'AI Essay Writer', description: 'Draft high-quality essays with proper citations and structure.', icon: FileText, to: '/ai-essay-writer', category: 'AI Tools', isNew: true },
+  { name: 'AI Essay Writer', description: 'Draft high-quality essays with proper citations and structure.', icon: FileText, to: '/ai-essay-writer', category: 'AI Tools' },
+  { name: 'Paraphrasing Tool', description: 'Rewrite text with 6 AI modes and a synonym intensity slider.', icon: Wand2, to: '/tools/paraphrasing-tool', category: 'AI Tools', isNew: true },
   { name: 'AI Study Planner', description: 'Generate personalized study schedules based on your exams.', icon: Calendar, to: '/ai-study-planner', category: 'AI Tools' },
   { name: 'AI Notes Generator', description: 'Turn your lecture recordings or text into concise notes.', icon: MessageSquare, to: '/ai-notes-generator', category: 'AI Tools' },
   { name: 'AI Quiz Generator', description: 'Create practice quizzes from your study material instantly.', icon: CheckCircle2, to: '/ai-quiz-generator', category: 'AI Tools' },

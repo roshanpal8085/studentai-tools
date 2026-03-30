@@ -455,4 +455,93 @@ Text: "${text}"`;
   }
 });
 
+router.post('/paraphrase', aiLimiter, async (req, res) => {
+  try {
+    const { text, mode = 'standard', tone = 'professional', synonymLevel = 50 } = req.body;
+
+    if (!text || !text.trim()) {
+      return res.status(400).json({ message: 'Text is required.' });
+    }
+
+    const modeInstructions = {
+      standard:  'Rewrite the text naturally while preserving the original meaning. Improve clarity and flow.',
+      fluency:   'Rewrite the text to sound as natural and native as possible. Fix awkward phrasing, improve rhythm, and ensure it reads like written by a native speaker.',
+      creative:  'Rewrite the text with creativity and flair. Use vivid language, varied sentence structures, and expressive word choices while keeping the core meaning intact.',
+      formal:    'Rewrite the text in a formal, professional, and academic tone. Use precise vocabulary, passive constructions where appropriate, and eliminate all slang or informal phrasing.',
+      shorten:   'Condense the text significantly. Remove redundancy, filler phrases, and unnecessary elaboration while keeping all the key points and essential meaning.',
+      expand:    'Expand the text by adding relevant context, examples, explanations, and elaboration. Make it richer and more detailed without introducing false information.',
+    };
+
+    const toneMap = {
+      casual:       'Use a relaxed, conversational, friendly tone as if speaking to a friend.',
+      professional: 'Use a confident, clear, professional business tone.',
+      academic:     'Use a scholarly, precise, objective academic tone with formal register.',
+    };
+
+    const synonymIntensity = synonymLevel < 34 ? 'minimal word replacement (only rephrase awkward parts)' :
+                             synonymLevel < 67 ? 'moderate word replacement (swap roughly half the key vocabulary)' :
+                                                'high word replacement (aggressively use synonyms and restructure sentences significantly)';
+
+    const prompt = `You are an expert AI writing assistant specialized in paraphrasing. Your task is to paraphrase the given text according to the instructions below.
+
+MODE: ${mode.toUpperCase()} — ${modeInstructions[mode] || modeInstructions.standard}
+TONE: ${tone.toUpperCase()} — ${toneMap[tone] || toneMap.professional}
+SYNONYM INTENSITY: ${synonymIntensity}
+
+CRITICAL RULES:
+1. NEVER change the factual meaning or introduce new information.
+2. Ensure grammar is perfect and sentences are natural, not robotic.
+3. Maintain proper paragraph breaks if the input has multiple paragraphs.
+4. Do NOT include any introduction, explanation, or meta-commentary — output ONLY the paraphrased text.
+5. Maintain consistent tense with the original.
+
+After the paraphrased text, append a JSON block on a new line in EXACTLY this format (no markdown code fences):
+METADATA_JSON:{"readability":85,"uniqueness":72,"improvements":["Simplified complex sentence structure","Replaced passive voice with active","Varied sentence length for better rhythm"]}
+
+Where:
+- readability: integer 0-100 (higher = more readable)
+- uniqueness: integer 0-100 (higher = more changed from original)
+- improvements: array of 3 short strings describing what was improved
+
+INPUT TEXT:
+${text}`;
+
+    // Use generateWithRotation (includes 24h cache + key rotation)
+    // On transient rate-limit, retry once after 4s before giving up
+    let response;
+    try {
+      response = await generateWithRotation(prompt, false);
+    } catch (firstErr) {
+      if (firstErr.message && (firstErr.message.includes('429') || firstErr.message.includes('exhausted'))) {
+        console.log('[Paraphrase] First attempt rate-limited, retrying in 4s...');
+        await new Promise(r => setTimeout(r, 4000));
+        response = await generateWithRotation(prompt, false); // may throw again — handled below
+      } else {
+        throw firstErr;
+      }
+    }
+
+    const raw = response.text;
+
+    // Parse out paraphrased text and metadata
+    const metaSplit = raw.split('METADATA_JSON:');
+    const paraphrasedText = metaSplit[0].trim();
+    
+    let metadata = { readability: 78, uniqueness: 65, improvements: ['Improved readability', 'Enhanced clarity', 'Natural phrasing'] };
+    if (metaSplit[1]) {
+      try {
+        metadata = JSON.parse(metaSplit[1].trim());
+      } catch (_) { /* use defaults */ }
+    }
+
+    res.json({ paraphrased: paraphrasedText, metadata });
+  } catch (error) {
+    if (error.message && (error.message.includes('429') || error.message.includes('quota') || error.message.includes('exhausted'))) {
+      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds and try again.' });
+    }
+    res.status(500).json({ message: error.message });
+  }
+});
+
 module.exports = router;
+

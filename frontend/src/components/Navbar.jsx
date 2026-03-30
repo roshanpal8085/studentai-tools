@@ -4,7 +4,7 @@ import {
   GraduationCap, Menu, X, Search, ChevronDown,
   FileText, Brain, Mail, MessageSquare, MonitorPlay, Hash,
   FileMinus, FilePlus, FileEdit, Image as ImageIcon, Scissors, Type as TypeIcon, Trash2, Upload, UploadCloud,
-  ShieldCheck, Timer, Calculator, Type, Wifi, Gamepad2, Zap, BookOpen, ListChecks, Calendar, Lightbulb, Quote, CheckCircle2
+  ShieldCheck, Timer, Calculator, Type, Wifi, Gamepad2, Zap, BookOpen, ListChecks, Calendar, Lightbulb, Quote, CheckCircle2, Wand2
 } from 'lucide-react';
 
 const NAV_DROPDOWNS = [
@@ -24,6 +24,7 @@ const NAV_DROPDOWNS = [
       { label: 'Study Planner', path: '/ai-study-planner', icon: Calendar, desc: 'Personalized study schedules' },
       { label: 'Essay Topic Generator', path: '/tools/essay-topic-generator', icon: Lightbulb, desc: "Beat writer's block instantly" },
       { label: 'Quiz Generator', path: '/ai-quiz-generator', icon: CheckCircle2, desc: 'Practice quizzes from any topic' },
+      { label: 'Paraphrasing Tool', path: '/tools/paraphrasing-tool', icon: Wand2, desc: 'Rewrite text in 6 AI modes' },
     ]
   },
   {
@@ -60,6 +61,7 @@ const SEARCH_SHORTCUTS = [
   { label: 'GPA Calculator', path: '/tools/gpa-calculator' },
   { label: 'Email Writer', path: '/email-writer' },
   { label: 'Essay Writer', path: '/ai-essay-writer' },
+  { label: 'Paraphrasing Tool', path: '/tools/paraphrasing-tool' },
   { label: 'Presentation Builder', path: '/presentation-generator' },
   { label: 'Free Games', path: '/free-games' },
   { label: 'Sudoku', path: '/sudoku-game' },
