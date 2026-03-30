@@ -176,7 +176,7 @@ export default function Navbar() {
                   <div className={`bg-white/95 dark:bg-slate-900/95 backdrop-blur-2xl rounded-2xl shadow-2xl shadow-slate-300/30 dark:shadow-slate-900/80 border border-slate-200/60 dark:border-slate-700/60 p-3 ${group.wide ? 'min-w-[520px] grid grid-cols-2 gap-x-2' : 'min-w-[280px]'}`}>
                       {group.items.map((item) => (
                         <Link
-                          key={item.path}
+                          key={item.label}
                           to={item.path}
                           onClick={closeAll}
                           className="flex items-start gap-3 p-2.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/20 group/item transition-colors"
@@ -327,7 +327,7 @@ export default function Navbar() {
                 <div className="pl-3 pt-1 space-y-1">
                   {group.items.map((item) => (
                     <Link
-                      key={item.path}
+                      key={item.label}
                       to={item.path}
                       onClick={closeAll}
                       className="flex items-center gap-3 px-3 py-2 rounded-xl text-sm text-slate-600 dark:text-slate-300 hover:text-indigo-600 dark:hover:text-indigo-400 hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors"

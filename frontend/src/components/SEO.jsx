@@ -36,7 +36,7 @@ const SEO = ({ title, description, keywords, canonical, ogImage, ogType = 'websi
       )}
 
       {/* AdSense Placeholder (Auto Ads) */}
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1647228811800166" crossorigin="anonymous"></script>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1647228811800166" crossOrigin="anonymous"></script>
     </Helmet>
   );
 };

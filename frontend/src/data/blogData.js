@@ -1556,7 +1556,7 @@ Thank you for being part of our journey. Let's make education more accessible, m
     `
   },
   {
-    id: 26,
+    id: 31,
     title: "Best Free AI Tools for Students in India to Study Smarter in 2026",
     slug: "best-free-ai-tools-students-india-2026",
     excerpt: "Discover the top free AI tools every Indian student needs in 2026 — from AI essay writers and quiz generators to GPA calculators and study planners. All free, all powerful.",
@@ -1899,13 +1899,13 @@ A high-end calculator is on sale for **25%** off its original price of **$120**.
 ## FAQ: Percentage Questions (AEO Section)
 
 **Q: How do I calculate a percentage manually?**
-**A:** To find a percentage of a number, divide the percentage by 100 and multiply it by the base number. Formula: `(Percentage / 100) * Number`.
+**A:** To find a percentage of a number, divide the percentage by 100 and multiply it by the base number. Formula: \`(Percentage / 100) * Number\`.
 
 **Q: What is the difference between a percentage and a percentile?**
 **A:** A percentage is a portion of a whole (like 80% out of 100). A percentile is a comparison to others (like being in the 80th percentile, meaning you performed better than 80% of the group).
 
 **Q: How do I calculate percentage increase or decrease?**
-**A:** Subtract the old value from the new value, divide by the old value, and multiply by 100. Formula: `((New - Old) / Old) * 100`.
+**A:** Subtract the old value from the new value, divide by the old value, and multiply by 100. Formula: \`((New - Old) / Old) * 100\`.
 
 **Q: Can a percentage be over 100%?**
 **A:** Yes! A percentage over 100 means the current value is larger than the original base. For example, 150% of 10 is 15.
