@@ -30,6 +30,11 @@ const NAV_DROPDOWNS = [
   {
     label: 'PDF Tools',
     items: [
+      { label: 'Merge PDF', path: '/tools/merge-pdf', icon: FilePlus, desc: 'Combine multiple PDFs into one' },
+      { label: 'Split PDF', path: '/tools/split-pdf', icon: Scissors, desc: 'Extract specific page ranges' },
+      { label: 'Compress PDF', path: '/tools/compress-pdf', icon: UploadCloud, desc: 'Reduce file size, keep quality' },
+      { label: 'Add Watermark', path: '/tools/pdf-watermark', icon: TypeIcon, desc: 'Stamp text on all pages' },
+      { label: 'Delete Pages', path: '/tools/delete-pdf-pages', icon: Trash2, desc: 'Remove unwanted pages' },
       { label: 'PDF Footer Editor', path: '/tools/pdf-footer-editor', icon: FileEdit, desc: 'Add name & enrollment number' },
       { label: 'Image to PDF', path: '/tools/image-to-pdf', icon: ImageIcon, desc: 'Convert photos to PDF' },
     ]
@@ -52,7 +57,7 @@ const SEARCH_SHORTCUTS = [
   { label: 'Chat with PDF', path: '/chat-pdf' },
   { label: 'Grammar Checker', path: '/tools/grammar-checker' },
   { label: 'Speed Test', path: '/tools/internet-speed-test' },
-  { label: 'PDF Merge', path: '/free-pdf-tools' },
+  { label: 'PDF Merge', path: '/tools/merge-pdf' },
   { label: 'GPA Calculator', path: '/tools/gpa-calculator' },
   { label: 'Email Writer', path: '/email-writer' },
   { label: 'Essay Writer', path: '/ai-essay-writer' },

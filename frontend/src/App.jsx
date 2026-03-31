@@ -96,6 +96,15 @@ function App() {
                 <Route path="/chat-pdf" element={<ChatPdf />} />
                 <Route path="/email-writer" element={<EmailWriter />} />
                 <Route path="/instagram-caption-generator" element={<CaptionGen />} />
+                <Route path="/free-pdf-tools" element={<PdfTools />} />
+                <Route path="/free-pdf-tool" element={<Navigate to="/free-pdf-tools" replace />} />
+
+                {/* PDF Tools Specific SEO Routes */}
+                <Route path="/tools/merge-pdf" element={<PdfTools />} />
+                <Route path="/tools/split-pdf" element={<PdfTools />} />
+                <Route path="/tools/pdf-watermark" element={<PdfTools />} />
+                <Route path="/tools/delete-pdf-pages" element={<PdfTools />} />
+                <Route path="/tools/compress-pdf" element={<PdfTools />} />
                 
                 {/* AI Tools Expansion */}
                 <Route path="/ai-homework-helper" element={<HomeworkHelper />} />
