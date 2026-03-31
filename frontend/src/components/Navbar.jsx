@@ -30,11 +30,6 @@ const NAV_DROPDOWNS = [
   {
     label: 'PDF Tools',
     items: [
-      { label: 'Merge PDF', path: '/free-pdf-tools', icon: FilePlus, desc: 'Combine multiple PDFs into one' },
-      { label: 'Split PDF', path: '/free-pdf-tools', icon: Scissors, desc: 'Extract specific page ranges' },
-      { label: 'Compress PDF', path: '/free-pdf-tools', icon: UploadCloud, desc: 'Reduce file size, keep quality' },
-      { label: 'Add Watermark', path: '/free-pdf-tools', icon: TypeIcon, desc: 'Stamp text on all pages' },
-      { label: 'Delete Pages', path: '/free-pdf-tools', icon: Trash2, desc: 'Remove unwanted pages' },
       { label: 'PDF Footer Editor', path: '/tools/pdf-footer-editor', icon: FileEdit, desc: 'Add name & enrollment number' },
       { label: 'Image to PDF', path: '/tools/image-to-pdf', icon: ImageIcon, desc: 'Convert photos to PDF' },
     ]

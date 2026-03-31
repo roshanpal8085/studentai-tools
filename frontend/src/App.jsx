@@ -96,8 +96,6 @@ function App() {
                 <Route path="/chat-pdf" element={<ChatPdf />} />
                 <Route path="/email-writer" element={<EmailWriter />} />
                 <Route path="/instagram-caption-generator" element={<CaptionGen />} />
-                <Route path="/free-pdf-tools" element={<PdfTools />} />
-                <Route path="/free-pdf-tool" element={<Navigate to="/free-pdf-tools" replace />} />
                 
                 {/* AI Tools Expansion */}
                 <Route path="/ai-homework-helper" element={<HomeworkHelper />} />
