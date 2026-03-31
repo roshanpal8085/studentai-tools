@@ -2,28 +2,32 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://studentaitools.in/</loc><priority>1.0</priority></url>
   <url><loc>https://studentaitools.in/ai-resume-generator</loc><priority>0.9</priority></url>
-  <url><loc>https://studentaitools.in/ai-homework-helper</loc><priority>0.9</priority></url>
-  <url><loc>https://studentaitools.in/ai-essay-writer</loc><priority>0.9</priority></url>
-  <url><loc>https://studentaitools.in/ai-quiz-generator</loc><priority>0.8</priority></url>
-  <url><loc>https://studentaitools.in/ai-assignment-generator</loc><priority>0.8</priority></url>
-  <url><loc>https://studentaitools.in/ai-notes-generator</loc><priority>0.8</priority></url>
-  <url><loc>https://studentaitools.in/ai-study-planner</loc><priority>0.8</priority></url>
-  <url><loc>https://studentaitools.in/chat-pdf</loc><priority>0.8</priority></url>
-  <url><loc>https://studentaitools.in/presentation-generator</loc><priority>0.8</priority></url>
-  <url><loc>https://studentaitools.in/email-writer</loc><priority>0.8</priority></url>
-  <url><loc>https://studentaitools.in/instagram-caption-generator</loc><priority>0.8</priority></url>
-  <url><loc>https://studentaitools.in/free-tools</loc><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/presentation-generator</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/chat-pdf</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/email-writer</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/instagram-caption-generator</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/free-pdf-tools</loc><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/free-pdf-tool</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/merge-pdf</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/split-pdf</loc><priority>0.7</priority></url>
-  <url><loc>https://studentaitools.in/tools/compress-pdf</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/pdf-watermark</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/delete-pdf-pages</loc><priority>0.7</priority></url>
-  <url><loc>https://studentaitools.in/tools/internet-speed-test</loc><lastmod>2026-03-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://studentaitools.in/tools/compress-pdf</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/ai-homework-helper</loc><priority>0.9</priority></url>
+  <url><loc>https://studentaitools.in/ai-essay-writer</loc><priority>0.9</priority></url>
+  <url><loc>https://studentaitools.in/ai-study-planner</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/ai-notes-generator</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/ai-quiz-generator</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/ai-assignment-generator</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/ai-text-summarizer</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/about</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/privacy-policy</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/terms-conditions</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/disclaimer</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/contact</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/free-tools</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/tools/word-counter</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/grammar-checker</loc><priority>0.7</priority></url>
-  <url><loc>https://studentaitools.in/tools/paraphrasing-tool</loc><priority>0.8</priority></url>
-  <url><loc>https://studentaitools.in/ai-text-summarizer</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/qr-generator</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/password-generator</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/age-calculator</loc><priority>0.7</priority></url>
@@ -36,14 +40,28 @@
   <url><loc>https://studentaitools.in/tools/exam-countdown</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/study-timer</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/image-to-pdf</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/tools/pdf-to-word</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/random-question-generator</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/homework-planner</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/study-timetable-generator</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/citation-generator</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/gpa-calculator</loc><priority>0.7</priority></url>
-  <url><loc>https://studentaitools.in/tools/pdf-to-word</loc><priority>0.7</priority></url>
   <url><loc>https://studentaitools.in/tools/pdf-footer-editor</loc><priority>0.7</priority></url>
-  
+  <url><loc>https://studentaitools.in/tools/internet-speed-test</loc><lastmod>2026-03-26</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://studentaitools.in/tools/paraphrasing-tool</loc><priority>0.7</priority></url>
+  <url><loc>https://studentaitools.in/blog</loc><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/free-games</loc><priority>0.9</priority></url>
+  <url><loc>https://studentaitools.in/snake-game</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/sudoku-game</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/tic-tac-toe</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/memory-card-game</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/typing-speed-test</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/math-quiz-game</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/logic-puzzle-game</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/stack-game</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/color-switch-game</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/word-puzzle-game</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/flappy-bird-game</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/best-ai-tools-for-students</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/how-to-write-resume-using-ai</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/ai-for-exam-prep-strategies</loc><priority>0.8</priority></url>
@@ -68,32 +86,12 @@
   <url><loc>https://studentaitools.in/blog/ai-in-psychology-students</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/ai-environmental-science-guide</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/future-of-education-2030</loc><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/blog/build-ai-ready-resume</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/about-studentai-tools-platform</loc><priority>0.8</priority></url>
+  <url><loc>https://studentaitools.in/blog/best-free-ai-tools-students-india-2026</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/gpa-calculator-guide-2026</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/percentage-calculator-student-guide</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/image-compressor-guide-students</loc><priority>0.8</priority></url>
   <url><loc>https://studentaitools.in/blog/grammar-checker-student-guide</loc><priority>0.8</priority></url>
-
-  <!-- Free Games Section -->
-  <url><loc>https://studentaitools.in/free-games</loc><priority>0.9</priority><changefreq>weekly</changefreq></url>
-  <url><loc>https://studentaitools.in/snake-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://studentaitools.in/sudoku-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://studentaitools.in/tic-tac-toe</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://studentaitools.in/memory-card-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://studentaitools.in/typing-speed-test</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://studentaitools.in/math-quiz-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://studentaitools.in/logic-puzzle-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://studentaitools.in/stack-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://studentaitools.in/color-switch-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://studentaitools.in/word-puzzle-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  <url><loc>https://studentaitools.in/flappy-bird-game</loc><priority>0.8</priority><changefreq>monthly</changefreq></url>
-  
-  <url><loc>https://studentaitools.in/blog/best-free-ai-tools-students-india-2026</loc><priority>0.9</priority></url>
-  
-  <url><loc>https://studentaitools.in/blog</loc><priority>0.8</priority></url>
-  <url><loc>https://studentaitools.in/about</loc><priority>0.5</priority></url>
-  <url><loc>https://studentaitools.in/privacy-policy</loc><priority>0.5</priority></url>
-  <url><loc>https://studentaitools.in/terms-conditions</loc><priority>0.5</priority></url>
-  <url><loc>https://studentaitools.in/disclaimer</loc><priority>0.5</priority></url>
-  <url><loc>https://studentaitools.in/contact</loc><priority>0.5</priority></url>
+  <url><loc>https://studentaitools.in/blog/merge-pdf-student-guide</loc><priority>0.8</priority></url>
 </urlset>
