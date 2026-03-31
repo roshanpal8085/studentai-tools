@@ -43,11 +43,12 @@ const AiResume = () => {
     const element = resumeRef.current;
     if (!element) return;
     
+    // Temporarily hide the 'contentEditable' highlight and other non-print elements
     const opt = {
-      margin:       [15, 15, 15, 15],
+      margin:       [10, 10, 10, 10], // Reduced margin for more space
       filename:     `${formData.name.replace(/[^a-z0-9]/gi, '_').toLowerCase() || 'resume'}.pdf`,
       image:        { type: 'jpeg', quality: 0.98 },
-      html2canvas:  { scale: 2, useCORS: true },
+      html2canvas:  { scale: 3, useCORS: true, letterRendering: true },
       jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
     };
     
@@ -55,20 +56,24 @@ const AiResume = () => {
     element.style.overflow = 'visible';
     
     html2pdf().set(opt).from(element).save().then(() => {
-      element.style.maxHeight = '800px';
-      element.style.overflow = 'auto';
+      element.style.maxHeight = 'none';
+      element.style.overflow = 'visible';
     });
   };
 
   const getTemplateStyles = () => {
+    // Base classes for all templates to ensure compactness
+    const base = "prose-sm prose-headings:mt-4 prose-headings:mb-2 prose-p:my-1 prose-ul:my-1 prose-li:my-0.5";
+    
     switch (template) {
       case 'modern':
-        return 'prose-headings:text-indigo-600 prose-a:text-indigo-500 font-sans';
+        return `${base} prose-headings:text-indigo-600 prose-a:text-indigo-500 font-sans`;
       case 'creative':
-        return 'prose-headings:text-pink-600 prose-headings:font-serif bg-rose-50/30 rounded-lg shadow-inner';
+        return `${base} prose-headings:text-pink-600 prose-headings:font-serif bg-rose-50/30 rounded-lg shadow-inner`;
       case 'professional':
       default:
-        return 'prose-headings:text-slate-800 prose-headings:border-b-2 prose-headings:border-slate-800 font-serif';
+        // Added pb-1 and border-b-2 optimization to prevent "heading cut" issue
+        return `${base} prose-headings:text-slate-800 prose-headings:border-b-2 prose-headings:border-slate-800 prose-headings:pb-1 font-serif`;
     }
   };
 
@@ -197,7 +202,7 @@ const AiResume = () => {
               <div 
                 id="resume-paper"
                 ref={resumeRef}
-                className={`bg-white w-full max-w-[210mm] shadow-2xl p-10 md:p-16 prose prose-slate dark:prose-invert outline-none animate-in fade-in zoom-in duration-500 ${getTemplateStyles()}`}
+                className={`bg-white w-full max-w-[210mm] shadow-2xl p-8 md:p-12 prose prose-slate dark:prose-invert outline-none animate-in fade-in zoom-in duration-500 ${getTemplateStyles()}`}
                 style={{ minHeight: '297mm', maxHeight: 'none', overflow: 'visible' }}
               >
                 {result ? (
