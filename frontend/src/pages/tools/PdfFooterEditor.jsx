@@ -3,14 +3,8 @@ import SEO from '../../components/SEO';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import {
     FileText, Download, Loader2, Upload, CheckCircle,
-    Shield, Sliders, User, Hash, AlignLeft, AlignCenter, AlignRight, Eye, HelpCircle, PaintBucket
+    Shield, Sliders, User, Hash, AlignLeft, Eye, HelpCircle, PaintBucket, BookOpen
 } from 'lucide-react';
-
-const POSITIONS = [
-    { id: 'left',   label: 'Left',   Icon: AlignLeft },
-    { id: 'center', label: 'Center', Icon: AlignCenter },
-    { id: 'right',  label: 'Right',  Icon: AlignRight },
-];
 
 const PdfFooterEditor = () => {
     const [pdfFile, setPdfFile] = useState(null);
@@ -18,14 +12,16 @@ const PdfFooterEditor = () => {
     const [done, setDone] = useState(false);
     const [error, setError]   = useState('');
 
-    // Footer settings
-    const [name,         setName]         = useState('');
-    const [enrollment,   setEnrollment]   = useState('');
-    const [position,     setPosition]     = useState('center');
-    const [fontSize,     setFontSize]     = useState(11);
+    // Footer fields
+    const [name,        setName]        = useState('');
+    const [enrollment,  setEnrollment]  = useState('');
+    const [subject,     setSubject]     = useState('');
+
+    // Style settings
+    const [fontSize,     setFontSize]     = useState(10);
     const [bottomMargin, setBottomMargin] = useState(20);
-    const [addPageNum,     setAddPageNum]     = useState(true);
-    const [textColor,      setTextColor]      = useState('#6366f1');
+    const [textColor,    setTextColor]    = useState('#000000');
+
     // Cover existing footer
     const [coverOldFooter, setCoverOldFooter] = useState(false);
     const [coverHeight,    setCoverHeight]    = useState(40);
@@ -51,18 +47,10 @@ const PdfFooterEditor = () => {
         return rgb(r, g, b);
     };
 
-    const buildFooterLine = (pageNum, totalPages) => {
-        const parts = [];
-        if (name.trim())       parts.push(`Name: ${name.trim()}`);
-        if (enrollment.trim()) parts.push(`Enrollment No.: ${enrollment.trim()}`);
-        if (addPageNum)        parts.push(`Page ${pageNum} of ${totalPages}`);
-        return parts.join('   |   ');
-    };
-
     const process = async () => {
         if (!pdfFile) return;
-        if (!name.trim() && !enrollment.trim()) {
-            setError('Please enter at least a name or enrollment number.');
+        if (!name.trim() && !enrollment.trim() && !subject.trim()) {
+            setError('Please enter at least one footer field.');
             return;
         }
         setLoading(true);
@@ -73,10 +61,14 @@ const PdfFooterEditor = () => {
             const font   = await pdfDoc.embedFont(StandardFonts.Helvetica);
             const color  = hexToRgb(textColor);
             const pages  = pdfDoc.getPages();
-            const total  = pages.length;
 
-            pages.forEach((page, i) => {
+            const leftText   = name.trim();
+            const centerText = enrollment.trim();
+            const rightText  = subject.trim();
+
+            pages.forEach((page) => {
                 const { width } = page.getSize();
+                const margin = 40;
 
                 // Step 1: Cover old footer with a white rectangle
                 if (coverOldFooter) {
@@ -85,27 +77,45 @@ const PdfFooterEditor = () => {
                         y:      0,
                         width:  width,
                         height: coverHeight,
-                        color:  rgb(1, 1, 1),   // white
+                        color:  rgb(1, 1, 1),
                         opacity: 1,
                     });
                 }
 
-                // Step 2: Draw new footer text
-                const text      = buildFooterLine(i + 1, total);
-                const textWidth = font.widthOfTextAtSize(text, fontSize);
+                // Step 2: Draw Left text
+                if (leftText) {
+                    page.drawText(leftText, {
+                        x: margin,
+                        y: bottomMargin,
+                        size: fontSize,
+                        font,
+                        color,
+                    });
+                }
 
-                let x;
-                if      (position === 'left')   x = 40;
-                else if (position === 'right')  x = width - textWidth - 40;
-                else                            x = (width - textWidth) / 2;
+                // Step 4: Draw Center text
+                if (centerText) {
+                    const cw = font.widthOfTextAtSize(centerText, fontSize);
+                    page.drawText(centerText, {
+                        x: (width - cw) / 2,
+                        y: bottomMargin,
+                        size: fontSize,
+                        font,
+                        color,
+                    });
+                }
 
-                page.drawText(text, {
-                    x,
-                    y:    bottomMargin,
-                    size: fontSize,
-                    font,
-                    color,
-                });
+                // Step 5: Draw Right text
+                if (rightText) {
+                    const rw = font.widthOfTextAtSize(rightText, fontSize);
+                    page.drawText(rightText, {
+                        x: width - margin - rw,
+                        y: bottomMargin,
+                        size: fontSize,
+                        font,
+                        color,
+                    });
+                }
             });
 
             const pdfBytes = await pdfDoc.save();
@@ -125,21 +135,24 @@ const PdfFooterEditor = () => {
         }
     };
 
-    const preview = buildFooterLine('1', '?');
+    /* ── Preview helpers ── */
+    const previewLeft   = name.trim()       || 'Your Name';
+    const previewCenter = enrollment.trim() || 'Enrollment No.';
+    const previewRight  = subject.trim()    || 'Class / Subject';
 
     return (
         <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
             <SEO
-                title="Free PDF Footer Editor — Add Name & Enrollment Number"
-                description="Add your name, enrollment number, and page numbers to every page footer of any PDF — 100% free, secure, and browser-based. No upload needed."
-                keywords="pdf footer editor, add name to pdf, enrollment number pdf, student pdf tool, free pdf editor"
+                title="Free PDF Footer Editor — Add Name, Enrollment & Class"
+                description="Add your name, enrollment number, and class/subject to every page footer of any PDF — three-column format. 100% free, secure, and browser-based."
+                keywords="pdf footer editor, add name to pdf, enrollment number pdf, student pdf tool, three column footer"
                 schema={{
                   "@context": "https://schema.org",
                   "@type": "SoftwareApplication",
                   "name": "PDF Footer Editor",
                   "operatingSystem": "Web",
                   "applicationCategory": "UtilitiesApplication",
-                  "description": "Professional local PDF editor to add custom footers, enrollment numbers, and page numbers securely.",
+                  "description": "Professional local PDF editor to add custom three-column footers with name, enrollment, and class info.",
                   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
                 }}
             />
@@ -158,7 +171,7 @@ const PdfFooterEditor = () => {
                         </span>
                     </h1>
                     <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-                        Automatically stamp your <strong>Name</strong> and <strong>Enrollment Number</strong> on every page of your PDF — no sign-up, no upload.
+                        Stamp a <strong>3-column professional footer</strong> — Name · Enrollment Number · Class — on every page of your PDF. No upload, no sign-up.
                     </p>
                 </div>
 
@@ -203,16 +216,23 @@ const PdfFooterEditor = () => {
                             )}
                         </div>
 
-                        {/* Name + Enrollment inputs */}
+                        {/* Footer Details */}
                         <div className="glass-card rounded-3xl p-8 space-y-5 border border-slate-200 dark:border-slate-800">
                             <h2 className="text-lg font-extrabold dark:text-white flex items-center gap-2">
                                 <Sliders className="w-5 h-5 text-indigo-500" /> Footer Details
                             </h2>
 
+                            {/* Three column layout hint */}
+                            <div className="flex items-center gap-2 bg-indigo-50 dark:bg-indigo-900/20 rounded-xl px-4 py-2.5 text-xs text-indigo-700 dark:text-indigo-300 font-semibold border border-indigo-100 dark:border-indigo-800">
+                                <AlignLeft className="w-3.5 h-3.5 flex-shrink-0" />
+                                Footer layout: <span className="font-black">LEFT · CENTER · RIGHT</span> (3-column, like your assignment sheets)
+                            </div>
+
                             <div className="space-y-4">
+                                {/* Name — Left */}
                                 <label className="block">
                                     <span className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
-                                        <User className="w-3.5 h-3.5" /> Your Name
+                                        <User className="w-3.5 h-3.5 text-indigo-400" /> Name <span className="ml-auto text-xs font-medium normal-case tracking-normal text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded-full">Left</span>
                                     </span>
                                     <input
                                         type="text"
@@ -223,48 +243,41 @@ const PdfFooterEditor = () => {
                                     />
                                 </label>
 
+                                {/* Enrollment — Center */}
                                 <label className="block">
                                     <span className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
-                                        <Hash className="w-3.5 h-3.5" /> Enrollment Number
+                                        <Hash className="w-3.5 h-3.5 text-indigo-400" /> Enrollment Number <span className="ml-auto text-xs font-medium normal-case tracking-normal text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded-full">Center</span>
                                     </span>
                                     <input
                                         type="text"
                                         value={enrollment}
                                         onChange={(e) => setEnrollment(e.target.value)}
-                                        placeholder="e.g. 2303035140"
+                                        placeholder="e.g. EN23CS304059"
+                                        className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:outline-none focus:border-indigo-500 transition-all"
+                                    />
+                                </label>
+
+                                {/* Subject / Class — Right */}
+                                <label className="block">
+                                    <span className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider flex items-center gap-1.5 mb-1.5">
+                                        <BookOpen className="w-3.5 h-3.5 text-indigo-400" /> Class / Subject <span className="ml-auto text-xs font-medium normal-case tracking-normal text-indigo-400 bg-indigo-50 dark:bg-indigo-900/30 px-2 py-0.5 rounded-full">Right</span>
+                                    </span>
+                                    <input
+                                        type="text"
+                                        value={subject}
+                                        onChange={(e) => setSubject(e.target.value)}
+                                        placeholder="e.g. CS(AI)-A-I"
                                         className="w-full px-4 py-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-medium focus:outline-none focus:border-indigo-500 transition-all"
                                     />
                                 </label>
                             </div>
 
-                            {/* Position */}
-                            <div>
-                                <span className="text-sm font-bold text-slate-600 dark:text-slate-400 uppercase tracking-wider mb-2 block">
-                                    Footer Position
-                                </span>
-                                <div className="flex gap-3">
-                                    {POSITIONS.map(({ id, label, Icon }) => (
-                                        <button
-                                            key={id}
-                                            onClick={() => setPosition(id)}
-                                            className={`flex-1 py-2.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 border-2 transition-all
-                                                ${position === id
-                                                    ? 'bg-indigo-600 border-indigo-600 text-white shadow-lg shadow-indigo-500/20'
-                                                    : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-indigo-400'
-                                                }`}
-                                        >
-                                            <Icon className="w-4 h-4" /> {label}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Advanced tweaks */}
-                            <div className="grid grid-cols-2 gap-4">
+                            {/* Style tweaks */}
+                            <div className="grid grid-cols-2 gap-4 pt-1">
                                 <label className="block">
                                     <span className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-1 block">Font Size ({fontSize}px)</span>
                                     <input
-                                        type="range" min={8} max={20} step={1}
+                                        type="range" min={8} max={18} step={1}
                                         value={fontSize}
                                         onChange={(e) => setFontSize(+e.target.value)}
                                         className="w-full accent-indigo-600"
@@ -281,19 +294,7 @@ const PdfFooterEditor = () => {
                                 </label>
                             </div>
 
-                            <div className="flex items-center justify-between gap-4">
-                                <label className="flex items-center gap-3 cursor-pointer group">
-                                    <div
-                                        onClick={() => setAddPageNum(!addPageNum)}
-                                        className={`w-11 h-6 rounded-full transition-all flex items-center px-0.5 ${addPageNum ? 'bg-indigo-600' : 'bg-slate-300 dark:bg-slate-600'}`}
-                                    >
-                                        <div className={`w-5 h-5 rounded-full bg-white shadow transition-transform ${addPageNum ? 'translate-x-5' : 'translate-x-0'}`} />
-                                    </div>
-                                    <span className="text-sm font-bold text-slate-700 dark:text-slate-300 group-hover:text-indigo-600 transition-colors">
-                                        Add page numbers
-                                    </span>
-                                </label>
-
+                            <div className="flex items-center gap-3">
                                 <label className="flex items-center gap-2">
                                     <span className="text-sm font-bold text-slate-600 dark:text-slate-400">Text Color</span>
                                     <input
@@ -303,6 +304,7 @@ const PdfFooterEditor = () => {
                                         className="w-9 h-9 rounded-xl border-2 border-slate-200 dark:border-slate-700 cursor-pointer p-0.5 bg-white dark:bg-slate-800"
                                     />
                                 </label>
+                                <span className="text-xs text-slate-400">(Default: Black — matches assignment sheets)</span>
                             </div>
 
                             {/* Cover old footer */}
@@ -384,16 +386,22 @@ const PdfFooterEditor = () => {
                                         <div key={i} className={`h-2.5 rounded-full bg-slate-100 dark:bg-slate-700 ${i === 0 ? 'w-3/4' : i % 3 === 0 ? 'w-1/2' : 'w-full'}`} />
                                     ))}
                                 </div>
-                                {/* Footer line */}
-                                <div className={`mt-4 pt-3 border-t border-slate-200 dark:border-slate-700 flex ${position === 'center' ? 'justify-center' : position === 'right' ? 'justify-end' : 'justify-start'}`}>
-                                    <span
-                                        className="font-mono font-semibold break-all"
-                                        style={{ fontSize: Math.min(fontSize, 13), color: textColor }}
-                                    >
-                                        {preview || 'Your text will appear here'}
-                                    </span>
+                                {/* Footer preview */}
+                                <div className="mt-4 pt-2">
+                                    <div className="flex justify-between items-center">
+                                        <span className="font-mono text-left" style={{ fontSize: Math.min(fontSize, 11), color: textColor, fontWeight: 500 }}>
+                                            {previewLeft}
+                                        </span>
+                                        <span className="font-mono text-center" style={{ fontSize: Math.min(fontSize, 11), color: textColor, fontWeight: 500 }}>
+                                            {previewCenter}
+                                        </span>
+                                        <span className="font-mono text-right" style={{ fontSize: Math.min(fontSize, 11), color: textColor, fontWeight: 500 }}>
+                                            {previewRight}
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
+                            <p className="text-xs text-slate-400 mt-3 text-center">↑ This is how your footer will look on each PDF page</p>
                         </div>
 
                         {/* Info cards */}
@@ -404,7 +412,7 @@ const PdfFooterEditor = () => {
                             {[
                                 { icon: Shield, title: '100% Private', text: 'Your PDF is processed entirely in your browser. Nothing is sent to any server.' },
                                 { icon: FileText, title: 'All Pages Updated', text: 'Footer is automatically added to every single page of the PDF.' },
-                                { icon: Sliders, title: 'Fully Customizable', text: 'Choose position, font size, margin, page numbers, and text color.' },
+                                { icon: Sliders, title: '3-Column Format', text: 'Name on left, Enrollment No. in center, Class/Subject on right — exactly like standard assignment sheets.' },
                             ].map(({ icon: Icon, title, text }, i) => (
                                 <div key={i} className="flex gap-3">
                                     <div className="w-9 h-9 rounded-xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 flex items-center justify-center flex-shrink-0">
