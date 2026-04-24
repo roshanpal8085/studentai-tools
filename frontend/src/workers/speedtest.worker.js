@@ -1,27 +1,29 @@
-// v9 Speed Test Worker — Accurate Download + Upload
-// Download: parallel streams from Cloudflare CDN
-// Upload: sequential timed chunks, bytes counted on completion
-
-const DOWNLOAD_CONCURRENCY = 4;
-const UPLOAD_CONCURRENCY = 3;
-const SAMPLE_INTERVAL = 200; // ms
+// v10 Speed Test Worker — More Accurate Download + Upload
+// Key improvements over v9:
+//  - Upload: warmup period (1.5s), instantaneous per-interval speed (not cumulative avg)
+//  - Upload: 1MB chunks → saturates fast connections (100Mbps+)
+//  - Download: instantaneous window-based sampling (bytes in last 400ms)
+//  - Ping: outlier removal (drop top 2), use median of remaining
+//  - Final: p95 for download (capture peak), p85 for upload (more stable)
 
 const CLOUDFLARE_BASE = 'https://speed.cloudflare.com';
+const DOWNLOAD_CONCURRENCY = 6;  // more streams → better saturation
+const UPLOAD_CONCURRENCY   = 4;
+const SAMPLE_INTERVAL      = 250; // ms
 
 self.onmessage = async (e) => {
     const { type } = e.data;
 
-    // ─── PING ──────────────────────────────────────────────────────────────────
+    // ─── PING ─────────────────────────────────────────────────────────────────
     if (type === 'PING') {
         const pings = [];
-        for (let i = 0; i < 10; i++) {
-            const start = performance.now();
+        for (let i = 0; i < 12; i++) {
+            const t = performance.now();
             try {
-                await fetch(`${CLOUDFLARE_BASE}/__down?bytes=1&t=${Date.now()}`, {
-                    cache: 'no-store',
-                    mode: 'cors'
+                await fetch(`${CLOUDFLARE_BASE}/__down?bytes=1&nocache=${Date.now()}${i}`, {
+                    cache: 'no-store', mode: 'cors'
                 });
-                pings.push(performance.now() - start);
+                pings.push(performance.now() - t);
             } catch (_) {}
         }
         if (pings.length === 0) {
@@ -29,22 +31,24 @@ self.onmessage = async (e) => {
             return;
         }
         pings.sort((a, b) => a - b);
-        const trimmed = pings.slice(1, Math.max(2, pings.length - 1));
-        const avg = trimmed.reduce((a, b) => a + b, 0) / trimmed.length;
-        self.postMessage({ type: 'PING_RESULT', value: avg.toFixed(0) });
+        // Drop top 2 outliers, use median of rest
+        const trimmed = pings.slice(0, Math.max(3, pings.length - 2));
+        const median  = trimmed[Math.floor(trimmed.length / 2)];
+        self.postMessage({ type: 'PING_RESULT', value: Math.round(median) });
     }
 
-    // ─── DOWNLOAD ──────────────────────────────────────────────────────────────
+    // ─── DOWNLOAD ─────────────────────────────────────────────────────────────
     if (type === 'DOWNLOAD') {
-        const TEST_DURATION = 10000; // ms
-        const WARMUP = 1500;         // ms
-        const startTime = performance.now();
+        const TEST_DURATION = 12000; // ms
+        const WARMUP        = 1800;  // ms — skip until connection saturated
+        const startTime     = performance.now();
+
+        // Track bytes in a rolling window for instantaneous speed
+        const byteLog  = []; // [{ t, bytes }]
         let totalBytes = 0;
-        let warmupBytes = 0;
-        let warmupDone = false;
-        const samples = [];
+        let stopped    = false;
+        const samples  = [];
         const controllers = [];
-        let stopped = false;
 
         const spawnStream = async () => {
             while (!stopped) {
@@ -52,7 +56,7 @@ self.onmessage = async (e) => {
                 controllers.push(ctrl);
                 try {
                     const res = await fetch(
-                        `${CLOUDFLARE_BASE}/__down?bytes=25000000&r=${Math.random()}`,
+                        `${CLOUDFLARE_BASE}/__down?bytes=30000000&r=${Math.random()}`,
                         { signal: ctrl.signal, cache: 'no-store', mode: 'cors' }
                     );
                     const reader = res.body.getReader();
@@ -60,6 +64,7 @@ self.onmessage = async (e) => {
                         const { done, value } = await reader.read();
                         if (done || stopped) break;
                         totalBytes += value.length;
+                        byteLog.push({ t: performance.now(), b: value.length });
                     }
                 } catch (_) {
                     if (stopped) break;
@@ -68,22 +73,26 @@ self.onmessage = async (e) => {
         };
 
         const sampleTimer = setInterval(() => {
-            const elapsed = performance.now() - startTime;
+            const elapsed  = performance.now() - startTime;
             const progress = Math.min(100, (elapsed / TEST_DURATION) * 100);
 
-            if (!warmupDone && elapsed >= WARMUP) {
-                warmupDone = true;
-                warmupBytes = totalBytes;
-            }
+            if (elapsed >= WARMUP) {
+                // Instantaneous speed: bytes received in last 600ms window
+                const windowMs  = 600;
+                const windowCut = performance.now() - windowMs;
+                const windowBytes = byteLog
+                    .filter(l => l.t >= windowCut)
+                    .reduce((s, l) => s + l.b, 0);
+                const mbps = (windowBytes * 8) / ((windowMs / 1000) * 1024 * 1024);
 
-            if (warmupDone) {
-                const measuredBytes = totalBytes - warmupBytes;
-                const measuredTimeSec = (elapsed - WARMUP) / 1000;
-                if (measuredTimeSec > 0) {
-                    const mbps = (measuredBytes * 8) / (measuredTimeSec * 1024 * 1024);
+                if (mbps > 0) {
                     samples.push(mbps);
                     self.postMessage({ type: 'DOWNLOAD_UPDATE', mbps, progress });
                 }
+
+                // Prune old entries to keep memory clean
+                const pruneCut = performance.now() - 2000;
+                while (byteLog.length > 0 && byteLog[0].t < pruneCut) byteLog.shift();
             } else {
                 self.postMessage({ type: 'DOWNLOAD_UPDATE', mbps: 0, progress: progress * 0.15 });
             }
@@ -92,74 +101,88 @@ self.onmessage = async (e) => {
                 clearInterval(sampleTimer);
                 stopped = true;
                 controllers.forEach(c => { try { c.abort(); } catch (_) {} });
+
+                // p95 — captures peak throughput, standard for download
                 const sorted = [...samples].sort((a, b) => a - b);
-                const p90 = sorted[Math.floor(sorted.length * 0.90)] || 0;
-                self.postMessage({ type: 'DOWNLOAD_RESULT', value: p90 });
+                const p95    = sorted[Math.floor(sorted.length * 0.95)] || 0;
+                self.postMessage({ type: 'DOWNLOAD_RESULT', value: p95 });
             }
         }, SAMPLE_INTERVAL);
 
-        // Spawn concurrent download streams
         await Promise.allSettled(
             Array.from({ length: DOWNLOAD_CONCURRENCY }, () => spawnStream())
         );
     }
 
-    // ─── UPLOAD ────────────────────────────────────────────────────────────────
+    // ─── UPLOAD ───────────────────────────────────────────────────────────────
     if (type === 'UPLOAD') {
-        const TEST_DURATION = 10000; // ms
-        const CHUNK_SIZE = 256 * 1024; // 256KB per chunk — completes in ~0.4s even at 5 Mbps
-        const startTime = performance.now();
-        const samples = [];
-        let totalBytes = 0;
-        let stopped = false;
+        const TEST_DURATION = 12000; // ms
+        const WARMUP        = 1500;  // ms — skip ramp-up phase
+        // 1MB chunks: fast enough to not stall pipes, large enough to saturate
+        const CHUNK_SIZE    = 1024 * 1024;
+        const startTime     = performance.now();
+        const byteLog       = []; // [{ t, bytes }] for instantaneous calc
+        const samples       = [];
+        let stopped         = false;
 
-        // Pre-generate random chunk
+        // Pre-fill with random-ish data (prevents compression by network stack)
         const chunkData = new Uint8Array(CHUNK_SIZE);
-        // Fill with pattern so it's not compressed by the network stack
-        for (let i = 0; i < CHUNK_SIZE; i++) chunkData[i] = i % 256;
+        crypto.getRandomValues(chunkData.subarray(0, Math.min(4096, CHUNK_SIZE)));
+        for (let i = 4096; i < CHUNK_SIZE; i++) chunkData[i] = (i * 7 + 13) % 256;
 
         const sampleTimer = setInterval(() => {
-            const elapsed = performance.now() - startTime;
+            const elapsed  = performance.now() - startTime;
             const progress = Math.min(100, (elapsed / TEST_DURATION) * 100);
 
-            if (elapsed > 300 && totalBytes > 0) {
-                const mbps = (totalBytes * 8) / ((elapsed / 1000) * 1024 * 1024);
-                samples.push(mbps);
-                self.postMessage({ type: 'UPLOAD_UPDATE', mbps, progress });
+            if (elapsed >= WARMUP) {
+                // Instantaneous speed: bytes uploaded in last 700ms
+                const windowMs    = 700;
+                const windowCut   = performance.now() - windowMs;
+                const windowBytes = byteLog
+                    .filter(l => l.t >= windowCut)
+                    .reduce((s, l) => s + l.b, 0);
+                const mbps = (windowBytes * 8) / ((windowMs / 1000) * 1024 * 1024);
+
+                if (mbps > 0) {
+                    samples.push(mbps);
+                    self.postMessage({ type: 'UPLOAD_UPDATE', mbps, progress });
+                }
+
+                // Prune
+                const pruneCut = performance.now() - 2000;
+                while (byteLog.length > 0 && byteLog[0].t < pruneCut) byteLog.shift();
+            } else {
+                self.postMessage({ type: 'UPLOAD_UPDATE', mbps: 0, progress });
             }
 
             if (elapsed >= TEST_DURATION) {
                 clearInterval(sampleTimer);
                 stopped = true;
+
+                // p85 for upload — more stable than p90 (upload is noisier)
                 const sorted = [...samples].sort((a, b) => a - b);
-                const p90 = sorted[Math.floor(sorted.length * 0.90)] || 0;
-                self.postMessage({ type: 'UPLOAD_RESULT', value: p90 });
+                const p85    = sorted[Math.floor(sorted.length * 0.85)] || 0;
+                self.postMessage({ type: 'UPLOAD_RESULT', value: p85 });
             }
         }, SAMPLE_INTERVAL);
 
-        // Each "worker" does back-to-back chunk uploads
         const uploadWorker = async () => {
             while (!stopped) {
-                const chunkStart = performance.now();
                 try {
-                    const blob = new Blob([chunkData]);
-                    const res = await fetch(
-                        `${CLOUDFLARE_BASE}/__up?t=${Date.now()}`,
-                        {
-                            method: 'POST',
-                            body: blob,
-                            mode: 'cors',
-                            cache: 'no-store',
-                        }
+                    const blob     = new Blob([chunkData]);
+                    const t0       = performance.now();
+                    const res      = await fetch(
+                        `${CLOUDFLARE_BASE}/__up?nocache=${Date.now()}${Math.random()}`,
+                        { method: 'POST', body: blob, mode: 'cors', cache: 'no-store' }
                     );
-                    if (res.ok || res.status === 200) {
-                        // Only count bytes AFTER successful upload
-                        totalBytes += CHUNK_SIZE;
+                    const duration = performance.now() - t0;
+                    if ((res.ok || res.status === 200) && !stopped) {
+                        // Log completion time at end of transfer (more accurate)
+                        byteLog.push({ t: performance.now(), b: CHUNK_SIZE });
                     }
                 } catch (_) {
-                    // network error — ignore and retry
+                    // network hiccup — retry
                 }
-                // Tiny yield to allow sampleTimer to fire
                 await new Promise(r => setTimeout(r, 0));
             }
         };
