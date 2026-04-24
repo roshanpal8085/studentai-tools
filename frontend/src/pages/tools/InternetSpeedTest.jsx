@@ -130,9 +130,6 @@ function Gauge({ value, phase }) {
     </svg>
   );
 }
-    </svg>
-  );
-}
 
 /* ── Animated number ─────────────────────────────────────────────────────── */
 function useSmoothed(target, speed = 0.08) {
