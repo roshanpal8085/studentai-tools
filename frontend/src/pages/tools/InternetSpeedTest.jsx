@@ -27,72 +27,109 @@ function speedToPercent(v) {
   return Math.min(1, 0.90 + ((v - 500) / 500) * 0.10);
 }
 
-const TICKS = [0, 1, 5, 10, 30, 50, 100, 300, 500, 1000];
+const TICKS       = [0, 1, 5, 10, 30, 50, 100, 300, 500, 1000];
+const TICK_LABELS = { 1: '1', 10: '10', 100: '100', 500: '500' };
 function tickAngle(v) { return -120 + speedToPercent(v) * 240; }
 
 function Gauge({ value, phase }) {
-  const pct    = speedToPercent(value);
-  const filled = arcLen * pct;
-  const color  = phase === 'UPLOAD' ? '#a855f7' : '#3b82f6';
-  const glow   = phase === 'UPLOAD' ? '#a855f7' : '#60a5fa';
-
-  // Needle angle: -120° (0) → +120° (1000)
+  const pct         = speedToPercent(value);
+  const filled      = arcLen * pct;
+  const isUpload    = phase === 'UPLOAD';
+  const isPing      = phase === 'PING';
+  const arcRotation = `rotate(${(360 - ARC_DEG) / 2 + 90} ${CX} ${CY})`;
   const needleAngle = -120 + pct * 240;
 
+  // Color theme per phase
+  const c0 = isUpload ? '#7c3aed' : isPing ? '#ca8a04' : '#1d4ed8';
+  const c1 = isUpload ? '#c084fc' : isPing ? '#fbbf24' : '#38bdf8';
+  const glowColor = isUpload ? '#a855f7' : isPing ? '#facc15' : '#60a5fa';
+
   return (
-    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-2xl">
+    <svg viewBox="0 0 100 100" className="w-full h-full">
       <defs>
-        <filter id="glow">
-          <feGaussianBlur stdDeviation="1.5" result="blur" />
+        <filter id="glowF" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="1.8" result="blur" />
           <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
         </filter>
-        <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%"   stopColor={color} stopOpacity="0.6" />
-          <stop offset="100%" stopColor={glow}  stopOpacity="1"   />
+        <filter id="softGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="3" result="blur" />
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <linearGradient id="arcG" gradientUnits="userSpaceOnUse" x1="5" y1="50" x2="95" y2="50">
+          <stop offset="0%"   stopColor={c0} />
+          <stop offset="50%"  stopColor={c1} />
+          <stop offset="100%" stopColor={c1} stopOpacity="0.9" />
         </linearGradient>
       </defs>
 
-      {/* Track */}
+      {/* Outer subtle ring */}
+      <circle cx={CX} cy={CY} r={R + 3} fill="none" stroke="rgba(255,255,255,0.02)" strokeWidth="0.5" />
+
+      {/* Track (background arc) */}
       <circle cx={CX} cy={CY} r={R} fill="none"
-        stroke="rgba(255,255,255,0.06)" strokeWidth="3.5"
+        stroke="rgba(255,255,255,0.05)" strokeWidth="4"
         strokeDasharray={`${arcLen} ${circumf}`}
         strokeDashoffset={circumf * (ARC_GAP / 360) / 2 * -1}
-        strokeLinecap="round"
-        transform={`rotate(${(360 - ARC_DEG) / 2 + 90} ${CX} ${CY})`}
+        strokeLinecap="round" transform={arcRotation}
       />
 
       {/* Filled arc */}
       <circle cx={CX} cy={CY} r={R} fill="none"
-        stroke="url(#arcGrad)" strokeWidth="3.5"
+        stroke="url(#arcG)" strokeWidth="4"
         strokeDasharray={`${filled} ${circumf}`}
         strokeDashoffset={circumf * (ARC_GAP / 360) / 2 * -1}
-        strokeLinecap="round"
-        transform={`rotate(${(360 - ARC_DEG) / 2 + 90} ${CX} ${CY})`}
-        filter="url(#glow)"
-        className="transition-all duration-150 ease-out"
+        strokeLinecap="round" transform={arcRotation}
+        filter="url(#glowF)"
+        style={{ transition: 'stroke-dasharray 120ms ease-out' }}
       />
 
-      {/* Tick marks */}
+      {/* Tick marks + labels */}
       {TICKS.map(t => {
-        const ang = tickAngle(t);
-        const rad = ang * Math.PI / 180;
-        const inner = R - 5; const outer = R - 2;
-        const x1 = CX + inner * Math.cos(rad - Math.PI/2);
-        const y1 = CY + inner * Math.sin(rad - Math.PI/2);
-        const x2 = CX + outer * Math.cos(rad - Math.PI/2);
-        const y2 = CY + outer * Math.sin(rad - Math.PI/2);
-        return <line key={t} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(255,255,255,0.2)" strokeWidth="0.8" strokeLinecap="round" />;
+        const ang    = tickAngle(t);
+        const rad    = ang * Math.PI / 180;
+        const isMaj  = t in TICK_LABELS;
+        const inner  = R - (isMaj ? 7 : 5);
+        const outer  = R - 2;
+        const x1 = CX + inner * Math.cos(rad - Math.PI / 2);
+        const y1 = CY + inner * Math.sin(rad - Math.PI / 2);
+        const x2 = CX + outer * Math.cos(rad - Math.PI / 2);
+        const y2 = CY + outer * Math.sin(rad - Math.PI / 2);
+        const lx = CX + (inner - 4) * Math.cos(rad - Math.PI / 2);
+        const ly = CY + (inner - 4) * Math.sin(rad - Math.PI / 2);
+        return (
+          <g key={t}>
+            <line x1={x1} y1={y1} x2={x2} y2={y2}
+              stroke={isMaj ? 'rgba(255,255,255,0.35)' : 'rgba(255,255,255,0.12)'}
+              strokeWidth={isMaj ? 1 : 0.6} strokeLinecap="round"
+            />
+            {isMaj && (
+              <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle"
+                fontSize="3.2" fill="rgba(255,255,255,0.3)" fontWeight="600"
+              >{TICK_LABELS[t]}</text>
+            )}
+          </g>
+        );
       })}
 
       {/* Needle */}
-      <g transform={`rotate(${needleAngle} ${CX} ${CY})`} className="transition-transform duration-150 ease-out">
-        <line x1={CX} y1={CY + 3} x2={CX} y2={CY - (R - 8)}
-          stroke={glow} strokeWidth="0.8" strokeLinecap="round"
-          filter="url(#glow)"
+      <g style={{ transform: `rotate(${needleAngle}deg)`, transformOrigin: `${CX}px ${CY}px`, transition: 'transform 120ms ease-out' }}>
+        {/* Needle tail (counterweight) */}
+        <line x1={CX} y1={CY + 8} x2={CX} y2={CY + 2}
+          stroke={glowColor} strokeWidth="1.2" strokeLinecap="round" opacity="0.4"
         />
-        <circle cx={CX} cy={CY} r="2.5" fill={color} filter="url(#glow)" />
-        <circle cx={CX} cy={CY} r="1.2" fill="white" />
+        {/* Main needle */}
+        <line x1={CX} y1={CY + 2} x2={CX} y2={CY - (R - 9)}
+          stroke={glowColor} strokeWidth="0.9" strokeLinecap="round"
+          filter="url(#glowF)"
+        />
+        {/* Pivot outer ring */}
+        <circle cx={CX} cy={CY} r="3.5" fill="rgba(0,0,0,0.6)" stroke={glowColor} strokeWidth="0.8" />
+        {/* Pivot inner dot */}
+        <circle cx={CX} cy={CY} r="1.5" fill={glowColor} filter="url(#glowF)" />
       </g>
+    </svg>
+  );
+}
     </svg>
   );
 }
@@ -145,6 +182,8 @@ export default function InternetSpeedTest() {
 
   const dlSmooth = useSmoothed(dlRaw, 0.08);
   const ulSmooth = useSmoothed(ulRaw, 0.08);
+  const finalDl  = useRef(0); // ref to avoid stale closure in history save
+  const finalPing = useRef(0);
 
   // Ping phase — oscillating gauge sweep so it doesn't look frozen
   useEffect(() => {
@@ -182,6 +221,7 @@ export default function InternetSpeedTest() {
 
       if (type === 'PING_RESULT') {
         setPing(+value); setJitter(j || 0);
+        finalPing.current = +value;
         setPhase('DOWNLOAD'); setProgress(10);
         w.postMessage({ type: 'DOWNLOAD' });
       }
@@ -189,7 +229,8 @@ export default function InternetSpeedTest() {
         setDlRaw(mbps); setProgress(10 + p * 0.5);
       }
       if (type === 'DOWNLOAD_RESULT') {
-        setDlRaw(value); setPhase('UPLOAD'); setProgress(60);
+        setDlRaw(value); finalDl.current = value; // save final DL to ref
+        setPhase('UPLOAD'); setProgress(60);
         w.postMessage({ type: 'UPLOAD' });
       }
       if (type === 'UPLOAD_UPDATE') {
@@ -198,8 +239,15 @@ export default function InternetSpeedTest() {
       if (type === 'UPLOAD_RESULT') {
         setUlRaw(value); setProgress(100); setStatus('done');
         w.terminate();
+        // Use refs for accurate final values (avoids stale closure)
+        const entry = {
+          dl:   +finalDl.current.toFixed(1),
+          ul:   +value.toFixed(1),
+          ping: finalPing.current,
+          date: new Date().toLocaleTimeString()
+        };
         setHistory(h => {
-          const next = [{ dl: value, ul: dlRaw, ping, date: new Date().toLocaleTimeString() }, ...h].slice(0, 5);
+          const next = [entry, ...h].slice(0, 5);
           localStorage.setItem('spt_hist_v11', JSON.stringify(next));
           return next;
         });
