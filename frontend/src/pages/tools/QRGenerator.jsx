@@ -111,8 +111,9 @@ const QRGenerator = () => {
           Ad Placement - Sharing Tools Hub
         </div>
 
+
         {/* Informational Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 py-16 border-t border-slate-200 dark:border-slate-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-16 py-16 border-t border-slate-200 dark:border-slate-800">
           <div className="space-y-12">
             <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">Digital <span className="text-indigo-600">Bridges</span></h2>
             <div className="space-y-10">
@@ -138,9 +139,14 @@ const QRGenerator = () => {
             <h2 className="text-2xl font-extrabold dark:text-white mb-8">QR Generator FAQ</h2>
             <div className="space-y-6">
               {[
-                { q: 'Will these codes expire?', a: 'No. These are static QR codes. They will work as long as the destination target remains active on the web.' },
-                { q: 'Can I change the link later?', a: 'Since these are static codes, the destination is hardcoded. You would need to generate a new code if the link changes.' },
-                { q: 'Are they free for commercial use?', a: 'Yes! StudentAI provides these tools with no licensing restrictions for academic or professional use.' }
+                { q: 'Will these codes expire?', a: 'No. These are static QR codes. They will work as long as the destination URL or text remains the same. Unlike dynamic QR codes from paid services, these never expire.' },
+                { q: 'Can I change the link later?', a: 'Since these are static codes, the destination is hardcoded into the QR pattern. You would need to generate a new code if the link changes. For URLs that change frequently, use a URL shortener like bit.ly as the QR destination.' },
+                { q: 'Are they free for commercial use?', a: 'Yes! StudentAI provides these tools with no licensing restrictions for academic or professional use. Download the PNG and use it anywhere.' },
+                { q: 'What is the maximum amount of data I can store in a QR code?', a: 'A standard QR code at Level H error correction can store approximately 1,273 characters of text or a URL up to about 2,953 characters. For practical use, shorter URLs scan faster and more reliably.' },
+                { q: 'What does "Level H error correction" mean?', a: 'QR codes have 4 error correction levels (L, M, Q, H). Level H means the code can be scanned even if up to 30% of it is obscured, damaged, or covered. This is why QR codes on printed posters still work even when slightly crumpled or marked.' },
+                { q: 'Can I use a QR code for my college project poster?', a: 'Absolutely. This is one of the most common student use cases. Generate a QR code pointing to your research paper, GitHub repo, or presentation, then paste the PNG onto your poster. Judges can scan it to see the full project.' },
+                { q: 'What resolution is the downloaded PNG?', a: 'The exported PNG is generated at 240×240 pixels with a white background and padding. For large print (e.g., A1 poster), scale it up in your design software while maintaining proportions — QR codes are vector-like and scale well.' },
+                { q: 'Can I encode plain text instead of a URL?', a: 'Yes! QR codes can store any text — a WiFi password, a contact card (vCard), an email address, a phone number, or even a short poem. Simply type your text into the input field instead of a URL.' },
               ].map((faq, i) => (
                 <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
                   <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2 text-sm uppercase tracking-wider">
@@ -153,9 +159,72 @@ const QRGenerator = () => {
           </div>
         </div>
 
+        {/* What is a QR Code */}
+        <div className="mb-16 py-12 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">What Exactly is a QR Code?</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-center max-w-3xl mx-auto mb-12 leading-relaxed">
+            QR stands for "Quick Response." A QR code is a two-dimensional barcode that stores information in a grid of black and white squares. Unlike traditional barcodes which can only store ~25 numbers, a QR code can store up to 3,000 characters of text — including URLs, WiFi credentials, contact information, and more.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-8">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">How QR Codes Work</h3>
+              <div className="space-y-4 text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
+                <p>QR codes encode data using a matrix of black squares arranged on a white background. When your camera app scans the code, it reads the pattern from left to right and top to bottom, decodes the binary data, and translates it into human-readable text or a URL.</p>
+                <p>The three square patterns in the corners (called "finder patterns") help your phone's camera orient itself — this is why QR codes can be scanned from any angle, even upside down.</p>
+                <p>The error correction capability (Level L, M, Q, or H) determines how much of the code can be obscured before it becomes unreadable. Our generator uses Level H — the highest setting — which allows up to 30% damage tolerance.</p>
+              </div>
+            </div>
+            <div className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-8">
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-4">Static vs. Dynamic QR Codes</h3>
+              <div className="space-y-4 text-sm leading-relaxed">
+                <div className="p-4 bg-indigo-50 dark:bg-indigo-900/20 rounded-2xl">
+                  <p className="font-bold text-indigo-700 dark:text-indigo-300 mb-1">✅ Static QR Codes (Free — What We Generate)</p>
+                  <p className="text-slate-600 dark:text-slate-400">The destination is permanently encoded into the QR pattern. Never expire. Work forever. Cannot be redirected after creation. Perfect for permanent links like your portfolio or a paper.</p>
+                </div>
+                <div className="p-4 bg-slate-100 dark:bg-slate-700/30 rounded-2xl">
+                  <p className="font-bold text-slate-700 dark:text-slate-300 mb-1">💳 Dynamic QR Codes (Paid Services)</p>
+                  <p className="text-slate-600 dark:text-slate-400">Redirect through a cloud server, so you can change the destination URL without reprinting. Provide scan analytics. Require a monthly subscription (e.g., Bitly QR, QR Tiger). Good for marketing campaigns.</p>
+                </div>
+                <p className="text-slate-500 dark:text-slate-400 text-xs mt-2">For 99% of student use cases, static QR codes are the right choice — they are free, private, and permanent.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* 10 Student Use Cases */}
+        <div className="mb-24 py-12 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">10 Ways Students Use QR Codes</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
+            QR codes are not just for restaurant menus. Here are the most creative and effective ways university students are using them in 2026:
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {[
+              { num: '01', title: 'Science Fair & Project Posters', desc: 'Link to your full research paper, GitHub repo, or a YouTube video demo. Judges can scan to see the complete project without you having to carry extra materials.' },
+              { num: '02', title: 'Digital Business Cards', desc: 'Print a QR code on the back of your visiting card that links to your LinkedIn profile or online portfolio. Far more impressive than writing a URL by hand.' },
+              { num: '03', title: 'Sharing Study Notes', desc: 'Upload your notes to Google Drive, generate a QR code for the link, and share it to your study group\'s WhatsApp. They scan it instantly — no typing required.' },
+              { num: '04', title: 'College Event Promotions', desc: 'Add a QR to your fest or club event poster, linking to the registration form or event details page. Passersby can register in seconds without typing a URL.' },
+              { num: '05', title: 'Resume / CV Enhancement', desc: 'Add a QR code in the corner of your resume linking to your portfolio website or LinkedIn. Recruiters can instantly access your work with one scan.' },
+              { num: '06', title: 'Library Resource Sharing', desc: 'Many physical textbooks are now paired with online resources. Generate QR codes linking to companion materials, YouTube explanations, or supplementary PDFs.' },
+              { num: '07', title: 'Classroom WiFi Sharing', desc: 'Encode your home WiFi credentials (format: WIFI:T:WPA;S:NetworkName;P:Password;;) and share the QR with visiting friends instead of reading out the password.' },
+              { num: '08', title: 'Attendance Tracking', desc: 'Teachers can display a QR code at the start of class that links to a Google Form attendance sheet. Students scan and submit their name — no paper, no fuss.' },
+              { num: '09', title: 'Augmented Reality Textbooks', desc: 'Add QR codes to your handwritten notes that link to relevant YouTube videos, simulations, or 3D models. Makes your notes exponentially more interactive.' },
+              { num: '10', title: 'Payment & Donation Links', desc: 'College clubs collecting donations for events can embed a UPI payment link or Razorpay donation URL in a QR code and display it at the entrance.' },
+            ].map((uc, i) => (
+              <div key={i} className="flex gap-4 bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-2xl p-5">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-black text-xs flex-shrink-0">{uc.num}</div>
+                <div>
+                  <h3 className="font-bold text-slate-900 dark:text-white text-sm mb-1">{uc.title}</h3>
+                  <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">{uc.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );
 };
 
 export default QRGenerator;
+

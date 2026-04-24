@@ -131,8 +131,9 @@ const GrammarChecker = () => {
           Ad Placement - Educational Tools Hub
         </div>
 
+
         {/* Informational Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 py-16 border-t border-slate-200 dark:border-slate-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-16 py-16 border-t border-slate-200 dark:border-slate-800">
           <div className="space-y-12">
             <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">Advanced <span className="text-teal-500" style={{ backgroundImage: 'linear-gradient(to right, #14b8a6, #0d9488)', WebkitBackgroundClip: 'text', color: 'transparent' }}>Proofreading</span></h2>
             <div className="space-y-10">
@@ -156,12 +157,17 @@ const GrammarChecker = () => {
 
           <div className="glass-card rounded-[3rem] p-10 md:p-14 relative overflow-hidden h-fit">
             <div className="absolute -top-24 -right-24 w-64 h-64 bg-teal-500/10 rounded-full blur-3xl point-events-none"></div>
-            <h2 className="text-2xl font-extrabold dark:text-white mb-8 relative z-10">Grammar FAQ</h2>
+            <h2 className="text-2xl font-extrabold dark:text-white mb-8 relative z-10">Grammar Checker FAQ</h2>
             <div className="space-y-6 relative z-10">
               {[
                 { q: 'Is it completely free?', a: 'Yes! Our AI-powered advanced proofreading module is 100% free with absolutely no hidden monthly limits or "premium-only" semantic features.' },
                 { q: 'Does it support alternative dialects?', a: 'Currently, the underlying model engine heavily excels at Standard US and UK English syntax, supporting rigorous academic and professional formalisms.' },
-                { q: 'Why is there a character limit?', a: 'To ensure processing speed and server stability, the model analyzes syntax chunks across strict blocks up to 5000 characters per individual ping.' }
+                { q: 'Why is there a character limit?', a: 'To ensure processing speed and server stability, the model analyzes syntax chunks across strict blocks up to 5000 characters per individual ping.' },
+                { q: 'Can it fix my entire essay at once?', a: 'For essays under 5,000 characters (roughly 700–800 words), yes — paste the full text. For longer essays, break them into sections of 2–3 paragraphs each for the most accurate corrections.' },
+                { q: 'Will it change my writing voice?', a: 'Our AI is instructed to fix errors while preserving your unique writing voice and tone. It corrects grammar, not style. Your phrasing and sentence structure choices are preserved unless they contain a grammatical error.' },
+                { q: 'What kind of errors does it catch?', a: 'Subject-verb disagreement, tense consistency errors, run-on sentences, comma splices, incorrect article usage (a/an/the), homophone confusion (there/their/they\'re), dangling modifiers, and passive voice overuse.' },
+                { q: 'Is this better than Grammarly?', a: 'For quick academic corrections without a subscription, yes. Our tool provides AI-level semantic understanding similar to Grammarly Premium — for free. For professional publishing work, Grammarly\'s tone detector and citation tools are more comprehensive.' },
+                { q: 'Does it check for plagiarism?', a: 'No, this tool focuses exclusively on grammar and writing quality. For plagiarism checking, use tools like Turnitin, PlagScan, or DupliChecker before submitting academic work.' },
               ].map((faq, i) => (
                 <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
                   <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2 text-sm uppercase tracking-wider">
@@ -174,9 +180,107 @@ const GrammarChecker = () => {
           </div>
         </div>
 
+        {/* Most Common Student Grammar Mistakes */}
+        <div className="mb-16 py-12 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">8 Grammar Mistakes Every Student Makes (And How to Fix Them)</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
+            These are the most common grammatical errors found in student essays and assignments. Understanding them will make you a significantly better writer — with or without AI help.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              {
+                mistake: '1. Subject-Verb Disagreement',
+                wrong: '"The team of researchers are working on the project."',
+                right: '"The team of researchers is working on the project."',
+                tip: 'The subject is "team" (singular), not "researchers." Always identify the true subject — ignoring the prepositional phrase — before choosing the verb form.'
+              },
+              {
+                mistake: '2. Comma Splices',
+                wrong: '"I finished the assignment, it was very difficult."',
+                right: '"I finished the assignment. It was very difficult." OR "I finished the assignment, and it was very difficult."',
+                tip: 'Two independent clauses cannot be joined by a comma alone. Use a period, a semicolon, or a coordinating conjunction (for, and, nor, but, or, yet, so).'
+              },
+              {
+                mistake: '3. Dangling Modifiers',
+                wrong: '"Having studied all night, the exam seemed easy."',
+                right: '"Having studied all night, I found the exam easy."',
+                tip: 'The introductory phrase "Having studied all night" must refer to the subject. The exam didn\'t study — you did. The subject of the main sentence must logically perform the action in the modifier.'
+              },
+              {
+                mistake: '4. There/Their/They\'re Confusion',
+                wrong: '"Their going to there house over they\'re."',
+                right: '"They\'re going to their house over there."',
+                tip: '"They\'re" = they are. "Their" = belonging to them. "There" = a place. This is a homophone trap that spellcheckers often miss because all three are legitimate words.'
+              },
+              {
+                mistake: '5. Incorrect Use of "Its" vs. "It\'s"',
+                wrong: '"The university improved it\'s campus facilities."',
+                right: '"The university improved its campus facilities."',
+                tip: '"It\'s" always means "it is" or "it has." "Its" is the possessive form. If you can replace it with "it is" and the sentence makes sense, use "it\'s." If not, use "its."'
+              },
+              {
+                mistake: '6. Tense Inconsistency',
+                wrong: '"The study found that participants report feeling anxious."',
+                right: '"The study found that participants reported feeling anxious."',
+                tip: 'When describing past research, maintain a consistent past tense throughout. Switching tenses mid-paragraph is one of the most common errors in academic writing.'
+              },
+              {
+                mistake: '7. Passive Voice Overuse',
+                wrong: '"The experiment was conducted by the scientists. The data was analyzed by the team."',
+                right: '"The scientists conducted the experiment. The team analyzed the data."',
+                tip: 'Active voice is clearer and 30% shorter than passive voice. While passive is acceptable in scientific writing (to focus on the process, not the person), overusing it makes academic writing weak and hard to read.'
+              },
+              {
+                mistake: '8. Apostrophe Misuse in Plurals',
+                wrong: '"The student\'s submitted their assignment\'s on time."',
+                right: '"The students submitted their assignments on time."',
+                tip: 'Apostrophes indicate possession or contraction — never a simple plural. "Students" (plural) never needs an apostrophe. "Student\'s" means "belonging to one student."'
+              },
+            ].map((err, i) => (
+              <div key={i} className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-2xl p-6">
+                <h3 className="font-bold text-slate-900 dark:text-white mb-3 text-sm">{err.mistake}</h3>
+                <div className="space-y-2 mb-3">
+                  <div className="flex items-start gap-2">
+                    <span className="text-red-500 font-bold text-xs mt-0.5 flex-shrink-0">✗</span>
+                    <p className="text-red-600 dark:text-red-400 text-xs italic leading-relaxed">{err.wrong}</p>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="text-emerald-500 font-bold text-xs mt-0.5 flex-shrink-0">✓</span>
+                    <p className="text-emerald-600 dark:text-emerald-400 text-xs italic leading-relaxed">{err.right}</p>
+                  </div>
+                </div>
+                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed border-t border-slate-100 dark:border-slate-700 pt-3">{err.tip}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Writing Like a Topper */}
+        <div className="mb-24 py-12 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">How to Write Like an Academic Topper</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
+            Grammar is just the foundation. Here are the writing habits that separate a 7/10 essay from a 10/10.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { step: '01', title: 'Write First, Edit Later', desc: 'Never try to write a "perfect first draft." Write freely without editing, then come back and use this grammar checker. Stopping to fix errors while writing kills your flow and slows you down 3x.', color: 'from-teal-500 to-emerald-600' },
+              { step: '02', title: 'Read It Aloud', desc: 'After running the grammar checker, read your essay out loud. Your ear catches run-on sentences, awkward phrasing, and rhythm problems that your eyes skip over. If you stumble reading it, your professor will stumble reading it.', color: 'from-emerald-500 to-cyan-600' },
+              { step: '03', title: 'Use Topic Sentences', desc: 'Every paragraph should begin with a topic sentence that makes one clear claim. The rest of the paragraph provides evidence for that claim. If a paragraph\'s first sentence doesn\'t tell the reader what the paragraph is about, rewrite it.', color: 'from-cyan-500 to-sky-600' },
+            ].map((s, i) => (
+              <div key={i} className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 relative overflow-hidden">
+                <div className={`text-7xl font-black bg-gradient-to-br ${s.color} bg-clip-text text-transparent opacity-10 absolute -top-2 -right-2`}>{s.step}</div>
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white font-black text-sm mb-4`}>{s.step}</div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{s.title}</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );
 };
 
 export default GrammarChecker;
+

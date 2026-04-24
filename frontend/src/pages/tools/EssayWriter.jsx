@@ -185,8 +185,9 @@ const EssayWriter = () => {
           </div>
         </div>
 
+
         {/* Informational Guidance (SEO Masterclass) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 py-16 border-t border-slate-200 dark:border-slate-800">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-16 py-16 border-t border-slate-200 dark:border-slate-800">
           <div className="space-y-12">
             <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">Mastering <span className="text-indigo-600">Academic Writing</span></h2>
             <div className="space-y-10">
@@ -201,7 +202,7 @@ const EssayWriter = () => {
                    </div>
                    <div>
                      <h3 className="text-xl font-bold dark:text-white mb-2">{item.title}</h3>
-                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
+                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">{item.desc}</p>
                    </div>
                 </div>
               ))}
@@ -212,12 +213,17 @@ const EssayWriter = () => {
             <h2 className="text-2xl font-extrabold dark:text-white mb-8">Essay Writing FAQ</h2>
             <div className="space-y-6">
               {[
-                { q: 'Is the essay plagiarism-free?', a: 'Yes! Our AI generates original content for every prompt. However, we always recommend verifying facts and adding your own voice.' },
-                { q: 'Can I choose the length?', a: 'Yes, from a 300-word summary to a comprehensive 1200-word academic piece.' },
-                { q: 'What essay types are supported?', a: 'Argumentative, descriptive, persuasive, expository, and narrative essays are all supported by our model.' }
+                { q: 'Is the essay plagiarism-free?', a: 'Yes! Our AI generates completely original content for every prompt. We do not pull pre-written essays from a database. However, you should still run it through your university\'s plagiarism checker just to be safe.' },
+                { q: 'Can I choose the length?', a: 'Yes, you can select from a 300-word short summary to a comprehensive 1200-word academic piece. The AI will optimally structure introduction and conclusion paragraphs to fit the length.' },
+                { q: 'What essay types are supported?', a: 'We support Argumentative (defending a claim), Descriptive (painting a picture with words), Persuasive (convincing the reader), Expository (explaining a concept), and Narrative (telling a story) essays.' },
+                { q: 'How do I use the generated essay?', a: 'We strongly recommend taking the AI output as a "First Draft" or an outline. Use the claims it generated, but rewrite paragraphs in your own voice and add specific citations from your course material.' },
+                { q: 'Does it write in different academic styles like APA or MLA?', a: 'The AI writes in a formal academic tone suitable for both. However, for specific in-text citations (like APA auth-date format) and bibliography generation, you will need to add those manually using our Citation Generator.' },
+                { q: 'What should I put in "Key Focus Points"?', a: 'This is where you guide the AI. If your professor asked you to focus specifically on "economic impacts" in an essay about climate change, type "economic impacts, job loss, renewable energy sector" here to force the AI to include them.' },
+                { q: 'Why is the output sometimes cut off?', a: 'If you select "Extensive" length for a very obscure topic, the AI might exhaust its knowledge base before hitting 1,200 words. Try providing more "Key Focus Points" to give it more material to write about.' },
+                { q: 'Is it cheating to use this tool?', a: 'Submitting an AI-generated essay directly as your own work is considered academic misconduct at almost all universities. Using this tool to brainstorm, structure an outline, or overcome writer\'s block is acceptable. Always check your syllabus.' }
               ].map((faq, i) => (
-                <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800">
-                  <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
+                  <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2 text-sm uppercase tracking-wider">
                     <HelpCircle className="w-4 h-4 text-indigo-500" /> {faq.q}
                   </h3>
                   <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
@@ -226,9 +232,65 @@ const EssayWriter = () => {
             </div>
           </div>
         </div>
+
+        {/* The 4 Pillars of a Perfect Academic Essay */}
+        <div className="mb-24 py-12 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">The 4 Pillars of a Perfect Academic Essay</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
+            Whether you use our AI to generate a draft or write from scratch, your final submission must contain these four structural pillars to get an A grade.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            <div className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 relative">
+              <div className="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/50 flex items-center justify-center text-indigo-600 dark:text-indigo-400 mb-6 font-black text-xl">1</div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">The Hook & Context</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">
+                The first 3 sentences of your introduction must grab attention and explain *why this topic matters now*. Do not start with "Since the beginning of time..."
+              </p>
+              <div className="text-xs bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-100 dark:border-slate-700 font-mono text-slate-600 dark:text-slate-400">
+                Example: "In 2023 alone, global e-waste reached..."
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 relative">
+              <div className="w-12 h-12 rounded-xl bg-sky-100 dark:bg-sky-900/50 flex items-center justify-center text-sky-600 dark:text-sky-400 mb-6 font-black text-xl">2</div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">The Thesis Statement</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">
+                The last sentence of your introduction. It must be a debatable claim, not a statement of fact. It tells the reader exactly what you intend to prove.
+              </p>
+              <div className="text-xs bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-100 dark:border-slate-700 font-mono text-slate-600 dark:text-slate-400">
+                Example: "Therefore, carbon taxes cannot succeed without simultaneous infrastructure subsidies."
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 relative">
+              <div className="w-12 h-12 rounded-xl bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400 mb-6 font-black text-xl">3</div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">TEEL Paragraphs</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">
+                Every body paragraph must follow TEEL: Topic sentence, Evidence (quote or data), Explanation (what the evidence means), and Link (connecting back to the thesis).
+              </p>
+              <div className="text-xs bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-100 dark:border-slate-700 font-mono text-slate-600 dark:text-slate-400">
+                Without the 'Explanation' step, quotes are just floating text.
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 relative">
+              <div className="w-12 h-12 rounded-xl bg-rose-100 dark:bg-rose-900/50 flex items-center justify-center text-rose-600 dark:text-rose-400 mb-6 font-black text-xl">4</div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">The Synthesis Conclusion</h3>
+              <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-4">
+                Never just copy-paste your introduction. Synthesize your arguments. Show how the points you made in the body paragraphs *prove* the thesis you stated at the start.
+              </p>
+              <div className="text-xs bg-slate-50 dark:bg-slate-900 p-3 rounded-lg border border-slate-100 dark:border-slate-700 font-mono text-slate-600 dark:text-slate-400">
+                Leave the reader with a final thought on future implications.
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );
 };
 
 export default EssayWriter;
+

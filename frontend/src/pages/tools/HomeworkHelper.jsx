@@ -160,8 +160,9 @@ const HomeworkHelper = () => {
           Ad Placement - Optimized for Student Traffic
         </div>
 
+
         {/* Informational Guidance (SEO Masterclass) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-16">
           <div className="space-y-12">
             <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">Beyond Simple <span className="text-amber-500">Answers</span></h2>
             <div className="space-y-10">
@@ -175,26 +176,30 @@ const HomeworkHelper = () => {
                     <item.icon className="w-7 h-7" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold dark:text-white mb-2">{item.title}</h3>
-                    <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
-                  </div>
+                     <h3 className="text-xl font-bold dark:text-white mb-2">{item.title}</h3>
+                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed text-sm">{item.desc}</p>
+                   </div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="glass-card rounded-[3rem] p-10 md:p-14 relative overflow-hidden">
+          <div className="glass-card rounded-[3rem] p-10 md:p-14 relative overflow-hidden h-fit">
             <div className="absolute top-0 right-0 w-40 h-40 bg-amber-500/5 blur-[60px] rounded-full translate-x-10 -translate-y-10" />
             <h2 className="text-2xl font-extrabold dark:text-white mb-8">Homework FAQ</h2>
-            <div className="space-y-6">
+            <div className="space-y-6 relative z-10">
               {[
                 { q: 'Is this AI Homework Helper free?', a: 'Yes! StudentAI is 100% free for all students. No registration or credit cards are required.' },
-                { q: 'How accurate are the math solutions?', a: 'Our AI utilizes advanced symbolic reasoning to handle math, science, and technical subjects with extremely high accuracy.' },
-                { q: 'Can I use it for research?', a: 'Definitely. It\'s a great way to verify your understanding of complex academic papers or textbook concepts.' },
-                { q: 'Is my data private?', a: 'We do not store your personal information or school details. Your sessions are anonymous and private.' }
+                { q: 'How accurate are the math solutions?', a: 'Our AI utilizes advanced symbolic reasoning to handle math, science, and technical subjects with extremely high accuracy. However, always double-check complex proofs.' },
+                { q: 'Can I use it for research papers?', a: 'Definitely. It\'s a great way to verify your understanding of complex academic papers or textbook concepts before citing them.' },
+                { q: 'Is my data private?', a: 'We do not store your personal information or school details. Your sessions are completely anonymous and locally processed.' },
+                { q: 'Will this do my homework for me?', a: 'The goal of this tool is to act as a tutor, not a cheat code. It provides step-by-step breakdowns so you understand the "why" and "how," preparing you for proctored exams where AI is not allowed.' },
+                { q: 'What subjects does it support?', a: 'It supports Physics, Chemistry, Biology, Mathematics (Algebra, Calculus, Statistics), Literature, History, Economics, and Computer Science algorithms.' },
+                { q: 'How do I ask a good question?', a: 'Provide context. Instead of "solve for x," write "solve for x in 2x + 4 = 10 using the substitution method." The more specific you are, the better the AI can tailor its explanation.' },
+                { q: 'Is it considered cheating to use this?', a: 'Using AI to understand a concept you are stuck on is tutoring. Submitting the AI\'s generated answer as your own work without understanding it is plagiarism. Use it to learn, not to copy.' }
               ].map((faq, i) => (
-                <div key={i} className="border-b border-slate-100 dark:border-slate-800 pb-5">
-                  <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+                <div key={i} className="border-b border-slate-100 dark:border-slate-800 pb-5 last:border-0">
+                  <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2 text-sm uppercase tracking-wider">
                     <CheckCircle className="w-4 h-4 text-emerald-500" /> {faq.q}
                   </h3>
                   <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
@@ -203,9 +208,69 @@ const HomeworkHelper = () => {
             </div>
           </div>
         </div>
+
+        {/* How to Use AI Without Cheating */}
+        <div className="mb-24 py-12 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">How to Use AI Tutors (Without Cheating)</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
+            The line between using a tool for learning and using it to bypass learning is thin. Here is how top students use AI ethically to actually boost their exam grades.
+          </p>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 rounded-3xl p-8">
+              <h3 className="flex items-center gap-2 text-xl font-bold text-red-700 dark:text-red-400 mb-6">
+                <span className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center text-red-600 dark:text-red-400">✗</span>
+                The Wrong Way (Cheating)
+              </h3>
+              <ul className="space-y-4 text-slate-700 dark:text-slate-300 text-sm">
+                <li className="flex items-start gap-3">
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
+                  <span>Copy-pasting the AI's exact final answer onto your homework sheet without reading the steps.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
+                  <span>Using the AI to generate an entire essay and submitting it as your own original thought.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-red-400 flex-shrink-0" />
+                  <span>Relying on the AI for take-home tests where outside help is explicitly forbidden by the professor.</span>
+                </li>
+              </ul>
+              <div className="mt-6 p-4 bg-white/50 dark:bg-slate-900/50 rounded-xl text-xs text-slate-500 dark:text-slate-400 italic">
+                Result: Short-term completion, but you will fail the in-person proctored exam because you didn't build the neural pathways required for problem-solving.
+              </div>
+            </div>
+
+            <div className="bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 rounded-3xl p-8">
+              <h3 className="flex items-center gap-2 text-xl font-bold text-emerald-700 dark:text-emerald-400 mb-6">
+                <span className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400">✓</span>
+                The Right Way (Learning)
+              </h3>
+              <ul className="space-y-4 text-slate-700 dark:text-slate-300 text-sm">
+                <li className="flex items-start gap-3">
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
+                  <span>Asking the AI to "explain the concept" behind a problem you are stuck on, rather than asking for the final answer.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
+                  <span>Typing your own attempt at a math problem and asking the AI: "Where did I make a mistake in my logic?"</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="mt-1 w-1.5 h-1.5 rounded-full bg-emerald-400 flex-shrink-0" />
+                  <span>Using the AI to generate 5 practice questions similar to the homework problem you just solved, to test your understanding.</span>
+                </li>
+              </ul>
+              <div className="mt-6 p-4 bg-white/50 dark:bg-slate-900/50 rounded-xl text-xs text-slate-500 dark:text-slate-400 italic">
+                Result: Deep conceptual mastery. You are using the AI exactly as you would use a human tutor sitting next to you.
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   );
 };
 
 export default HomeworkHelper;
+
