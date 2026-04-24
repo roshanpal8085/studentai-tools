@@ -10,6 +10,28 @@ const aiCache = new NodeCache({ stdTTL: 86400 }); // 24H Cache
 
 const providers = [];
 
+// ─── 1. LOCAL GEMMA (Ollama) — Primary, Unlimited, Free ──────────────────────
+// Install: https://ollama.com  →  then run: ollama pull gemma2:2b
+// Ollama runs at localhost:11434 by default
+const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
+const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma2:2b';
+
+// Check if Ollama is available (non-blocking)
+const checkOllama = async () => {
+  try {
+    await axios.get(`${OLLAMA_URL}/api/tags`, { timeout: 2000 });
+    return true;
+  } catch { return false; }
+};
+
+providers.push({ 
+  type: 'ollama', 
+  name: `Local Gemma2 (Ollama - ${OLLAMA_MODEL})`,
+  url: OLLAMA_URL,
+  model: OLLAMA_MODEL
+});
+
+// ─── 2. Google Gemini API — Secondary Fallback ────────────────────────────────
 const rawKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY || '';
 const API_KEYS = rawKeys.split(',').map(k => k.trim()).filter(k => k.length > 0);
 
@@ -21,6 +43,7 @@ API_KEYS.forEach((key, index) => {
     });
 });
 
+// ─── 3. OpenRouter / HuggingFace — Last Resort ───────────────────────────────
 if (process.env.OPENROUTER_API_KEY) {
     providers.push({ type: 'openrouter', name: 'OpenRouter Fallback', key: process.env.OPENROUTER_API_KEY });
 }
@@ -29,8 +52,11 @@ if (process.env.HUGGINGFACE_API_KEY) {
 }
 
 if (providers.length === 0) { 
-    console.error("CRITICAL ERROR: No API keys configured (Gemini, OpenRouter, or HuggingFace)."); 
+    console.error("CRITICAL ERROR: No AI providers configured."); 
 }
+
+console.log(`[AI Engine] Providers loaded: ${providers.map(p => p.name).join(' → ')}`);
+console.log(`[AI Engine] Priority: Local Gemma (Ollama) → Gemini API → OpenRouter`);
 
 let currentKeyIndex = 0;
 
@@ -46,18 +72,33 @@ const generateRaw = async (prompt, isJson = false) => {
             console.log(`[AI Engine] Attempting request using: ${provider.name}`);
             let outputText = "";
 
-            if (provider.type === 'gemini') {
+            // ── Ollama (Local Gemma) ──────────────────────────────────────────
+            if (provider.type === 'ollama') {
+                const res = await axios.post(`${provider.url}/api/generate`, {
+                    model: provider.model,
+                    prompt: prompt,
+                    stream: false,
+                    options: {
+                        temperature: 0.7,
+                        num_predict: 4096,
+                    }
+                }, { 
+                    timeout: 60000, // 60s timeout for local model
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                outputText = res.data.response || '';
+
+            // ── Google Gemini API ─────────────────────────────────────────────
+            } else if (provider.type === 'gemini') {
                 const config = isJson ? { responseMimeType: "application/json" } : {};
-                // Using gemini-1.5-flash for maximum reliability on free tier
                 const response = await provider.instance.models.generateContent({ 
                     model: 'gemini-1.5-flash', 
                     contents: [{ role: 'user', parts: [{ text: prompt }] }],
                     config 
                 });
-                
-                // New SDK response structure
                 outputText = response.candidates?.[0]?.content?.parts?.[0]?.text || response.text || "";
-                
+
+            // ── OpenRouter ────────────────────────────────────────────────────
             } else if (provider.type === 'openrouter') {
                 const res = await axios.post("https://openrouter.ai/api/v1/chat/completions", {
                     model: "google/gemini-flash-1.5", 
@@ -65,6 +106,7 @@ const generateRaw = async (prompt, isJson = false) => {
                 }, { headers: { "Authorization": `Bearer ${provider.key}` } });
                 outputText = res.data.choices[0].message.content;
 
+            // ── HuggingFace ───────────────────────────────────────────────────
             } else if (provider.type === 'huggingface') {
                 const res = await axios.post("https://api-inference.huggingface.co/models/mistralai/Mixtral-8x7B-Instruct-v0.1", {
                     inputs: `[INST] ${prompt} [/INST]`, parameters: { max_new_tokens: 4000, return_full_text: false }
@@ -77,15 +119,32 @@ const generateRaw = async (prompt, isJson = false) => {
             if (isJson) {
                 outputText = outputText.replace(/```json/gi, '').replace(/```/g, '').trim();
             }
-            return { text: outputText };
+
+            // Log which provider actually served the request
+            if (provider.type === 'ollama') {
+                console.log(`[AI Engine] ✅ Served by Local Gemma (${provider.model}) — FREE, no quota used`);
+            } else {
+                console.log(`[AI Engine] ✅ Served by ${provider.name}`);
+            }
+
+            return { text: outputText, provider: provider.name };
             
         } catch (error) {
-            console.error(`[API Rotator] Provider '${provider.name}' failed: ${error.message}`);
+            const isOllamaDown = provider.type === 'ollama' && 
+                (error.code === 'ECONNREFUSED' || error.code === 'ECONNRESET' || error.message.includes('timeout'));
+            
+            if (isOllamaDown) {
+                console.warn(`[AI Engine] ⚠️  Ollama not running — falling back to Gemini API automatically.`);
+            } else {
+                console.error(`[API Rotator] Provider '${provider.name}' failed: ${error.message}`);
+            }
+
             // Move to next provider
             currentKeyIndex = (currentKeyIndex + 1) % providers.length;
             attempts++;
-            // Small delay before next attempt
-            await new Promise(resolve => setTimeout(resolve, 500));
+            if (!isOllamaDown) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
         }
     }
     throw new Error('429_ALL_KEYS_EXHAUSTED_OR_FAILED');
