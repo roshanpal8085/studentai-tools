@@ -22,7 +22,7 @@ const providers = [];
 if (process.env.GROQ_API_KEY) {
     providers.push({ 
         type: 'groq', 
-        name: 'Groq (Gemma2-9b-it — Free)', 
+        name: 'Groq (Llama-3.1-8b — Free)', 
         key: process.env.GROQ_API_KEY,
         model: process.env.GROQ_MODEL || 'llama-3.1-8b-instant'
     });
