@@ -432,9 +432,97 @@ const PdfFooterEditor = () => {
                 <div className="w-full h-24 glass-card rounded-2xl flex items-center justify-center text-slate-400 text-sm mb-16 border border-dashed border-slate-300 dark:border-slate-700/50">
                     Ad Placement - PDF Tools Hub
                 </div>
+
+                {/* ── Rich Content: How to Use ── */}
+                <div className="mb-20 py-12 border-t border-slate-200 dark:border-slate-800">
+                    <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">How to Add a Footer to Your PDF</h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
+                        Adding a professional three-column footer to your assignment PDF takes less than 30 seconds. Here's exactly how to do it.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+                        {[
+                            { step: '1', title: 'Upload Your PDF', desc: 'Click the upload zone and select your assignment or document PDF. The file stays on your device — nothing is uploaded to any server.', color: 'from-indigo-500 to-purple-600' },
+                            { step: '2', title: 'Enter Your Details', desc: 'Type your Name (left), Enrollment Number (center), and Class/Subject (right). These will appear on every page of your PDF.', color: 'from-purple-500 to-pink-600' },
+                            { step: '3', title: 'Customize Style', desc: 'Adjust the font size, bottom margin, and text color. Use the live preview to see exactly how your footer will look before generating.', color: 'from-pink-500 to-rose-600' },
+                            { step: '4', title: 'Download Your PDF', desc: 'Click "Add Footer & Download PDF." Your stamped PDF downloads instantly — ready to print or submit digitally.', color: 'from-rose-500 to-orange-500' },
+                        ].map((s, i) => (
+                            <div key={i} className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-7 relative overflow-hidden">
+                                <div className={`text-7xl font-black bg-gradient-to-br ${s.color} bg-clip-text text-transparent opacity-10 absolute -top-2 -right-2`}>{s.step}</div>
+                                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white font-black text-sm mb-4`}>{s.step}</div>
+                                <h3 className="text-base font-bold text-slate-900 dark:text-white mb-2">{s.title}</h3>
+                                <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed">{s.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* ── Who Is This For ── */}
+                <div className="mb-20 py-12 border-t border-slate-200 dark:border-slate-800">
+                    <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">Who Uses the PDF Footer Editor?</h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
+                        This tool was designed for a specific academic need — but it's useful for anyone who needs to label PDF documents professionally.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {[
+                            {
+                                title: 'Engineering & BTech Students',
+                                desc: 'Universities require every assignment page to have your name, enrollment number, and branch/class in the footer. This tool automates that for all pages in one click.',
+                                tags: ['Assignments', 'Lab Reports', 'Projects']
+                            },
+                            {
+                                title: 'MBA & Management Students',
+                                desc: 'Case studies and reports submitted to professors need proper identification. Stamp your name and roll number across all pages without manually editing every slide.',
+                                tags: ['Case Studies', 'Reports', 'Presentations']
+                            },
+                            {
+                                title: 'Teachers & Educators',
+                                desc: 'Create labeled worksheets and handouts with student name fields in the footer. Or add your institution name and class code to every page of a course packet.',
+                                tags: ['Worksheets', 'Handouts', 'Course Packets']
+                            },
+                        ].map((u, i) => (
+                            <div key={i} className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-8">
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{u.title}</h3>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed mb-5">{u.desc}</p>
+                                <div className="flex flex-wrap gap-2">
+                                    {u.tags.map(t => (
+                                        <span key={t} className="text-xs font-bold px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">{t}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                {/* ── FAQ Section ── */}
+                <div className="mb-24 py-12 border-t border-slate-200 dark:border-slate-800">
+                    <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">Frequently Asked Questions</h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
+                        Everything you need to know about adding footers to your PDF assignments.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                        {[
+                            { q: 'Is my PDF uploaded to any server?', a: 'No. This tool uses the pdf-lib JavaScript library to process your PDF entirely inside your browser. Your document never leaves your device, ensuring complete privacy for sensitive academic work.' },
+                            { q: 'Will the footer appear on every page?', a: 'Yes. The tool automatically iterates through every page of your PDF and applies identical footer text at the same position and size. You do not need to do anything extra for multi-page documents.' },
+                            { q: 'Can I use this on an encrypted or password-protected PDF?', a: 'Unfortunately, password-protected PDFs cannot be modified without decryption. If you see an error message, try removing the PDF password first using an unlock tool, then run it through the footer editor.' },
+                            { q: 'What is the correct format for an Indian university footer?', a: 'Most Indian universities (including VTU, SPPU, GTU, Anna University) require: Name on the left, Enrollment/Registration Number in the center, and Branch/Class on the right — exactly the 3-column format this tool uses.' },
+                            { q: 'Can I change the text color to match my university theme?', a: 'Yes. Click the color picker next to "Text Color" to choose any color. The default is black, which is the standard professional choice for printed academic documents.' },
+                            { q: 'What PDF file size can I use?', a: 'The editor works purely in-browser memory, so very large files (100MB+) may be slow depending on your device. For typical assignment PDFs (under 50MB), it processes near-instantly.' },
+                            { q: 'Does the "Cover Existing Footer" option work well?', a: 'Yes. It paints a white rectangle over the bottom of each page before adding the new footer. Increase the "Cover Height" slider if the old footer was particularly tall.' },
+                            { q: 'Is this tool completely free?', a: 'Yes, 100% free. No account creation, no premium tier, and no watermarks on your output PDF. The platform is sustained by non-intrusive advertising.' },
+                        ].map((faq, i) => (
+                            <div key={i} className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-2xl p-6">
+                                <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-start gap-2 text-sm">
+                                    <HelpCircle className="w-4 h-4 text-indigo-500 flex-shrink-0 mt-0.5" /> {faq.q}
+                                </h3>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed pl-6">{faq.a}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </div>
         </div>
     );
 };
 
 export default PdfFooterEditor;
+

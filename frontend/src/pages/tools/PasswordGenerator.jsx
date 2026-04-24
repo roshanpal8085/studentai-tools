@@ -150,7 +150,7 @@ const PasswordGenerator = () => {
           Ad Placement - Security Tools Hub
         </div>
 
-        {/* Informational Sections */}
+        {/* Security Guide */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 py-16 border-t border-slate-200 dark:border-slate-800">
           <div className="space-y-12">
             <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">Elite <span className="text-indigo-600">Privacy</span></h2>
@@ -179,7 +179,11 @@ const PasswordGenerator = () => {
               {[
                 { q: 'Is a 12-character password enough?', a: 'Modern brute-force attacks are efficient. While 12 is good, we recommend 16+ characters for critical academic and financial portals.' },
                 { q: 'Why is local generation safer?', a: 'If a site generates it on their server, a breach could expose your password. Local generation ensures only you ever see the result.' },
-                { q: 'What are "symbols" in a password?', a: 'Symbols include characters like #, $, %, and ^. These significantly increase the complexity and time required for a hack to succeed.' }
+                { q: 'What are "symbols" in a password?', a: 'Symbols include characters like #, $, %, and ^. These significantly increase the complexity and time required for a hack to succeed.' },
+                { q: 'How often should I change my university portal password?', a: 'Security experts recommend changing passwords every 90 days for high-value accounts like student portals, email, and banking. Use our generator each time to create a fresh, unique password.' },
+                { q: 'Can I use the same generated password on multiple sites?', a: 'No. Password reuse is the #1 cause of account takeovers. If one site is breached, attackers will try your password on every major platform. Generate a unique password for every service.' },
+                { q: 'What is password entropy?', a: 'Entropy measures the unpredictability of your password. A 16-character password using uppercase, lowercase, numbers, and symbols has approximately 105 bits of entropy — considered virtually uncrackable with current technology.' },
+                { q: 'Is this tool really 100% free?', a: 'Yes, completely. StudentAI Tools is free for all students with no registration, no premium tier, and no usage limits. It is sustained by non-intrusive advertising.' }
               ].map((faq, i) => (
                 <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
                   <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2 text-sm uppercase tracking-wider">
@@ -192,9 +196,32 @@ const PasswordGenerator = () => {
           </div>
         </div>
 
+        {/* How to Use Guide */}
+        <div className="mb-24 py-12 border-t border-slate-200 dark:border-slate-800">
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-4 text-center">How to Create the Perfect Student Password</h2>
+          <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
+            As a student, you manage dozens of accounts — university portal, email, LMS, library, Wi-Fi, banking. Each one needs a unique, strong password. Here's how to use this tool effectively.
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              { step: '01', title: 'Set Your Length', desc: 'Drag the slider to 16 characters minimum. For your university and banking accounts, use 20+ characters. Longer passwords are exponentially harder to crack.', color: 'from-indigo-500 to-purple-600' },
+              { step: '02', title: 'Enable All Character Types', desc: 'Keep uppercase, lowercase, numbers, AND symbols all enabled. Each type adds a different dimension of complexity. A password with all four types is orders of magnitude stronger.', color: 'from-purple-500 to-pink-600' },
+              { step: '03', title: 'Copy & Store Safely', desc: 'Click "Copy to Clipboard" and immediately paste it into a trusted password manager like Bitwarden (free) or 1Password. Never save passwords in notes or browser autofill for critical accounts.', color: 'from-pink-500 to-rose-600' },
+            ].map((s, i) => (
+              <div key={i} className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 relative overflow-hidden">
+                <div className={`text-7xl font-black bg-gradient-to-br ${s.color} bg-clip-text text-transparent opacity-20 absolute -top-2 -right-2`}>{s.step}</div>
+                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white font-black text-sm mb-4`}>{s.step}</div>
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{s.title}</h3>
+                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">{s.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
       </div>
     </div>
   );
 };
 
 export default PasswordGenerator;
+

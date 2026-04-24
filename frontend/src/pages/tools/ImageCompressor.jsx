@@ -180,9 +180,12 @@ const ImageCompressor = () => {
                         <h2 className="text-2xl font-extrabold dark:text-white mb-8 relative z-10">Compressor FAQ</h2>
                         <div className="space-y-6 relative z-10">
                             {[
-                                { q: 'How much smaller will my image get?', a: 'Savings vary by image content and format, but typically you can expect an 80% to 90% reduction in file size (e.g. 10MB down to 1MB) without noticeable artifacting.' },
-                                { q: 'Do you keep a copy of my images?', a: 'Absolutely not. This entire platform is built with a privacy-first architecture. The compression library runs strictly on your device.' },
-                                { q: 'Can I compress WebP formats?', a: 'Yes! We support JPEG, PNG, and Modern WebP formats for both input and highly-optimized output.' }
+                                { q: 'How much smaller will my image get?', a: 'Savings vary by image content and format, but typically you can expect an 70% to 90% reduction in file size (e.g. 10MB down to 1MB) without noticeable visual quality loss.' },
+                                { q: 'Do you keep a copy of my images?', a: 'Absolutely not. This entire platform is built with a privacy-first architecture. The compression library (browser-image-compression) runs strictly on your device — no cloud, no uploads.' },
+                                { q: 'Can I compress WebP formats?', a: 'Yes! We support JPEG, PNG, and Modern WebP formats for both input and highly-optimized output.' },
+                                { q: 'Why do university portals reject my files?', a: 'Most university assignment portals enforce a strict 2MB or 5MB file size limit. Scanned documents and photos are frequently 8-20MB. Use this compressor to bring them within the allowed limit.' },
+                                { q: 'Will the image look the same after compression?', a: 'For most images, yes. Our algorithm uses "lossy" compression which removes imperceptible data. At 80-90% compression, the visual difference is essentially invisible to the human eye.' },
+                                { q: 'Does this work on iPhone and Android?', a: 'Yes. The tool works entirely in-browser, so it functions on any modern smartphone browser including Chrome, Safari, and Firefox on iOS and Android.' },
                             ].map((faq, i) => (
                                 <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
                                     <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2 text-sm uppercase tracking-wider">
@@ -195,9 +198,32 @@ const ImageCompressor = () => {
                     </div>
                 </div>
 
+                {/* How to Use */}
+                <div className="mb-24 py-12 border-t border-slate-200 dark:border-slate-800">
+                    <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">How to Compress an Image in 3 Steps</h2>
+                    <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
+                        No software installation, no registration, no watermarks. Reduce your image size directly in your browser in seconds.
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {[
+                            { step: '01', title: 'Select Your Image', desc: 'Click the upload area or drag and drop any JPG, PNG, or WebP image. Works from your phone camera roll, Downloads folder, or scanned documents.', color: 'from-sky-500 to-blue-600' },
+                            { step: '02', title: 'Click Compress', desc: 'Hit the "Compress Image Now" button. The tool instantly runs the smart compression algorithm in your browser. See the before/after file size comparison in real-time.', color: 'from-blue-500 to-indigo-600' },
+                            { step: '03', title: 'Download the Result', desc: 'Click "Download Compressed Image" to save the smaller file. Your compressed image is ready to upload to any university portal, email, or storage service.', color: 'from-indigo-500 to-violet-600' },
+                        ].map((s, i) => (
+                            <div key={i} className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-3xl p-8 relative overflow-hidden">
+                                <div className={`text-7xl font-black bg-gradient-to-br ${s.color} bg-clip-text text-transparent opacity-10 absolute -top-2 -right-2`}>{s.step}</div>
+                                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${s.color} flex items-center justify-center text-white font-black text-sm mb-4`}>{s.step}</div>
+                                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-3">{s.title}</h3>
+                                <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed">{s.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
             </div>
         </div>
     );
 };
 
 export default ImageCompressor;
+
