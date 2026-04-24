@@ -10,31 +10,38 @@ const aiCache = new NodeCache({ stdTTL: 86400 }); // 24H Cache
 
 const providers = [];
 
-// ─── 1. LOCAL GEMMA (Ollama) — Primary, Unlimited, Free ──────────────────────
-// Install: https://ollama.com  →  then run: ollama pull gemma2:2b
-// Ollama runs at localhost:11434 by default
+// ─────────────────────────────────────────────────────────────────────────────
+// PROVIDER PRIORITY:
+//  1. Ollama      — Local dev only (Gemma2, unlimited, offline)
+//  2. Groq        — Production PRIMARY (Gemma2-9b free, 14400 req/day, FAST)
+//  3. Gemini API  — Secondary fallback
+//  4. OpenRouter  — Tertiary fallback
+//  5. HuggingFace — Last resort
+// ─────────────────────────────────────────────────────────────────────────────
+
+// 1. LOCAL GEMMA (Ollama) — dev only
 const OLLAMA_URL = process.env.OLLAMA_URL || 'http://localhost:11434';
 const OLLAMA_MODEL = process.env.OLLAMA_MODEL || 'gemma2:2b';
-
-// Check if Ollama is available (non-blocking)
-const checkOllama = async () => {
-  try {
-    await axios.get(`${OLLAMA_URL}/api/tags`, { timeout: 2000 });
-    return true;
-  } catch { return false; }
-};
-
 providers.push({ 
   type: 'ollama', 
-  name: `Local Gemma2 (Ollama - ${OLLAMA_MODEL})`,
+  name: `Local Gemma2 (Ollama)`,
   url: OLLAMA_URL,
   model: OLLAMA_MODEL
 });
 
-// ─── 2. Google Gemini API — Secondary Fallback ────────────────────────────────
+// 2. GROQ — Production primary (free Gemma2-9b-it, fast)
+if (process.env.GROQ_API_KEY) {
+    providers.push({ 
+        type: 'groq', 
+        name: 'Groq (Gemma2-9b-it — Free)', 
+        key: process.env.GROQ_API_KEY,
+        model: process.env.GROQ_MODEL || 'gemma2-9b-it'
+    });
+}
+
+// 3. GOOGLE GEMINI API — Secondary fallback
 const rawKeys = process.env.GEMINI_API_KEYS || process.env.GEMINI_API_KEY || '';
 const API_KEYS = rawKeys.split(',').map(k => k.trim()).filter(k => k.length > 0);
-
 API_KEYS.forEach((key, index) => {
     providers.push({ 
         type: 'gemini', 
@@ -43,20 +50,20 @@ API_KEYS.forEach((key, index) => {
     });
 });
 
-// ─── 3. OpenRouter / HuggingFace — Last Resort ───────────────────────────────
+// 4. OpenRouter / HuggingFace — Last resort
 if (process.env.OPENROUTER_API_KEY) {
     providers.push({ type: 'openrouter', name: 'OpenRouter Fallback', key: process.env.OPENROUTER_API_KEY });
 }
-if (process.env.HUGGINGFACE_API_KEY) {
+if (process.env.HUGGINGFACE_API_KEY && process.env.HUGGINGFACE_API_KEY !== 'your_huggingface_key') {
     providers.push({ type: 'huggingface', name: 'HuggingFace Fallback', key: process.env.HUGGINGFACE_API_KEY });
 }
 
-if (providers.length === 0) { 
-    console.error("CRITICAL ERROR: No AI providers configured."); 
+if (providers.length <= 1) { 
+    console.warn("[AI Engine] WARNING: Only Ollama configured. Add GROQ_API_KEY for production."); 
 }
 
-console.log(`[AI Engine] Providers loaded: ${providers.map(p => p.name).join(' → ')}`);
-console.log(`[AI Engine] Priority: Local Gemma (Ollama) → Gemini API → OpenRouter`);
+console.log(`[AI Engine] Provider chain: ${providers.map(p => p.name).join(' → ')}`);
+
 
 let currentKeyIndex = 0;
 
@@ -72,21 +79,31 @@ const generateRaw = async (prompt, isJson = false) => {
             console.log(`[AI Engine] Attempting request using: ${provider.name}`);
             let outputText = "";
 
-            // ── Ollama (Local Gemma) ──────────────────────────────────────────
+            // ── Ollama (Local Gemma — dev only) ──────────────────────────────
             if (provider.type === 'ollama') {
                 const res = await axios.post(`${provider.url}/api/generate`, {
                     model: provider.model,
                     prompt: prompt,
                     stream: false,
-                    options: {
-                        temperature: 0.7,
-                        num_predict: 4096,
-                    }
-                }, { 
-                    timeout: 60000, // 60s timeout for local model
-                    headers: { 'Content-Type': 'application/json' }
-                });
+                    options: { temperature: 0.7, num_predict: 4096 }
+                }, { timeout: 60000, headers: { 'Content-Type': 'application/json' } });
                 outputText = res.data.response || '';
+
+            // ── Groq (Gemma2-9b-it — production FREE) ────────────────────────
+            } else if (provider.type === 'groq') {
+                const res = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
+                    model: provider.model,
+                    messages: [{ role: 'user', content: prompt }],
+                    temperature: 0.7,
+                    max_tokens: 4096,
+                }, { 
+                    headers: { 
+                        'Authorization': `Bearer ${provider.key}`,
+                        'Content-Type': 'application/json'
+                    },
+                    timeout: 30000
+                });
+                outputText = res.data.choices?.[0]?.message?.content || '';
 
             // ── Google Gemini API ─────────────────────────────────────────────
             } else if (provider.type === 'gemini') {
