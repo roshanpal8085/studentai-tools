@@ -7,7 +7,7 @@ import {
   User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator, FileEdit, Wifi, Gamepad2, LayoutGrid, FileMinus, FilePlus, Star, Sparkles, ArrowRight, Wand2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 const allTools = [
   // Core AI Tools
@@ -91,6 +91,16 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState('All');
 
+  // Scroll-reveal
+  useEffect(() => {
+    const els = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    els.forEach(el => io.observe(el));
+    return () => io.disconnect();
+  }, []);
+
   const filteredTools = useMemo(() => {
     return allTools.filter(tool => {
       const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -108,67 +118,70 @@ export default function Home() {
       />
 
       {/* ──────────── HERO ──────────── */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-10 mb-16 relative overflow-visible">
-        {/* Floating orbs */}
-        <div className="hero-orb w-[600px] h-[400px] bg-indigo-500/15 -left-40 -top-20 opacity-60" style={{ animationDelay: '0s' }} />
-        <div className="hero-orb w-[400px] h-[400px] bg-purple-500/15 right-0 top-10 opacity-50" style={{ animationDelay: '2s' }} />
-        <div className="hero-orb w-[300px] h-[300px] bg-pink-500/10 left-1/3 bottom-0 opacity-40" style={{ animationDelay: '4s' }} />
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-6 mb-16 relative overflow-hidden">
+        {/* Grid bg */}
+        <div className="hero-grid absolute inset-0 -z-10" />
+        {/* Orbs */}
+        <div className="hero-orb w-[500px] h-[350px] bg-indigo-500/20 -left-32 -top-16" style={{ animationDelay: '0s' }} />
+        <div className="hero-orb w-[380px] h-[380px] bg-purple-500/15 right-0 top-8" style={{ animationDelay: '2.5s' }} />
+        <div className="hero-orb w-[260px] h-[260px] bg-pink-500/10 left-1/3 bottom-0" style={{ animationDelay: '4.5s' }} />
+        {/* Floating particles */}
+        {[{s:8,l:'15%',t:'18%',c:'bg-indigo-400/40',dur:'6s',delay:'0s'},{s:5,l:'80%',t:'25%',c:'bg-purple-400/30',dur:'8s',delay:'1s'},{s:6,l:'55%',t:'70%',c:'bg-pink-400/30',dur:'7s',delay:'2s'},{s:4,l:'30%',t:'60%',c:'bg-indigo-300/40',dur:'9s',delay:'0.5s'},{s:7,l:'70%',t:'65%',c:'bg-violet-400/30',dur:'7.5s',delay:'1.5s'}].map((p,i) => (
+          <div key={i} className={`particle ${p.c}`} style={{ width:p.s, height:p.s, left:p.l, top:p.t, '--dur':p.dur, '--delay':p.delay }} />
+        ))}
 
-        {/* Pill badge */}
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700/50 text-indigo-600 dark:text-indigo-400 text-sm font-semibold mb-8 animate-fade-in-up">
-          <Sparkles className="w-4 h-4" />
-          50+ Free Tools for Students
-        </div>
+        <div className="relative z-10 py-8">
+          {/* Pill badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700/50 text-indigo-600 dark:text-indigo-400 text-sm font-semibold mb-8 animate-fade-in-up">
+            <Sparkles className="w-4 h-4 animate-spin-slow" />
+            50+ Free Tools for Students · No Login · Always Free
+          </div>
 
-        <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6 leading-tight animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          All-in-One Free<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600">
-            Student AI Tools
-          </span>
-        </h1>
+          <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6 leading-[1.1] animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
+            All-in-One Free<br />
+            <span className="text-shimmer">Student AI Tools</span>
+          </h1>
 
-        <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-slate-600 dark:text-slate-300 mb-10 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-          PDF tools, AI writing, study helpers and games — everything in one place. 100% free, no sign-up needed.
-        </p>
+          <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-slate-500 dark:text-slate-300 mb-10 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            PDF tools, AI writing, study helpers and games —{' '}
+            <span className="font-semibold text-slate-700 dark:text-slate-200">everything in one place.</span>{' '}
+            100% free, no sign-up needed.
+          </p>
 
-        {/* CTAs */}
-        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-          <Link to="/ai-resume-generator" className="btn-primary btn-glow px-8 py-4 text-lg flex items-center gap-2 w-full sm:w-auto justify-center">
-            <Zap className="w-5 h-5" />
-            Try AI Tools Free
-          </Link>
-          <Link to="/free-pdf-tools" className="flex items-center gap-2 w-full sm:w-auto justify-center px-8 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:-translate-y-0.5 transition-all shadow-sm">
-            Explore Tools <ArrowRight className="w-5 h-5" />
-          </Link>
-        </div>
+          {/* CTAs */}
+          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
+            <Link to="/ai-homework-helper" className="btn-primary btn-glow px-8 py-4 text-lg flex items-center gap-2 w-full sm:w-auto justify-center">
+              <Zap className="w-5 h-5" /> Try AI Tools Free
+            </Link>
+            <Link to="/free-pdf-tools" className="flex items-center gap-2 w-full sm:w-auto justify-center px-8 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:-translate-y-0.5 transition-all shadow-sm">
+              Explore Tools <ArrowRight className="w-5 h-5" />
+            </Link>
+          </div>
 
-        {/* Trust badges */}
-        <div className="flex flex-wrap justify-center gap-3 text-sm font-semibold text-slate-500 dark:text-slate-400 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-          {['100% Free', 'No Registration', 'Student Optimized', 'Works on Mobile'].map(b => (
-            <div key={b} className="flex items-center gap-1.5 bg-white dark:bg-slate-800/50 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700/50 shadow-sm">
-              <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-              {b}
-            </div>
-          ))}
+          {/* Trust badges */}
+          <div className="flex flex-wrap justify-center gap-3 text-sm font-semibold text-slate-500 dark:text-slate-400 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
+            {['100% Free','No Registration','Works on Mobile','Student Optimized','Used by 2M+ Students'].map(b => (
+              <div key={b} className="flex items-center gap-1.5 bg-white/80 dark:bg-slate-800/60 backdrop-blur px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700/50 shadow-sm hover:border-indigo-300 dark:hover:border-indigo-600 transition-colors">
+                <CheckCircle2 className="w-4 h-4 text-emerald-500" />{b}
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ──────────── TRENDING TOOLS SCROLL ──────────── */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div className="flex items-center gap-3 mb-5">
+      {/* ──────────── TRENDING MARQUEE ──────────── */}
+      <section className="w-full mb-16 reveal">
+        <div className="flex items-center gap-3 mb-5 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="p-2.5 bg-gradient-to-br from-rose-500 to-orange-400 rounded-xl text-white shadow-lg shadow-rose-500/30">
             <Flame className="w-5 h-5" />
           </div>
-          <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">🔥 Trending Tools</h2>
+          <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">🔥 Trending Right Now</h2>
         </div>
-
-        <div className="overflow-x-auto trending-scroll pb-3">
-          <div className="flex gap-3 w-max">
-            {TRENDING.map((tool) => (
-              <Link
-                key={tool.to}
-                to={tool.to}
-                className="flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all group whitespace-nowrap"
+        <div className="marquee-wrap">
+          <div className="marquee-track gap-3 px-2">
+            {[...TRENDING, ...TRENDING].map((tool, i) => (
+              <Link key={i} to={tool.to}
+                className="flex items-center gap-2.5 px-5 py-3 mx-1.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all group whitespace-nowrap"
               >
                 <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${tool.color} flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-110 transition-transform`}>
                   <tool.icon className="w-4 h-4 text-white" />
@@ -315,14 +328,14 @@ export default function Home() {
       </section>
 
       {/* ──────────── STATS ──────────── */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
           {stats.map((stat, idx) => (
-            <div key={idx} className="bg-white dark:bg-slate-800/60 p-8 rounded-3xl text-center border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all group">
-              <div className="mx-auto w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
-                <stat.icon className="h-6 w-6 text-white" />
+            <div key={idx} className="stat-card bg-white dark:bg-slate-800/60 p-8 rounded-3xl text-center border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-2 transition-all duration-300 group">
+              <div className="mx-auto w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-indigo-500/20 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                <stat.icon className="h-7 w-7 text-white" />
               </div>
-              <div className="text-4xl font-extrabold text-slate-900 dark:text-white mb-2">{stat.value}</div>
+              <div className="text-4xl font-extrabold text-slate-900 dark:text-white mb-2 tabular-nums">{stat.value}</div>
               <div className="text-slate-500 dark:text-slate-400 font-medium text-sm">{stat.name}</div>
             </div>
           ))}
@@ -330,25 +343,26 @@ export default function Home() {
       </section>
 
       {/* ──────────── TESTIMONIALS ──────────── */}
-      <section className="w-full bg-gradient-to-br from-slate-900 to-indigo-950 text-white py-24 my-10 relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/20 blur-[120px] rounded-full" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600/20 blur-[120px] rounded-full" />
-        
+      <section className="w-full bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white py-24 my-10 relative overflow-hidden reveal">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/20 blur-[120px] rounded-full animate-float" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600/20 blur-[120px] rounded-full animate-float" style={{ animationDelay: '3s' }} />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-indigo-300 text-sm font-semibold mb-6">
+              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> Trusted by students worldwide
+            </div>
             <h2 className="text-3xl md:text-5xl font-extrabold mb-4">Loved by Students Worldwide</h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">Don't just take our word for it.</p>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto">Real stories from real students.</p>
           </div>
-          
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {testimonials.map((testimonial, idx) => (
-              <div key={idx} className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:bg-white/10 hover:-translate-y-1 transition-all">
+              <div key={idx} className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:bg-white/10 hover:-translate-y-2 hover:border-indigo-500/30 transition-all duration-300 group">
                 <div className="flex items-center gap-1 mb-5">
                   {Array(5).fill(0).map((_, i) => <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />)}
                 </div>
-                <p className="text-lg leading-relaxed text-slate-300 mb-7 font-medium italic">"{testimonial.content}"</p>
+                <p className="text-base leading-relaxed text-slate-300 mb-7 italic">"{testimonial.content}"</p>
                 <div className="flex items-center gap-4">
-                  <img src={testimonial.image} alt={testimonial.author} className="w-12 h-12 rounded-full border-2 border-indigo-500/30" />
+                  <img src={testimonial.image} alt={testimonial.author} className="w-12 h-12 rounded-full border-2 border-indigo-500/40 group-hover:border-indigo-400 transition-colors" />
                   <div>
                     <h4 className="font-bold text-white">{testimonial.author}</h4>
                     <span className="text-slate-400 text-sm">{testimonial.role}</span>
