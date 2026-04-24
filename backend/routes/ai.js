@@ -126,6 +126,10 @@ const generateRaw = async (prompt, isJson = false) => {
             return { text: outputText, provider: provider.name };
             
         } catch (error) {
+            // Log exact error so Render logs show what's wrong
+            const errDetail = error.response?.data?.error?.message || error.response?.data?.message || error.message;
+            const errStatus = error.response?.status || 'N/A';
+            console.error(`[AI Engine] ❌ ${provider.name} FAILED | HTTP:${errStatus} | ${errDetail}`);
             // Move to next provider
             currentKeyIndex = (currentKeyIndex + 1) % providers.length;
             attempts++;
@@ -169,6 +173,33 @@ const aiLimiter = rateLimit({
   keyGenerator: (req) => {
     return req.headers['x-forwarded-for'] || req.socket.remoteAddress || 'guest';
   }
+});
+
+// ── Health Check — GET /api/ai/health ────────────────────────────────────────────
+router.get('/health', async (req, res) => {
+  const status = {
+    providers: providers.map(p => ({ name: p.name, type: p.type, hasKey: p.type === 'groq' ? !!p.key : p.type === 'gemini' ? !!p.instance : !!p.key })),
+    providerChain: providers.map(p => p.name).join(' → '),
+    cacheSize: aiCache.keys().length,
+    uptime: process.uptime().toFixed(0) + 's'
+  };
+
+  // Quick Groq test
+  const groqProvider = providers.find(p => p.type === 'groq');
+  if (groqProvider) {
+    try {
+      const r = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
+        model: groqProvider.model, messages: [{ role: 'user', content: 'Say OK' }], max_tokens: 5
+      }, { headers: { 'Authorization': `Bearer ${groqProvider.key}` }, timeout: 8000 });
+      status.groqTest = r.data.choices?.[0]?.message?.content ? '✅ Working' : '⚠️ Empty response';
+    } catch (e) {
+      status.groqTest = `❌ ${e.response?.status || ''} ${e.response?.data?.error?.message || e.message}`;
+    }
+  } else {
+    status.groqTest = '⚠️ GROQ_API_KEY not set in environment';
+  }
+
+  res.json(status);
 });
 
 router.post('/resume', aiLimiter, async (req, res) => {
