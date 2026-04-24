@@ -1,327 +1,382 @@
-import { useState, useEffect, useRef } from 'react';
-import { Zap, Activity, ArrowDown, ArrowUp, RefreshCw, Share2, Globe, Wifi, Gamepad2, MonitorPlay, Video, Cpu, History, Rocket, HeartPulse, ShieldCheck, CheckCircle2 } from 'lucide-react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { Globe, RefreshCw, ArrowDown, ArrowUp, Activity, Wifi, Zap } from 'lucide-react';
 import SEO from '../../components/SEO';
 
-const speedTestSchema = [
-    {
-        "@context": "https://schema.org",
-        "@type": "WebApplication",
-        "name": "Internet Speed Test - StudentAI SpeedPulse",
-        "url": "https://studentaitools.in/tools/internet-speed-test",
-        "operatingSystem": "Web Browser",
-        "applicationCategory": "UtilityApplication",
-        "description": "Free online internet speed test tool. Check your broadband download speed, upload speed, and ping/latency instantly. Accurate multi-threaded speed test for fiber, broadband, and mobile connections.",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" },
-        "aggregateRating": { "@type": "AggregateRating", "ratingValue": "4.8", "ratingCount": "3120" },
-        "featureList": [
-            "Download Speed Test",
-            "Upload Speed Test",
-            "Ping & Latency Test",
-            "Multi-threaded parallel streams",
-            "No app download required",
-            "Works on mobile and desktop"
-        ]
-    },
-    {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        "mainEntity": [
-            {
-                "@type": "Question",
-                "name": "How to check my internet speed?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Click the GO button on our speed test tool. It will automatically measure your download speed, upload speed, and ping in about 20 seconds. No app or plugin needed."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is a good internet speed for students?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "For students, a download speed of 25 Mbps or more is recommended for smooth video calls, streaming lectures, and online research. Upload speed of 5 Mbps+ is good for submitting assignments and video conferencing."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "What is ping in internet speed test?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Ping (latency) is the time it takes for data to travel from your device to a server and back, measured in milliseconds (ms). Lower ping means faster response — under 50ms is excellent, 50-100ms is good, above 150ms may cause lag in video calls and gaming."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Why is my upload speed slower than download speed?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Most broadband connections are designed to download faster than they upload — this is called asymmetric broadband. ISPs prioritize download speed because most users consume more content than they upload. If your upload is extremely low, contact your ISP."
-                }
-            },
-            {
-                "@type": "Question",
-                "name": "Is this internet speed test accurate?",
-                "acceptedAnswer": {
-                    "@type": "Answer",
-                    "text": "Yes. Our speed test uses multi-threaded parallel connections and 90th percentile peak sampling to deliver accurate results. It measures your real connection speed using Cloudflare's global CDN, similar to professional tools like Ookla Speedtest."
-                }
-            }
-        ]
-    }
-];
-
-const Gauge = ({ value, phase, isTesting }) => {
-    const getAngle = (v) => {
-        if (v <= 0) return -135;
-        if (v <= 10) return -135 + (v / 10) * 54;
-        if (v <= 100) return -81 + ((v - 10) / 90) * 81;
-        if (v <= 500) return 0 + ((v - 100) / 400) * 90;
-        return 90 + Math.min(((v - 500) / 500) * 45, 45);
-    };
-
-    return (
-        <div className="relative w-80 h-80 flex flex-col items-center justify-center">
-            <svg className="absolute inset-0 w-full h-full transform rotate-[-225deg]" viewBox="0 0 100 100">
-                <circle cx="50" cy="50" r="46" fill="none" stroke="rgba(255,255,255,0.03)" strokeWidth="3" strokeDasharray="216 289" strokeLinecap="round" />
-                <circle 
-                    cx="50" cy="50" r="46" 
-                    fill="none" 
-                    stroke={phase === 'UPLOAD' ? '#a78bfa' : '#3b82f6'} 
-                    strokeWidth="4" 
-                    strokeDasharray={`${(216 * (getAngle(value) + 135)) / 270} 289`} 
-                    strokeLinecap="round" 
-                    className="transition-all duration-500 ease-out" 
-                />
-            </svg>
-            <div className="absolute w-[2px] h-[145px] bg-blue-500 origin-bottom transition-transform duration-500 ease-out z-20 rounded-full shadow-[0_0_10px_#3b82f6]" style={{ transform: `rotate(${getAngle(value)}deg)`, bottom: '50%' }} />
-            <div className="text-center z-10 pt-10 select-none">
-                <div className="text-8xl font-black text-white italic tabular-nums tracking-tighter drop-shadow-[0_0_25px_rgba(59,130,246,0.6)]">
-                    {value > 100 ? Math.round(value) : value.toFixed(1)}
-                </div>
-                <div className="text-[10px] font-black text-slate-500 uppercase tracking-[0.4em] mt-3 italic flex items-center gap-2 justify-center">
-                   <Activity className="w-3 h-3 text-blue-500 animate-pulse" /> Mbps Verified
-                </div>
-            </div>
-        </div>
-    );
+/* ── SEO Schema ─────────────────────────────────────────────────────────── */
+const schema = {
+  "@context": "https://schema.org", "@type": "WebApplication",
+  "name": "Internet Speed Test", "url": "https://studentaitools.in/tools/internet-speed-test",
+  "applicationCategory": "UtilityApplication",
+  "description": "Free internet speed test — check download speed, upload speed, and ping instantly.",
+  "offers": { "@type": "Offer", "price": "0" }
 };
 
-const QualityIndicator = ({ icon: Icon, label, status, active }) => (
-    <div className={`flex flex-col items-center gap-3 p-5 rounded-[2.5rem] border transition-all duration-700 ${active ? 'bg-white/5 border-white/10 opacity-100 scale-100' : 'opacity-10 scale-90 grayscale'}`}>
-        <div className={`p-4 rounded-2xl ${status === 'good' ? 'bg-emerald-500/20 text-emerald-400' : status === 'avg' ? 'bg-yellow-500/20 text-yellow-400' : 'bg-red-500/20 text-red-400'}`}>
-            <Icon className="w-6 h-6" />
-        </div>
-        <div className="text-center">
-            <div className="text-[8px] font-black text-slate-500 uppercase tracking-widest mb-1">{label}</div>
-            <div className={`text-[10px] font-black uppercase italic ${status === 'good' ? 'text-emerald-500' : status === 'avg' ? 'text-yellow-500' : 'text-red-500'}`}>{status === 'good' ? 'Maximum' : status === 'avg' ? 'Supported' : 'Weak'}</div>
-        </div>
+/* ── Gauge SVG (speedtest.net style 240° arc) ────────────────────────────── */
+const ARC_DEG  = 240;
+const ARC_GAP  = 360 - ARC_DEG; // 120° gap at bottom
+const R        = 42;
+const CX       = 50; const CY = 54;
+const circumf  = 2 * Math.PI * R;
+const arcLen   = (ARC_DEG / 360) * circumf;
+
+function speedToPercent(v) {
+  if (v <= 0)   return 0;
+  if (v <= 10)  return (v / 10)  * 0.12;
+  if (v <= 100) return 0.12 + ((v - 10)  / 90)  * 0.45;
+  if (v <= 500) return 0.57 + ((v - 100) / 400) * 0.33;
+  return Math.min(1, 0.90 + ((v - 500) / 500) * 0.10);
+}
+
+const TICKS = [0, 1, 5, 10, 30, 50, 100, 300, 500, 1000];
+function tickAngle(v) { return -120 + speedToPercent(v) * 240; }
+
+function Gauge({ value, phase }) {
+  const pct    = speedToPercent(value);
+  const filled = arcLen * pct;
+  const color  = phase === 'UPLOAD' ? '#a855f7' : '#3b82f6';
+  const glow   = phase === 'UPLOAD' ? '#a855f7' : '#60a5fa';
+
+  // Needle angle: -120° (0) → +120° (1000)
+  const needleAngle = -120 + pct * 240;
+
+  return (
+    <svg viewBox="0 0 100 100" className="w-full h-full drop-shadow-2xl">
+      <defs>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="1.5" result="blur" />
+          <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%"   stopColor={color} stopOpacity="0.6" />
+          <stop offset="100%" stopColor={glow}  stopOpacity="1"   />
+        </linearGradient>
+      </defs>
+
+      {/* Track */}
+      <circle cx={CX} cy={CY} r={R} fill="none"
+        stroke="rgba(255,255,255,0.06)" strokeWidth="3.5"
+        strokeDasharray={`${arcLen} ${circumf}`}
+        strokeDashoffset={circumf * (ARC_GAP / 360) / 2 * -1}
+        strokeLinecap="round"
+        transform={`rotate(${(360 - ARC_DEG) / 2 + 90} ${CX} ${CY})`}
+      />
+
+      {/* Filled arc */}
+      <circle cx={CX} cy={CY} r={R} fill="none"
+        stroke="url(#arcGrad)" strokeWidth="3.5"
+        strokeDasharray={`${filled} ${circumf}`}
+        strokeDashoffset={circumf * (ARC_GAP / 360) / 2 * -1}
+        strokeLinecap="round"
+        transform={`rotate(${(360 - ARC_DEG) / 2 + 90} ${CX} ${CY})`}
+        filter="url(#glow)"
+        className="transition-all duration-150 ease-out"
+      />
+
+      {/* Tick marks */}
+      {TICKS.map(t => {
+        const ang = tickAngle(t);
+        const rad = ang * Math.PI / 180;
+        const inner = R - 5; const outer = R - 2;
+        const x1 = CX + inner * Math.cos(rad - Math.PI/2);
+        const y1 = CY + inner * Math.sin(rad - Math.PI/2);
+        const x2 = CX + outer * Math.cos(rad - Math.PI/2);
+        const y2 = CY + outer * Math.sin(rad - Math.PI/2);
+        return <line key={t} x1={x1} y1={y1} x2={x2} y2={y2} stroke="rgba(255,255,255,0.2)" strokeWidth="0.8" strokeLinecap="round" />;
+      })}
+
+      {/* Needle */}
+      <g transform={`rotate(${needleAngle} ${CX} ${CY})`} className="transition-transform duration-150 ease-out">
+        <line x1={CX} y1={CY + 3} x2={CX} y2={CY - (R - 8)}
+          stroke={glow} strokeWidth="0.8" strokeLinecap="round"
+          filter="url(#glow)"
+        />
+        <circle cx={CX} cy={CY} r="2.5" fill={color} filter="url(#glow)" />
+        <circle cx={CX} cy={CY} r="1.2" fill="white" />
+      </g>
+    </svg>
+  );
+}
+
+/* ── Animated number ─────────────────────────────────────────────────────── */
+function useSmoothed(target, speed = 0.12) {
+  const [display, setDisplay] = useState(0);
+  const ref = useRef(0);
+  const raf = useRef(null);
+
+  useEffect(() => {
+    const animate = () => {
+      const diff = target - ref.current;
+      if (Math.abs(diff) < 0.05) { ref.current = target; setDisplay(target); return; }
+      ref.current += diff * speed;
+      setDisplay(ref.current);
+      raf.current = requestAnimationFrame(animate);
+    };
+    cancelAnimationFrame(raf.current);
+    raf.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(raf.current);
+  }, [target, speed]);
+
+  return display;
+}
+
+/* ── Pulse ring during test ─────────────────────────────────────────────── */
+function PulseRing({ active, color }) {
+  return active ? (
+    <div className="absolute inset-0 pointer-events-none">
+      <div className={`absolute inset-0 rounded-full border-2 ${color} animate-ping opacity-20`} style={{ animationDuration: '1.5s' }} />
     </div>
-);
+  ) : null;
+}
 
+/* ── Main Component ──────────────────────────────────────────────────────── */
 export default function InternetSpeedTest() {
-    const [status, setStatus] = useState('idle'); 
-    const [phase, setPhase] = useState(''); 
-    const [download, setDownload] = useState(0);
-    const [upload, setUpload] = useState(0);
-    const [ping, setPing] = useState(0);
-    const [progress, setProgress] = useState(0);
-    const [ispInfo, setIspInfo] = useState({ ip: '...', org: 'Analytic Node' });
-    const [history, setHistory] = useState(() => JSON.parse(localStorage.getItem('sp_history_v27_refined') || '[]'));
-    const workerRef = useRef(null);
-    const lastUpdate = useRef(0);
+  const [status,   setStatus]   = useState('idle');   // idle | testing | done
+  const [phase,    setPhase]    = useState('');        // PING | DOWNLOAD | UPLOAD
+  const [ping,     setPing]     = useState(0);
+  const [jitter,   setJitter]   = useState(0);
+  const [dlRaw,    setDlRaw]    = useState(0);
+  const [ulRaw,    setUlRaw]    = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [isp,      setIsp]      = useState({ ip: '—', org: 'Detecting…', city: '', country: '' });
+  const [history,  setHistory]  = useState(() => JSON.parse(localStorage.getItem('spt_hist_v11') || '[]'));
+  const workerRef  = useRef(null);
 
-    useEffect(() => {
-        fetch('https://ipapi.co/json/').then(r => r.json()).then(d => setIspInfo(d)).catch(() => {});
-        return () => workerRef.current?.terminate();
-    }, []);
+  const dlSmooth = useSmoothed(dlRaw, 0.1);
+  const ulSmooth = useSmoothed(ulRaw, 0.1);
 
-    const startTest = () => {
-        setStatus('testing'); setDownload(0); setUpload(0); setProgress(0); setPing(0);
-        setPhase('INITIALIZING');
+  useEffect(() => {
+    fetch('https://ipapi.co/json/').then(r => r.json())
+      .then(d => setIsp({ ip: d.ip, org: d.org || d.asn, city: d.city, country: d.country_name }))
+      .catch(() => {});
+    return () => workerRef.current?.terminate();
+  }, []);
 
-        workerRef.current = new Worker(new URL('../../workers/speedtest.worker.js', import.meta.url), { type: 'module' });
-        
-        workerRef.current.onmessage = (e) => {
-            const { type, value, mbps, progress: p } = e.data;
-            const now = Date.now();
+  const startTest = useCallback(() => {
+    workerRef.current?.terminate();
+    setStatus('testing'); setPhase('PING');
+    setDlRaw(0); setUlRaw(0); setPing(0); setJitter(0); setProgress(0);
 
-            if (type === 'PING_RESULT') { 
-                setPing(value); setPhase('DOWNLOAD'); 
-                workerRef.current.postMessage({ type: 'DOWNLOAD' }); 
-            }
-            if (type === 'DOWNLOAD_UPDATE' && now - lastUpdate.current > 100) { 
-                setDownload(mbps); setProgress(10 + p * 0.45); 
-                lastUpdate.current = now;
-            }
-            if (type === 'DOWNLOAD_RESULT') { 
-                setDownload(value); setPhase('UPLOAD'); 
-                workerRef.current.postMessage({ type: 'UPLOAD' }); 
-            }
-            if (type === 'UPLOAD_UPDATE' && now - lastUpdate.current > 100) { 
-                setUpload(mbps); setProgress(55 + (mbps/100) * 45); 
-                lastUpdate.current = now;
-            }
-            if (type === 'UPLOAD_RESULT') { 
-                setUpload(prev => {
-                    setProgress(100); setStatus('finished');
-                    setHistory(h => [{ down: (download || 0).toFixed(1), up: value.toFixed(1), date: new Date().toLocaleTimeString() }, ...h].slice(0, 3));
-                    return value;
-                });
-                workerRef.current.terminate();
-            }
-        };
+    const w = new Worker(new URL('../../workers/speedtest.worker.js', import.meta.url), { type: 'module' });
+    workerRef.current = w;
 
-        workerRef.current.postMessage({ type: 'PING' });
+    w.onmessage = ({ data }) => {
+      const { type, value, mbps, progress: p, jitter: j } = data;
+
+      if (type === 'PING_RESULT') {
+        setPing(+value); setJitter(j || 0);
+        setPhase('DOWNLOAD'); setProgress(10);
+        w.postMessage({ type: 'DOWNLOAD' });
+      }
+      if (type === 'DOWNLOAD_UPDATE') {
+        setDlRaw(mbps); setProgress(10 + p * 0.5);
+      }
+      if (type === 'DOWNLOAD_RESULT') {
+        setDlRaw(value); setPhase('UPLOAD'); setProgress(60);
+        w.postMessage({ type: 'UPLOAD' });
+      }
+      if (type === 'UPLOAD_UPDATE') {
+        setUlRaw(mbps); setProgress(60 + p * 0.4);
+      }
+      if (type === 'UPLOAD_RESULT') {
+        setUlRaw(value); setProgress(100); setStatus('done');
+        w.terminate();
+        setHistory(h => {
+          const next = [{ dl: value, ul: dlRaw, ping, date: new Date().toLocaleTimeString() }, ...h].slice(0, 5);
+          localStorage.setItem('spt_hist_v11', JSON.stringify(next));
+          return next;
+        });
+      }
     };
 
-    const getQuality = (type, val) => {
-        if (type === 'gaming') return val < 35 ? 'good' : val < 80 ? 'avg' : 'poor';
-        if (type === 'streaming') return val > 40 ? 'good' : val > 15 ? 'avg' : 'poor';
-        if (type === 'video') return val > 12 ? 'good' : val > 3 ? 'avg' : 'poor';
-    };
+    w.postMessage({ type: 'PING' });
+  }, [dlRaw, ping]);
 
-    return (
-        <div className="min-h-screen bg-[#05070a] text-[#f8fafc] flex flex-col items-center justify-center p-4 selection:bg-blue-500/20 pt-20 overflow-hidden relative">
-            <div className="absolute top-[-15%] right-[-10%] w-[60%] h-[60%] bg-blue-600/5 rounded-full blur-[180px]" />
-            <div className="absolute bottom-[-15%] left-[-10%] w-[60%] h-[60%] bg-purple-600/5 rounded-full blur-[180px]" />
+  const currentValue = phase === 'UPLOAD' ? ulSmooth : dlSmooth;
+  const isDownload   = phase === 'DOWNLOAD';
+  const isUpload     = phase === 'UPLOAD';
+  const isTesting    = status === 'testing';
 
-            <SEO 
-                title="Internet Speed Test - Free Online Broadband Speed Checker"
-                description="Free internet speed test tool. Check download speed, upload speed, and ping instantly. Accurate multi-threaded speed test for fiber, broadband & mobile connections in India. No app needed."
-                keywords="internet speed test, broadband speed test, check internet speed, download speed test, upload speed test, ping test, wifi speed test, speed test online free, internet speed check india, mbps test, jio speed test, airtel speed test, bsnl speed test"
-                canonical="/tools/internet-speed-test"
-                schema={speedTestSchema}
-            />
+  const fmtSpeed = (v) => v >= 100 ? Math.round(v) : v.toFixed(v < 10 ? 2 : 1);
 
-            <div className="w-full max-w-[500px] backdrop-blur-[60px] bg-white/[0.02] border border-white/5 shadow-[0_40px_120px_rgba(0,0,0,0.6)] rounded-[5rem] p-2 flex flex-col transition-all duration-1000 overflow-hidden relative">
-                
-                {status === 'idle' && (
-                    <div className="flex flex-col items-center justify-center min-h-[550px] gap-16 py-16 animate-in fade-in zoom-in-95 duration-1000 lg:p-12 p-8">
-                        <div className="text-center space-y-4">
-                            <h1 className="text-5xl font-black text-white italic tracking-tigh">SPEEDPULSE <span className="text-blue-500">PRO</span></h1>
-                            <div className="flex items-center gap-3 justify-center">
-                                <span className="h-[1px] w-8 bg-white/10" />
-                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-[0.6em] italic">Precision Analytics v7</p>
-                                <span className="h-[1px] w-8 bg-white/10" />
-                            </div>
-                        </div>
+  return (
+    <div className="min-h-screen bg-[#0a0e1a] text-white flex flex-col items-center justify-start pt-20 pb-16 px-4 relative overflow-hidden">
+      <SEO
+        title="Internet Speed Test — Free Online Broadband Speed Checker"
+        description="Free internet speed test. Check your download speed, upload speed, and ping in seconds. Accurate, no install needed."
+        keywords="internet speed test, broadband speed test, download speed, upload speed, ping test, wifi speed"
+        canonical="/tools/internet-speed-test"
+        schema={schema}
+      />
 
-                        <div className="relative isolate">
-                            <div className="absolute inset-[-40px] bg-blue-500/10 rounded-full blur-3xl animate-pulse" />
-                            <button onClick={startTest} className="relative w-44 h-44 bg-white/5 border border-white/10 rounded-full flex items-center justify-center hover:scale-105 transition-all duration-500 active:scale-95 shadow-[0_20px_50px_rgba(0,0,0,0.5)] group">
-                                <div className="absolute inset-2 bg-gradient-to-br from-blue-600 to-blue-900 rounded-full flex flex-col items-center justify-center shadow-[inset_0_2px_10px_rgba(255,255,255,0.2)]">
-                                    <span className="text-4xl font-black text-white italic tracking-tighter group-hover:tracking-widest transition-all duration-500">GO</span>
-                                </div>
-                            </button>
-                        </div>
+      {/* Background glows */}
+      <div className="absolute top-[-20%] left-[10%]  w-[500px] h-[500px] bg-blue-600/8   rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-[-10%] right-[5%] w-[400px] h-[400px] bg-purple-600/8 rounded-full blur-[140px] pointer-events-none" />
 
-                        <div className="space-y-3 opacity-30 group-hover:opacity-100 transition-opacity">
-                            <div className="flex items-center gap-3 text-[10px] font-black uppercase tracking-widest italic justify-center text-white">
-                                <Globe className="w-4 h-4 text-blue-500" /> {ispInfo.org}
-                            </div>
-                            <div className="text-[9px] font-black text-slate-600 text-center tracking-widest">{ispInfo.ip}</div>
-                        </div>
-                    </div>
-                )}
-
-                {status === 'testing' && (
-                    <div className="p-10 flex flex-col items-center gap-12 animate-in fade-in slide-in-from-bottom-6 duration-700 min-h-[550px]">
-                        <div className="w-full flex justify-between items-end">
-                            <div className="space-y-1">
-                                <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest block italic">Real-Time Latency</span>
-                                <span className="text-3xl font-black text-white tabular-nums">{ping || '--'}<span className="text-xs opacity-20 ml-1 italic font-bold">ms</span></span>
-                            </div>
-                            <div className="px-5 py-2.5 rounded-2xl bg-white/5 border border-white/5 text-[10px] font-black text-blue-500 uppercase italic flex items-center gap-3 tracking-[0.2em] shadow-xl">
-                                <Rocket className="w-3 h-3 animate-bounce" /> {phase} STAGE
-                            </div>
-                        </div>
-
-                        <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden shadow-inner p-[1px]">
-                            <div className="h-full bg-gradient-to-r from-blue-600 to-blue-400 shadow-[0_0_15px_rgba(37,99,235,0.6)] transition-all duration-300 rounded-full" style={{ width: `${progress}%` }} />
-                        </div>
-
-                        <div className="bg-black/20 rounded-[4.5rem] border border-white/5 p-4 shadow-inner relative overflow-hidden backdrop-blur-md hover:scale-105 transition-transform duration-700 group/gauge">
-                            <Gauge value={phase === 'UPLOAD' ? upload : download} phase={phase} isTesting={true} />
-                            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/gauge:opacity-10 transition-opacity pointer-events-none">
-                                <Cpu className="w-48 h-48 text-blue-500 animate-spin-slow" />
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-2 gap-4 w-full">
-                            <div className="bg-white/5 p-6 rounded-[3rem] border border-white/5 flex flex-col items-center justify-center space-y-2 group/card">
-                                <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest italic group-hover:text-blue-500 transition-colors">Sampling</span>
-                                <span className="text-[11px] font-black text-white italic truncate tracking-widest uppercase">95th Percentile</span>
-                            </div>
-                            <div className="bg-white/5 p-6 rounded-[3rem] border border-white/5 flex flex-col items-center justify-center space-y-2 group/card">
-                                <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest italic group-hover:text-purple-500 transition-colors">Stability</span>
-                                <span className="text-[11px] font-black text-white italic truncate tracking-widest uppercase flex items-center gap-2"><CheckCircle2 className="w-3 h-3 text-emerald-500" /> Verified</span>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {status === 'finished' && (
-                    <div className="p-10 flex flex-col gap-10 animate-in slide-in-from-bottom-12 duration-1000 min-h-[550px]">
-                        
-                        <div className="grid grid-cols-2 gap-6">
-                            <div className="bg-gradient-to-br from-blue-900/40 to-black/40 p-8 rounded-[4rem] border border-blue-500/20 text-center relative overflow-hidden group/down transition-all duration-500 hover:-translate-y-2">
-                                <div className="absolute top-[-20%] right-[-10%] opacity-[0.03] group-hover/down:opacity-10 transition-opacity"><ArrowDown className="w-32 h-32 text-blue-500" /></div>
-                                <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4 block italic">Download</span>
-                                <div className="text-7xl font-black text-white italic tabular-nums tracking-tighter drop-shadow-2xl">{Math.round(download)}</div>
-                                <span className="text-[10px] font-black text-blue-500 uppercase italic tracking-widest mt-2 block">Mbps Peak</span>
-                            </div>
-                            <div className="bg-gradient-to-br from-purple-900/40 to-black/40 p-8 rounded-[4rem] border border-purple-500/20 text-center relative overflow-hidden group/up transition-all duration-500 hover:-translate-y-2">
-                                <div className="absolute top-[-20%] right-[-10%] opacity-[0.03] group-hover/up:opacity-10 transition-opacity"><ArrowUp className="w-32 h-32 text-purple-400" /></div>
-                                <span className="text-[9px] font-black text-slate-500 uppercase tracking-[0.4em] mb-4 block italic">Upload</span>
-                                <div className="text-7xl font-black text-white italic tabular-nums tracking-tighter drop-shadow-2xl">{Math.round(upload)}</div>
-                                <span className="text-[10px] font-black text-purple-400 uppercase italic tracking-widest mt-2 block">Mbps Peak</span>
-                            </div>
-                        </div>
-
-                        <div className="grid grid-cols-3 gap-3">
-                            <QualityIndicator icon={Gamepad2} label="Gaming" status={getQuality('gaming', ping)} active={true} />
-                            <QualityIndicator icon={MonitorPlay} label="Streaming" status={getQuality('streaming', download)} active={true} />
-                            <QualityIndicator icon={Video} label="Video Call" status={getQuality('video', upload)} active={true} />
-                        </div>
-
-                        <div className="flex justify-between items-center bg-white/5 px-10 py-7 rounded-[3.5rem] border border-white/5 backdrop-blur-2xl">
-                            <div className="flex flex-col items-center"><span className="text-[9px] font-black text-slate-600 uppercase mb-2 tracking-widest">Latency</span><span className="text-xl font-black text-blue-500 tabular-nums">{ping}<span className="text-[9px] ml-1 opacity-40 italic">ms</span></span></div>
-                            <div className="flex flex-col items-center"><span className="text-[9px] font-black text-slate-600 uppercase mb-2 tracking-widest">Jitter</span><span className="text-xl font-black text-emerald-500 tabular-nums">2<span className="text-[9px] ml-1 opacity-40 italic">ms</span></span></div>
-                            <div className="flex flex-col items-center"><span className="text-[9px] font-black text-slate-600 uppercase mb-2 tracking-widest">Engine</span><span className="text-xl font-black text-white italic uppercase">v8.ULTRA</span></div>
-                        </div>
-
-                        <div className="flex gap-4">
-                            <button onClick={startTest} className="flex-1 py-7 bg-white/5 hover:bg-white/10 text-white font-black rounded-[3rem] text-[10px] tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-4 border border-white/10 active:scale-95 shadow-lg group">
-                                <RefreshCw className="w-4 h-4 text-blue-500 group-hover:rotate-180 transition-transform duration-700" /> Re-Scan
-                            </button>
-                            <button className="flex-1 py-7 bg-blue-600 hover:bg-blue-700 text-white font-black rounded-[3rem] text-[10px] tracking-[0.3em] uppercase transition-all flex items-center justify-center gap-4 shadow-2xl active:scale-95 group">
-                                <Share2 className="w-4 h-4 group-hover:scale-125 transition-transform" /> Share Peak
-                            </button>
-                        </div>
-                    </div>
-                )}
-            </div>
-
-            <div className="w-full max-w-2xl px-4 mt-20 pb-20 relative z-10 grid grid-cols-1 md:grid-cols-2 gap-10">
-                <div className="backdrop-blur-3xl bg-white/[0.01] p-10 rounded-[4rem] border border-white/5 hover:border-blue-500/10 transition-all duration-700">
-                    <div className="flex items-center gap-5 mb-6">
-                        <div className="p-4 bg-blue-500/10 rounded-3xl text-blue-400 group-hover:scale-110 transition-transform"><Cpu className="w-7 h-7" /></div>
-                        <h3 className="text-2xl font-black tracking-tight text-white italic">Peak-Saturated Engine</h3>
-                    </div>
-                    <p className="text-slate-400 leading-relaxed text-sm italic font-medium">
-                        Standard speed tests use simple averages, which often under-report true capacity on busy networks. Our v7 engine utilizes a **95th-percentile sampling filter** across 8 parallel streams, capturing your connection's absolute peak capability while ignoring transient network noise.
-                    </p>
-                </div>
-                <div className="backdrop-blur-3xl bg-white/[0.01] p-10 rounded-[4rem] border border-white/5 hover:border-emerald-500/10 transition-all duration-700">
-                    <div className="flex items-center gap-5 mb-6">
-                        <div className="p-4 bg-emerald-500/10 rounded-3xl text-emerald-400"><ShieldCheck className="w-7 h-7" /></div>
-                        <h3 className="text-2xl font-black tracking-tight text-white italic">Verified Stability Analysis</h3>
-                    </div>
-                    <p className="text-slate-400 leading-relaxed text-sm italic font-medium">
-                        By deploying dedicated **Web Workers**, we isolate measurement from UI rendering. This guarantees that your browser's speed results are bit-accurate and unhindered by main-thread lag, providing a diagnostic reliability equivalent to desktop-level speedtest software.
-                    </p>
-                </div>
-            </div>
+      {/* Header */}
+      <div className="text-center mb-10 z-10">
+        <div className="inline-flex items-center gap-2 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full text-xs font-semibold text-blue-400 mb-4">
+          <Wifi className="w-3 h-3" /> Powered by Cloudflare CDN
         </div>
-    );
+        <h1 className="text-3xl md:text-4xl font-black tracking-tight">
+          Internet <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Speed Test</span>
+        </h1>
+        <p className="text-slate-500 text-sm mt-2">Accurate multi-stream measurement • No install required</p>
+      </div>
+
+      {/* Main card */}
+      <div className="w-full max-w-sm z-10">
+
+        {/* ISP Info */}
+        <div className="flex items-center justify-between bg-white/[0.03] border border-white/8 rounded-2xl px-5 py-3 mb-6 text-xs">
+          <div className="flex items-center gap-2 text-slate-400">
+            <Globe className="w-3.5 h-3.5 text-blue-400" />
+            <span className="font-mono">{isp.ip}</span>
+          </div>
+          <span className="text-slate-500 truncate max-w-[160px]">{isp.org}</span>
+        </div>
+
+        {/* Gauge area */}
+        <div className="relative flex flex-col items-center">
+          {/* Outer ring glow */}
+          <div className={`relative w-72 h-72 transition-all duration-700 ${isTesting ? 'scale-100' : 'scale-95'}`}>
+            <div className={`absolute inset-0 rounded-full transition-all duration-700 ${
+              isDownload ? 'shadow-[0_0_80px_rgba(59,130,246,0.15)]' :
+              isUpload   ? 'shadow-[0_0_80px_rgba(168,85,247,0.15)]' : ''
+            }`} />
+            <PulseRing active={isTesting} color={isUpload ? 'border-purple-500' : 'border-blue-500'} />
+            <Gauge value={currentValue} phase={phase} />
+
+            {/* Center readout */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ paddingTop: '12px' }}>
+              {status === 'idle' ? (
+                <div className="text-center">
+                  <div className="text-4xl font-black text-white/20">—</div>
+                  <div className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mt-1">Mbps</div>
+                </div>
+              ) : (
+                <>
+                  <div className={`text-5xl font-black tabular-nums tracking-tighter transition-colors duration-500 ${
+                    isUpload ? 'text-purple-300' : 'text-blue-300'
+                  }`}>
+                    {fmtSpeed(currentValue)}
+                  </div>
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Mbps</div>
+                  <div className={`text-[10px] font-bold uppercase tracking-widest mt-2 px-3 py-1 rounded-full ${
+                    isDownload ? 'bg-blue-500/10 text-blue-400' :
+                    isUpload   ? 'bg-purple-500/10 text-purple-400' :
+                    phase === 'PING' ? 'bg-yellow-500/10 text-yellow-400' : 'text-slate-500'
+                  }`}>
+                    {phase === 'PING' ? '⟳ Testing Ping…' :
+                     isDownload ? '↓ Download' :
+                     isUpload   ? '↑ Upload' : ''}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Start / Restart button */}
+          {status !== 'testing' && (
+            <button
+              onClick={startTest}
+              className={`mt-6 w-36 h-14 rounded-2xl font-black text-sm tracking-widest uppercase transition-all duration-300 active:scale-95 shadow-2xl ${
+                status === 'idle'
+                  ? 'bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 shadow-blue-500/30 hover:shadow-blue-500/50'
+                  : 'bg-white/10 hover:bg-white/15 border border-white/10'
+              }`}
+            >
+              {status === 'idle' ? (
+                <span className="flex items-center justify-center gap-2"><Zap className="w-4 h-4" /> GO</span>
+              ) : (
+                <span className="flex items-center justify-center gap-2"><RefreshCw className="w-4 h-4" /> Again</span>
+              )}
+            </button>
+          )}
+
+          {/* Progress bar */}
+          {isTesting && (
+            <div className="w-full mt-6 h-1 bg-white/5 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all duration-300 ${isUpload ? 'bg-purple-500' : 'bg-blue-500'}`}
+                style={{ width: `${progress}%`, boxShadow: `0 0 12px ${isUpload ? '#a855f7' : '#3b82f6'}` }}
+              />
+            </div>
+          )}
+        </div>
+
+        {/* Results */}
+        {(status === 'done' || (isTesting && ping > 0)) && (
+          <div className="mt-8 grid grid-cols-3 gap-3">
+            {/* Ping */}
+            <div className="bg-white/[0.03] border border-white/8 rounded-2xl p-4 text-center">
+              <Activity className="w-4 h-4 text-yellow-400 mx-auto mb-2" />
+              <div className="text-xl font-black text-white tabular-nums">{ping}<span className="text-[9px] text-slate-500 ml-0.5">ms</span></div>
+              <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mt-1">Ping</div>
+            </div>
+
+            {/* Download */}
+            <div className={`bg-white/[0.03] border rounded-2xl p-4 text-center transition-all duration-500 ${
+              status === 'done' || isUpload ? 'border-blue-500/20 bg-blue-500/5' : 'border-white/8'
+            }`}>
+              <ArrowDown className="w-4 h-4 text-blue-400 mx-auto mb-2" />
+              <div className="text-xl font-black text-white tabular-nums">
+                {fmtSpeed(status === 'done' ? dlRaw : dlSmooth)}
+              </div>
+              <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mt-1">Mbps ↓</div>
+            </div>
+
+            {/* Upload */}
+            <div className={`bg-white/[0.03] border rounded-2xl p-4 text-center transition-all duration-500 ${
+              status === 'done' ? 'border-purple-500/20 bg-purple-500/5' : 'border-white/8'
+            }`}>
+              <ArrowUp className="w-4 h-4 text-purple-400 mx-auto mb-2" />
+              <div className="text-xl font-black text-white tabular-nums">
+                {fmtSpeed(ulSmooth)}
+              </div>
+              <div className="text-[10px] text-slate-500 font-semibold uppercase tracking-wider mt-1">Mbps ↑</div>
+            </div>
+          </div>
+        )}
+
+        {/* Jitter (when done) */}
+        {status === 'done' && jitter > 0 && (
+          <div className="mt-3 text-center text-[11px] text-slate-600">
+            Jitter: <span className="text-slate-400 font-semibold">{jitter}ms</span>
+            &nbsp;·&nbsp; Connection quality:&nbsp;
+            <span className={`font-bold ${dlRaw > 50 ? 'text-emerald-400' : dlRaw > 10 ? 'text-yellow-400' : 'text-red-400'}`}>
+              {dlRaw > 50 ? 'Excellent' : dlRaw > 10 ? 'Good' : 'Poor'}
+            </span>
+          </div>
+        )}
+
+        {/* History */}
+        {history.length > 0 && status !== 'testing' && (
+          <div className="mt-8">
+            <div className="text-[10px] font-bold text-slate-600 uppercase tracking-widest mb-3 flex items-center gap-2">
+              <Activity className="w-3 h-3" /> Recent Tests
+            </div>
+            <div className="space-y-2">
+              {history.slice(0, 4).map((h, i) => (
+                <div key={i} className="flex items-center justify-between bg-white/[0.02] border border-white/5 rounded-xl px-4 py-2.5 text-xs">
+                  <span className="text-slate-600 font-mono">{h.date}</span>
+                  <div className="flex items-center gap-4">
+                    <span className="text-blue-400 font-bold">↓ {fmtSpeed(h.dl || 0)}</span>
+                    <span className="text-purple-400 font-bold">↑ {fmtSpeed(h.ul || 0)}</span>
+                    <span className="text-yellow-400 font-bold">{Math.round(h.ping)}ms</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Info footer */}
+      <div className="mt-16 max-w-lg text-center z-10">
+        <p className="text-slate-700 text-xs leading-relaxed">
+          Uses Cloudflare's global CDN endpoints with 8 parallel streams. Results represent p95 download / p90 upload throughput — same methodology used by professional speed test tools.
+        </p>
+      </div>
+    </div>
+  );
 }
