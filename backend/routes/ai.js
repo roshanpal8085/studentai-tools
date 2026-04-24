@@ -126,21 +126,10 @@ const generateRaw = async (prompt, isJson = false) => {
             return { text: outputText, provider: provider.name };
             
         } catch (error) {
-            const isOllamaDown = provider.type === 'ollama' && 
-                (error.code === 'ECONNREFUSED' || error.code === 'ECONNRESET' || error.message.includes('timeout'));
-            
-            if (isOllamaDown) {
-                console.warn(`[AI Engine] ⚠️  Ollama not running — falling back to Gemini API automatically.`);
-            } else {
-                console.error(`[API Rotator] Provider '${provider.name}' failed: ${error.message}`);
-            }
-
             // Move to next provider
             currentKeyIndex = (currentKeyIndex + 1) % providers.length;
             attempts++;
-            if (!isOllamaDown) {
-                await new Promise(resolve => setTimeout(resolve, 500));
-            }
+            await new Promise(resolve => setTimeout(resolve, 300));
         }
     }
     throw new Error('429_ALL_KEYS_EXHAUSTED_OR_FAILED');
@@ -159,6 +148,18 @@ const generateWithRotation = async (prompt, isJson = false) => {
     aiCache.set(hash, response);
     return response;
 };
+
+// Central quota/error checker — covers all error variants
+const isQuotaError = (err) => {
+    const msg = err?.message || '';
+    return msg.includes('429') || msg.includes('quota') || 
+           msg.includes('exhausted') || msg.includes('EXHAUSTED') ||
+           msg.includes('rate_limit') || msg.includes('rate limit') ||
+           msg.includes('FAILED') || msg.includes('Resource has been exhausted');
+};
+
+const QUOTA_MSG = 'All AI providers are currently busy. Please wait 15-30 seconds and try again.';
+
 
 const aiLimiter = rateLimit({
   windowMs: 24 * 60 * 60 * 1000, 
@@ -192,9 +193,7 @@ CRITICAL FORMATTING INSTRUCTIONS:
     const response = await generateWithRotation(prompt, false);
     res.json({ title: `${name} Resume`, content: response.text });
   } catch (error) {
-    if (error.message && (error.message.includes('429') || error.message.includes('quota') || error.message.includes('exhausted'))) {
-      return res.status(429).json({ message: 'Google API Free Tier Limit Reached: Please wait 15-30 seconds before generating again.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -253,9 +252,7 @@ Make the presentation engaging, clear, and visually attractive.`;
     res.json({ title: `${topic} Presentation`, content: presentationData });
   } catch (error) {
     console.error('AI Presentation Error:', error);
-    if (error.message && (error.message.includes('429') || error.message.includes('quota') || error.message.includes('exhausted'))) {
-      return res.status(429).json({ message: 'Google API Free Tier Limit Reached: Please wait 15-30 seconds before generating again.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: 'Error generating presentation. The AI might not have returned valid JSON.' });
   }
 });
@@ -268,9 +265,7 @@ router.post('/caption', aiLimiter, async (req, res) => {
     const response = await generateWithRotation(prompt, false);
     res.json({ topic, content: response.text });
   } catch (error) {
-    if (error.message && (error.message.includes('429') || error.message.includes('quota') || error.message.includes('exhausted'))) {
-      return res.status(429).json({ message: 'Google API Free Tier Limit Reached: Please wait 15-30 seconds before generating again.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -299,9 +294,7 @@ Provide a clear, engaging, and highly informative answer. Format it beautifully 
     res.json({ answer: response.text });
   } catch (error) {
     console.error('AI Chat Error:', error);
-    if (error.message && (error.message.includes('429') || error.message.includes('quota') || error.message.includes('exhausted'))) {
-      return res.status(429).json({ message: 'Google API Free Tier Limit Reached: You are sending requests too quickly. Please wait 10-15 seconds and try asking your question again.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -332,9 +325,7 @@ Subject: [Your Subject Here]
     res.json({ content: response.text.trim() });
   } catch (error) {
     console.error('AI Email Error:', error);
-    if (error.message && (error.message.includes('429') || error.message.includes('quota') || error.message.includes('exhausted'))) {
-      return res.status(429).json({ message: 'Google API Free Tier Limit Reached: Please wait 15-30 seconds before generating again.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -357,9 +348,7 @@ Instructions:
     const response = await generateWithRotation(prompt, false);
     res.json({ content: response.text });
   } catch (error) {
-    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
-      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -380,9 +369,7 @@ Formatting:
     const response = await generateWithRotation(prompt, false);
     res.json({ content: response.text });
   } catch (error) {
-    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
-      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -404,9 +391,7 @@ Requirements:
     const response = await generateWithRotation(prompt, false);
     res.json({ content: response.text });
   } catch (error) {
-    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
-      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -429,9 +414,7 @@ Requirements:
     const response = await generateWithRotation(prompt, false);
     res.json({ content: response.text });
   } catch (error) {
-    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
-      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -455,9 +438,7 @@ Requirements:
     const response = await generateWithRotation(prompt, false);
     res.json({ content: response.text });
   } catch (error) {
-    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
-      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -480,9 +461,7 @@ Include:
     const response = await generateWithRotation(prompt, false);
     res.json({ content: response.text });
   } catch (error) {
-    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
-      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -503,9 +482,7 @@ Text: "${text}"`;
     const response = await generateWithRotation(prompt, false);
     res.json({ content: response.text });
   } catch (error) {
-    if (error.message === '429_ALL_KEYS_EXHAUSTED') {
-      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds or try again later.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
@@ -591,12 +568,11 @@ ${text}`;
 
     res.json({ paraphrased: paraphrasedText, metadata });
   } catch (error) {
-    if (error.message && (error.message.includes('429') || error.message.includes('quota') || error.message.includes('exhausted'))) {
-      return res.status(429).json({ message: 'AI Limit Reached: All free API keys are currently exhausted. Please wait 15-30 seconds and try again.' });
-    }
+    if (isQuotaError(error)) { return res.status(429).json({ message: QUOTA_MSG }); }
     res.status(500).json({ message: error.message });
   }
 });
 
 module.exports = router;
+
 
