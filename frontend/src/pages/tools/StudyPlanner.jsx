@@ -45,18 +45,32 @@ const StudyPlanner = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
-        title="AI Study Planner - Personalized Exam Schedules" 
-        description="Generate efficient, science-backed study plans with our AI Study Planner. Optimize your preparation using Spaced Repetition and Active Recall techniques."
-        keywords="ai study planner, exam preparation, personalized study plan, student productivity, science-backed study"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          "name": "AI Study Planner",
-          "operatingSystem": "Web",
-          "applicationCategory": "EducationalApplication",
-          "description": "AI-powered study plan generator utilizing spaced repetition and active recall for optimized exam preparation.",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
-        }}
+        title="Free AI Study Planner — Personalized Exam Study Schedule Generator (2026)" 
+        description="Generate a personalised AI study plan for any exam in seconds. Uses Spaced Repetition and Active Recall. Free, no signup required. Perfect for JEE, NEET, UPSC, finals."
+        keywords="ai study planner, free study schedule generator, personalized exam prep plan, best study planner for students 2026, how to make study schedule with AI"
+        schema={[
+          {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "AI Study Planner",
+            "operatingSystem": "Web",
+            "applicationCategory": "EducationalApplication",
+            "description": "AI-powered study plan generator using spaced repetition and active recall for optimized exam preparation.",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              { "@type": "Question", "name": "How many subjects can I add to the study planner?", "acceptedAnswer": { "@type": "Answer", "text": "You can add as many subjects as you need in the 'Subjects to Cover' field, separated by commas. We recommend focusing on 3-5 major subjects per plan for better focus and realistic scheduling." } },
+              { "@type": "Question", "name": "Can the AI study planner handle tight exam deadlines?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The '48 Hour Crash Course' option generates a high-yield, triage-focused plan that identifies the most important topics to cover when time is critically short." } },
+              { "@type": "Question", "name": "What is the difference between 'Practice Questions' and 'Mastering Theory' focus goals?", "acceptedAnswer": { "@type": "Answer", "text": "If you understand the concepts but underperform in exams, choose 'Practice Questions' — the plan will allocate more time to timed mock tests. If the content is new or unfamiliar, choose 'Mastering Theory' to focus on conceptual understanding first." } },
+              { "@type": "Question", "name": "Is this study planner free to use?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, the AI Study Planner is completely free with no account creation or credit card required. It is supported by non-intrusive advertising." } },
+              { "@type": "Question", "name": "Does the study plan use Spaced Repetition?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The AI schedules subject reviews at scientifically optimal intervals to move information from short-term to long-term memory, based on the principles of Spaced Repetition and Active Recall." } },
+              { "@type": "Question", "name": "Can I use this for competitive exams like JEE, NEET or UPSC?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Simply enter your exam name (e.g. JEE Mains), your available preparation time, and your subjects. The AI will generate a structured daily schedule adapted to the scale of competitive exam preparation." } }
+            ]
+          }
+        ]}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -214,9 +228,12 @@ const StudyPlanner = () => {
             <h2 className="text-2xl font-extrabold dark:text-white mb-8">Planning FAQ</h2>
             <div className="space-y-6">
               {[
-                { q: 'How many subjects can I add?', a: 'You can add as many as you need, but we suggest focusing on 3-5 major subjects per planning session for better focus.' },
-                { q: 'Can It handle tight deadlines?', a: 'Yes, the "48 Hour Crash Course" option helps you identify high-yield topics when time is short.' },
-                { q: 'Which focus goal should I choose?', a: 'If you know the material but fail exams, choose "Practice Questions". If the concepts are new, choose "Mastering Theory".' }
+                { q: 'How many subjects can I add?', a: 'You can add as many as needed, but we suggest focusing on 3-5 major subjects per plan for better focus and realistic scheduling.' },
+                { q: 'Can it handle tight deadlines?', a: 'Yes, the "48 Hour Crash Course" option helps you identify high-yield topics when time is critically short.' },
+                { q: 'Which focus goal should I choose?', a: 'If you know the material but fail exams, choose "Practice Questions". If the concepts are new, choose "Mastering Theory".' },
+                { q: 'Is this study planner free?', a: 'Yes, 100% free with no account creation or credit card required. Supported by non-intrusive advertising.' },
+                { q: 'Does it use Spaced Repetition?', a: 'Yes. The AI schedules subject reviews at scientifically optimal intervals to move information from short-term to long-term memory.' },
+                { q: 'Can I use it for JEE, NEET or UPSC prep?', a: 'Absolutely. Enter your exam name, available preparation time, and subjects. The AI adapts the plan to the scale of competitive exam preparation.' }
               ].map((faq, i) => (
                 <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
                   <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">

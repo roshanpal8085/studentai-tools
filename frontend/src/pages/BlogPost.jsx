@@ -36,14 +36,31 @@ const BlogPost = () => {
   return (
     <div className="min-h-screen bg-white dark:bg-slate-900 pb-20">
       <SEO 
-        title={post.title} 
+        title={post.title}
         description={post.excerpt} 
+        schema={{
+          "@context": "https://schema.org",
+          "@type": "Article",
+          "headline": post.title,
+          "description": post.excerpt,
+          "image": post.image,
+          "datePublished": post.date,
+          "author": { "@type": "Organization", "name": "StudentAI Tools", "url": "https://studentaitools.in" },
+          "publisher": { "@type": "Organization", "name": "StudentAI Tools", "logo": { "@type": "ImageObject", "url": "https://studentaitools.in/logo.png" } },
+          "mainEntityOfPage": { "@type": "WebPage", "@id": `https://studentaitools.in/blog/${post.slug}` }
+        }}
       />
+      <link rel="canonical" href={`https://studentaitools.in/blog/${post.slug}`} />
       
       {/* Article Header */}
       <div className="w-full h-[400px] relative">
         <div className="absolute inset-0 bg-slate-900/60 z-10"></div>
-        <img src={post.image} alt={post.title} className="w-full h-full object-cover" />
+        <img 
+          src={post.image} 
+          alt={`${post.category} article: ${post.title} — StudentAI Tools`} 
+          className="w-full h-full object-cover" 
+          loading="eager"
+        />
         <div className="absolute inset-0 z-20 flex flex-col justify-end max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
           <Link to="/blog" className="text-white/80 hover:text-white flex items-center gap-2 mb-6 font-medium w-fit transition-colors">
             <ArrowLeft className="w-4 h-4" /> Back to Blog

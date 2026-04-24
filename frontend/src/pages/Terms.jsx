@@ -1,55 +1,122 @@
 import { Helmet } from 'react-helmet-async';
-import { Scale, CheckCircle, FileText } from 'lucide-react';
+import { Scale, CheckCircle, FileText, AlertTriangle, CreditCard, BookOpen, ShieldAlert, Globe } from 'lucide-react';
+
+const Section = ({ icon: Icon, title, children }) => (
+  <div className="mb-10">
+    <h2 className="flex items-center gap-3 text-2xl font-bold text-slate-900 dark:text-white mt-10 mb-4">
+      <Icon className="w-6 h-6 text-indigo-500 flex-shrink-0" />
+      {title}
+    </h2>
+    <div className="space-y-4 text-slate-600 dark:text-slate-400 leading-relaxed">{children}</div>
+  </div>
+);
 
 const Terms = () => {
+  const lastUpdated = 'April 24, 2026';
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
-      <Helmet><title>Terms & Conditions - StudentAI Tools</title></Helmet>
-      
+      <Helmet>
+        <title>Terms of Service — StudentAI Tools | Usage Rules &amp; Legal Agreement</title>
+        <meta name="description" content="Read the Terms of Service for StudentAI Tools (studentaitools.in). Understand your rights, our AI output disclaimer, advertising disclosure, academic integrity clause, and governing law." />
+        <link rel="canonical" href="https://studentaitools.in/terms-conditions" />
+      </Helmet>
+
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 mb-4 shadow-sm">
             <Scale className="w-8 h-8" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-6">Terms & Conditions</h1>
-          <p className="text-lg text-slate-600 dark:text-slate-400">Please read these terms carefully before using our services.</p>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4">Terms of Service</h1>
+          <p className="text-slate-500 dark:text-slate-400">Effective Date: <strong className="text-slate-700 dark:text-slate-300">{lastUpdated}</strong> · Applies to: studentaitools.in</p>
         </div>
 
-        <div className="glass-card rounded-[2.5rem] shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-14 prose prose-slate dark:prose-invert max-w-none prose-h2:text-2xl prose-h2:font-bold prose-h2:mt-10 prose-h2:mb-4">
-          <p className="lead font-medium">
-            Welcome to StudentAI Tools. By accessing this website, we assume you accept these terms and conditions. Do not continue to use StudentAI Tools if you do not agree to take all of the terms and conditions stated on this page.
+        <div className="glass-card rounded-[2.5rem] shadow-sm border border-slate-200 dark:border-slate-800 p-8 md:p-14">
+
+          {/* Intro */}
+          <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed mb-6 p-5 bg-amber-50 dark:bg-amber-900/20 rounded-2xl border border-amber-200 dark:border-amber-800">
+            <strong className="text-amber-700 dark:text-amber-300">Please read carefully.</strong> By accessing or using StudentAI Tools at studentaitools.in, you agree to be bound by these Terms of Service. If you do not agree to these terms, please discontinue use of the website immediately.
           </p>
 
-          <h2 className="flex items-center gap-3"><FileText className="w-6 h-6 text-indigo-500" /> 1. License and Usage</h2>
-          <p>Unless otherwise stated, StudentAI Tools and/or its licensors own the intellectual property rights for all material on StudentAI Tools. All intellectual property rights are reserved. You may access this from StudentAI Tools for your own personal use subjected to restrictions set in these terms and conditions.</p>
-          <p>You must not:</p>
-          <ul>
-            <li>Republish material from StudentAI Tools</li>
-            <li>Sell, rent or sub-license material from StudentAI Tools</li>
-            <li>Reproduce, duplicate or copy material from StudentAI Tools</li>
-            <li>Automate requests, scrape, or excessively ping our API backend</li>
-          </ul>
+          <Section icon={FileText} title="1. Acceptance of Terms">
+            <p>These Terms of Service ("Terms") constitute a legally binding agreement between you ("User") and StudentAI Tools ("we," "us," or "our") governing your access to and use of the website studentaitools.in and all associated tools, content, and services (collectively, the "Service").</p>
+            <p>Your continued use of the Service after any modification to these Terms constitutes your acceptance of the revised Terms. We will update the "Effective Date" at the top of this page when changes are made.</p>
+          </Section>
 
-          <h2 className="flex items-center gap-3"><CheckCircle className="w-6 h-6 text-indigo-500" /> 2. User Generated Content & AI Output</h2>
-          <p>The content generated by our AI tools (including but not limited to resumes, presentations, essays, and captions) is provided "as is". Machine learning models can sometimes produce inaccurate, biased, or highly repetitive output.</p>
-          <p><strong>Disclaimer of Reliability:</strong> We are not responsible for the inaccuracies of generated content. You, the user, are solely responsible for reviewing, editing, and verifying any content before using it in a professional, academic, or legal setting.</p>
+          <Section icon={CheckCircle} title="2. License &amp; Permitted Use">
+            <p>Subject to these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to access and use the Service for your personal, non-commercial academic purposes.</p>
+            <p>You are expressly prohibited from:</p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Republishing, selling, renting, or sub-licensing any material from this website for commercial gain.</li>
+              <li>Reproducing or duplicating our proprietary content, tool interfaces, or algorithms without written permission.</li>
+              <li>Using automated scripts, bots, crawlers, or scrapers to make excessive or automated requests to our services.</li>
+              <li>Attempting to gain unauthorized access to any part of the Service or its underlying systems.</li>
+              <li>Using the Service in any way that violates applicable local, national, or international law.</li>
+              <li>Impersonating any person or entity, or falsely representing your affiliation with any person or entity.</li>
+            </ul>
+          </Section>
 
-          <h2>3. Academic Integrity Clause</h2>
-          <p>You explicitly agree not to use StudentAI Tools to bypass institutional rules regarding academic honesty. The intent of our platform is to provide study aids, outlining assistance, and structural formatting help. Engaging in direct, unedited plagiarism submitting AI-generated essays as entirely your own work violates our intended usage guidelines.</p>
+          <Section icon={AlertTriangle} title="3. AI Output Disclaimer">
+            <p>This is a critically important section. Please read it in full.</p>
+            <p>Our tools use large language models (LLMs) and other AI systems to generate content including essays, summaries, study plans, quiz questions, notes, and more. You acknowledge and agree to the following:</p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li><strong className="text-slate-800 dark:text-slate-200">AI output is not guaranteed to be accurate.</strong> AI systems can "hallucinate" — producing plausible-sounding but factually incorrect information. Always fact-check any critical data, dates, citations, or statistics generated by our tools before using them.</li>
+              <li><strong className="text-slate-800 dark:text-slate-200">AI output is not professional advice.</strong> Content generated by our tools does not constitute legal, medical, financial, psychological, or any other form of professional advice. Consult a qualified professional for matters requiring expert judgment.</li>
+              <li><strong className="text-slate-800 dark:text-slate-200">You are responsible for all content you submit and use.</strong> We are not responsible for the accuracy, legality, or appropriateness of any AI-generated output or for any consequences arising from your reliance on it.</li>
+              <li><strong className="text-slate-800 dark:text-slate-200">AI output may not be original.</strong> AI models are trained on large datasets and may produce content that is similar to existing material. You are responsible for verifying the originality of any content before submission in an academic or professional context.</li>
+            </ul>
+          </Section>
 
-          <h2>4. Cookies & Advertising</h2>
-          <p>We employ the use of cookies. By accessing StudentAI Tools, you agreed to use cookies in agreement with the StudentAI Tools's Privacy Policy. Most interactive websites use cookies to let us retrieve the user's details for each visit. We also utilize third-party ad networks (like Google AdSense) which utilize cookies as outlined in our Privacy Statement.</p>
+          <Section icon={BookOpen} title="4. Academic Integrity">
+            <p>StudentAI Tools is designed as an academic assistance and learning aid platform. Our tools are intended to help students understand concepts, structure their thinking, and improve their academic skills — not to enable academic misconduct.</p>
+            <p>By using our Service, you explicitly agree:</p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Not to submit AI-generated content as entirely your own original work in any academic context where such submission constitutes a violation of your institution's academic honesty policy.</li>
+              <li>To comply with the academic integrity policies of your school, college, or university.</li>
+              <li>To use AI tools as a learning aid — for brainstorming, outlining, understanding concepts, and self-testing — rather than as a means to circumvent genuine learning and assessment.</li>
+            </ul>
+            <p>We are not responsible for any academic or disciplinary consequences you face as a result of how you choose to use AI-generated content. The responsibility for ethical use rests entirely with you.</p>
+          </Section>
 
-          <h2>5. Disclaimer of Warranties</h2>
-          <p>To the maximum extent permitted by applicable law, we exclude all representations, warranties and conditions relating to our website and the use of this website. Nothing in this disclaimer will:</p>
-          <ul>
-            <li>limit or exclude our or your liability for death or personal injury;</li>
-            <li>limit or exclude our or your liability for fraud or fraudulent misrepresentation;</li>
-            <li>limit any of our or your liabilities in any way that is not permitted under applicable law; or</li>
-          </ul>
+          <Section icon={CreditCard} title="5. Advertising Disclosure">
+            <p>StudentAI Tools is a free service sustained by advertising revenue. We participate in the <strong className="text-slate-800 dark:text-slate-200">Google AdSense</strong> program, which displays targeted advertisements on our website.</p>
+            <p>You acknowledge and agree that:</p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Advertisements may appear on our pages. These ads are served by Google AdSense and are not endorsements by StudentAI Tools.</li>
+              <li>Google uses cookies (including the DART cookie) to serve ads based on your prior visits to this and other websites. You can opt out of personalized ads via <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" className="text-indigo-600 dark:text-indigo-400 underline">Google Ad Settings</a>.</li>
+              <li>We do not control the content of third-party advertisements. We are not responsible for the products, services, or content advertised by third parties on our platform.</li>
+              <li>You may not use ad-blocking software specifically configured to circumvent our ability to display non-intrusive advertising, as this directly undermines our ability to provide free services.</li>
+            </ul>
+            <p>Our editorial content is completely independent of our advertising. We never allow advertisers to influence our tool recommendations, blog content, or product evaluations.</p>
+          </Section>
 
-          <h2>6. Updates to these Terms</h2>
-          <p>We reserve the right to revise these terms and conditions at any time. By using this website, you are expected to review these terms on a regular basis.</p>
+          <Section icon={ShieldAlert} title="6. Limitation of Liability &amp; Disclaimer of Warranties">
+            <p>THE SERVICE IS PROVIDED "AS IS" AND "AS AVAILABLE" WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND NON-INFRINGEMENT.</p>
+            <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, STUDENTAI TOOLS SHALL NOT BE LIABLE FOR ANY:</p>
+            <ul className="list-disc pl-6 space-y-2">
+              <li>Indirect, incidental, special, consequential, or punitive damages;</li>
+              <li>Loss of profits, revenue, data, or academic standing;</li>
+              <li>Damages resulting from your use of or inability to use the Service;</li>
+              <li>Damages resulting from errors, inaccuracies, or omissions in AI-generated content;</li>
+              <li>Damages resulting from unauthorized access to or alteration of your data.</li>
+            </ul>
+            <p>Nothing in these Terms shall limit our liability for: (a) death or personal injury caused by our negligence; (b) fraud or fraudulent misrepresentation; or (c) any liability that cannot be excluded or limited under applicable law.</p>
+          </Section>
+
+          <Section icon={Globe} title="7. Governing Law &amp; Dispute Resolution">
+            <p>These Terms are governed by and construed in accordance with the laws of <strong className="text-slate-800 dark:text-slate-200">India</strong>, without regard to its conflict of law provisions.</p>
+            <p>Any dispute arising from or in connection with these Terms or your use of the Service shall first be attempted to be resolved through good-faith negotiation. If negotiation fails, disputes shall be subject to the exclusive jurisdiction of the courts of India.</p>
+            <p>If you are accessing our Service from outside India, you are responsible for compliance with your local laws where those laws are applicable to your use of our Service.</p>
+          </Section>
+
+          <Section icon={FileText} title="8. Intellectual Property">
+            <p>All content on StudentAI Tools — including text, graphics, logos, tool interfaces, and software — is the property of StudentAI Tools and is protected by applicable intellectual property laws in India and internationally.</p>
+            <p>AI-generated output produced by our tools in response to your specific inputs may be used by you for personal, academic, or non-commercial purposes. We make no claim of ownership over the specific output generated in response to your unique prompts, but you acknowledge the limitations described in Section 3 (AI Output Disclaimer).</p>
+          </Section>
+
+          <div className="mt-10 p-5 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <p className="font-semibold text-slate-800 dark:text-slate-200 mb-2">Contact Us Regarding These Terms</p>
+            <p className="text-slate-600 dark:text-slate-400">If you have questions about these Terms, please contact us via our <a href="/contact" className="text-indigo-600 dark:text-indigo-400 underline">Contact Page</a>. We respond to all inquiries within 5 business days.</p>
+          </div>
 
         </div>
       </div>

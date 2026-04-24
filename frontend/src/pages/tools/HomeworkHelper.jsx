@@ -35,18 +35,32 @@ const HomeworkHelper = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
-        title="AI Homework Helper - Step-by-Step Solutions for Students" 
-        description="Get instant, expert-level homework help for any subject. Our AI tutor provides clear, step-by-step explanations to help you master complex topics in seconds."
-        keywords="ai homework helper, homework solver, step by step math, science help, free ai tutor"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          "name": "AI Homework Helper",
-          "operatingSystem": "Web",
-          "applicationCategory": "EducationalApplication",
-          "description": "Instant AI-powered homework assistance with step-by-step explanations for all academic subjects.",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
-        }}
+        title="Free AI Homework Helper — Step-by-Step Solutions for Any Subject (2026)" 
+        description="Stuck on homework? Get instant, step-by-step AI explanations for Maths, Science, History, Literature & more. Free, no signup, works on any device. Used by 2M+ students."
+        keywords="ai homework helper, free homework solver, step by step math solutions, free AI tutor for students, ai homework help 2026"
+        schema={[
+          {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "AI Homework Helper",
+            "operatingSystem": "Web",
+            "applicationCategory": "EducationalApplication",
+            "description": "Instant AI-powered homework assistance with step-by-step explanations for all academic subjects.",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              { "@type": "Question", "name": "Is this AI Homework Helper free?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, StudentAI Homework Helper is 100% free for all students. No registration, no credit card, and no usage limits are required." } },
+              { "@type": "Question", "name": "How accurate are the math solutions?", "acceptedAnswer": { "@type": "Answer", "text": "Our AI uses advanced reasoning to handle maths, science, and technical subjects with high accuracy. Always double-check complex proofs or multi-step derivations with your textbook." } },
+              { "@type": "Question", "name": "Is my data private when I use this tool?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We do not store the questions or content you submit. All AI processing is session-scoped and your data is purged automatically when you close the page." } },
+              { "@type": "Question", "name": "Will this do my homework for me?", "acceptedAnswer": { "@type": "Answer", "text": "The tool acts as a tutor, not a ghostwriter. It explains the reasoning step-by-step so you understand the concept and can replicate it in exams. Submitting AI output as your own work without understanding it violates academic integrity." } },
+              { "@type": "Question", "name": "What subjects does the AI Homework Helper support?", "acceptedAnswer": { "@type": "Answer", "text": "It supports Physics, Chemistry, Biology, Mathematics (Algebra, Calculus, Statistics), Literature, History, Economics, Computer Science, and General subjects." } },
+              { "@type": "Question", "name": "How do I ask a good question for better results?", "acceptedAnswer": { "@type": "Answer", "text": "Be specific. Instead of 'solve for x', write 'solve for x in 2x + 4 = 10 and explain which algebraic property is used in each step'. The more context you provide, the more tailored the explanation." } }
+            ]
+          }
+        ]}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

@@ -45,18 +45,31 @@ const EssayWriter = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
-        title="AI Essay Writer - Generate Academic Essays for Free" 
-        description="Craft high-quality, structured essays in seconds with our AI Essay Writer. Perfect for argumentative, descriptive, and persuasive essays with proper academic flow."
-        keywords="ai essay writer, essay generator, academic writing tool, free essay maker, student ai"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          "name": "AI Essay Writer",
-          "operatingSystem": "Web",
-          "applicationCategory": "EducationalApplication",
-          "description": "Powerful AI tool for generating well-structured academic essays across multiple genres.",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
-        }}
+        title="Free AI Essay Writer — Generate Academic Essays Instantly (2026)" 
+        description="Generate well-structured argumentative, persuasive and descriptive essays in seconds. Our free AI Essay Writer is used by 2M+ students. No signup needed."
+        keywords="ai essay writer, free essay generator, academic essay AI, argumentative essay writer, student AI essay tool 2026"
+        schema={[
+          {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "AI Essay Writer",
+            "operatingSystem": "Web",
+            "applicationCategory": "EducationalApplication",
+            "description": "Free AI tool for generating well-structured academic essays across multiple genres including argumentative, descriptive, and persuasive.",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              { "@type": "Question", "name": "Is the AI essay plagiarism-free?", "acceptedAnswer": { "@type": "Answer", "text": "Our AI generates completely original content for every unique prompt. It does not pull from a pre-written database. However, we recommend running the output through your institution's plagiarism checker before submission." } },
+              { "@type": "Question", "name": "What essay types does the AI Essay Writer support?", "acceptedAnswer": { "@type": "Answer", "text": "We support Argumentative, Descriptive, Persuasive, Expository, and Narrative essay types. Select your type in the settings panel before generating." } },
+              { "@type": "Question", "name": "Can I use the AI essay as my final submission?", "acceptedAnswer": { "@type": "Answer", "text": "We recommend using the AI output as a first draft or structural outline. Add your own specific evidence, citations, and voice before submitting. Submitting AI-generated text without editing may violate your institution's academic integrity policy." } },
+              { "@type": "Question", "name": "Is it considered cheating to use this AI essay tool?", "acceptedAnswer": { "@type": "Answer", "text": "Using AI to brainstorm, outline, or overcome writer's block is widely accepted. Submitting AI-generated text as entirely your own original work without modification is considered academic misconduct at most universities. Always check your syllabus." } },
+              { "@type": "Question", "name": "How do I get the best quality essay output?", "acceptedAnswer": { "@type": "Answer", "text": "Be specific in the 'Key Focus Points' field. Add the exact arguments, examples or evidence you want the AI to incorporate. The more context you provide, the higher the quality of the structured output." } }
+            ]
+          }
+        ]}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

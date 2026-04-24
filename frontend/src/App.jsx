@@ -4,6 +4,7 @@ import { HelmetProvider } from 'react-helmet-async';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
+import CookieConsent from './components/CookieConsent';
 
 // Lazy loading Pages for performance optimization
 const Home = lazy(() => import('./pages/Home'));
@@ -177,6 +178,7 @@ function App() {
             </Suspense>
           </main>
           <Footer />
+          <CookieConsent />
         </div>
       </Router>
     </HelmetProvider>
