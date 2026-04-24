@@ -98,7 +98,7 @@ function Gauge({ value, phase }) {
 }
 
 /* ── Animated number ─────────────────────────────────────────────────────── */
-function useSmoothed(target, speed = 0.12) {
+function useSmoothed(target, speed = 0.08) {
   const [display, setDisplay] = useState(0);
   const ref = useRef(0);
   const raf = useRef(null);
@@ -106,7 +106,7 @@ function useSmoothed(target, speed = 0.12) {
   useEffect(() => {
     const animate = () => {
       const diff = target - ref.current;
-      if (Math.abs(diff) < 0.05) { ref.current = target; setDisplay(target); return; }
+      if (Math.abs(diff) < 0.02) { ref.current = target; setDisplay(target); return; }
       ref.current += diff * speed;
       setDisplay(ref.current);
       raf.current = requestAnimationFrame(animate);
@@ -130,8 +130,8 @@ function PulseRing({ active, color }) {
 
 /* ── Main Component ──────────────────────────────────────────────────────── */
 export default function InternetSpeedTest() {
-  const [status,   setStatus]   = useState('idle');   // idle | testing | done
-  const [phase,    setPhase]    = useState('');        // PING | DOWNLOAD | UPLOAD
+  const [status,   setStatus]   = useState('idle');
+  const [phase,    setPhase]    = useState('');
   const [ping,     setPing]     = useState(0);
   const [jitter,   setJitter]   = useState(0);
   const [dlRaw,    setDlRaw]    = useState(0);
@@ -139,10 +139,28 @@ export default function InternetSpeedTest() {
   const [progress, setProgress] = useState(0);
   const [isp,      setIsp]      = useState({ ip: '—', org: 'Detecting…', city: '', country: '' });
   const [history,  setHistory]  = useState(() => JSON.parse(localStorage.getItem('spt_hist_v11') || '[]'));
+  const [pingAnim, setPingAnim] = useState(0); // gauge sweep during ping phase
   const workerRef  = useRef(null);
+  const pingAnimRef = useRef(null);
 
-  const dlSmooth = useSmoothed(dlRaw, 0.1);
-  const ulSmooth = useSmoothed(ulRaw, 0.1);
+  const dlSmooth = useSmoothed(dlRaw, 0.08);
+  const ulSmooth = useSmoothed(ulRaw, 0.08);
+
+  // Ping phase — oscillating gauge sweep so it doesn't look frozen
+  useEffect(() => {
+    if (phase === 'PING') {
+      let t = 0;
+      pingAnimRef.current = setInterval(() => {
+        t += 0.06;
+        // Smooth sine wave: sweeps between 0 and ~80 Mbps
+        setPingAnim(Math.max(0, 40 + 40 * Math.sin(t)));
+      }, 50);
+    } else {
+      clearInterval(pingAnimRef.current);
+      setPingAnim(0);
+    }
+    return () => clearInterval(pingAnimRef.current);
+  }, [phase]);
 
   useEffect(() => {
     fetch('https://ipapi.co/json/').then(r => r.json())
@@ -191,7 +209,8 @@ export default function InternetSpeedTest() {
     w.postMessage({ type: 'PING' });
   }, [dlRaw, ping]);
 
-  const currentValue = phase === 'UPLOAD' ? ulSmooth : dlSmooth;
+  const currentValue = phase === 'PING'   ? pingAnim :
+                        phase === 'UPLOAD' ? ulSmooth : dlSmooth;
   const isDownload   = phase === 'DOWNLOAD';
   const isUpload     = phase === 'UPLOAD';
   const isTesting    = status === 'testing';
@@ -261,14 +280,14 @@ export default function InternetSpeedTest() {
                     {fmtSpeed(currentValue)}
                   </div>
                   <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Mbps</div>
-                  <div className={`text-[10px] font-bold uppercase tracking-widest mt-2 px-3 py-1 rounded-full ${
-                    isDownload ? 'bg-blue-500/10 text-blue-400' :
-                    isUpload   ? 'bg-purple-500/10 text-purple-400' :
-                    phase === 'PING' ? 'bg-yellow-500/10 text-yellow-400' : 'text-slate-500'
+                  <div className={`text-[10px] font-bold uppercase tracking-widest mt-2 px-3 py-1 rounded-full transition-all duration-500 ${
+                    phase === 'PING'     ? 'bg-yellow-500/10 text-yellow-400 animate-pulse' :
+                    isDownload          ? 'bg-blue-500/10   text-blue-400'   :
+                    isUpload            ? 'bg-purple-500/10 text-purple-400' : 'text-slate-500'
                   }`}>
-                    {phase === 'PING' ? '⟳ Testing Ping…' :
+                    {phase === 'PING' ? '⧗ Measuring Ping…' :
                      isDownload ? '↓ Download' :
-                     isUpload   ? '↑ Upload' : ''}
+                     isUpload   ? '↑ Upload'   : ''}
                   </div>
                 </>
               )}
@@ -279,10 +298,10 @@ export default function InternetSpeedTest() {
           {status !== 'testing' && (
             <button
               onClick={startTest}
-              className={`mt-6 w-36 h-14 rounded-2xl font-black text-sm tracking-widest uppercase transition-all duration-300 active:scale-95 shadow-2xl ${
+              className={`mt-8 w-40 h-14 rounded-2xl font-black text-sm tracking-widest uppercase transition-all duration-300 active:scale-95 shadow-2xl ${
                 status === 'idle'
-                  ? 'bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 shadow-blue-500/30 hover:shadow-blue-500/50'
-                  : 'bg-white/10 hover:bg-white/15 border border-white/10'
+                  ? 'bg-gradient-to-r from-blue-600 to-blue-500 hover:from-blue-500 hover:to-blue-400 shadow-blue-500/30 hover:shadow-blue-500/50 hover:-translate-y-0.5'
+                  : 'bg-white/10 hover:bg-white/15 border border-white/10 hover:-translate-y-0.5'
               }`}
             >
               {status === 'idle' ? (
@@ -295,10 +314,18 @@ export default function InternetSpeedTest() {
 
           {/* Progress bar */}
           {isTesting && (
-            <div className="w-full mt-6 h-1 bg-white/5 rounded-full overflow-hidden">
+            <div className="w-full mt-6 h-1.5 bg-white/5 rounded-full overflow-hidden">
               <div
-                className={`h-full rounded-full transition-all duration-300 ${isUpload ? 'bg-purple-500' : 'bg-blue-500'}`}
-                style={{ width: `${progress}%`, boxShadow: `0 0 12px ${isUpload ? '#a855f7' : '#3b82f6'}` }}
+                className={`h-full rounded-full transition-all duration-500 ease-out ${
+                  phase === 'PING'   ? 'bg-yellow-400' :
+                  isUpload          ? 'bg-purple-500' : 'bg-blue-500'
+                }`}
+                style={{
+                  width: `${progress}%`,
+                  boxShadow: `0 0 10px ${
+                    phase === 'PING' ? '#facc15' : isUpload ? '#a855f7' : '#3b82f6'
+                  }`
+                }}
               />
             </div>
           )}
