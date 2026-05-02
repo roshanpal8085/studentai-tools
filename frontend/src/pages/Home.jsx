@@ -1,167 +1,94 @@
 import SEO from '../components/SEO';
-import QuickToolsFloat from '../components/QuickToolsFloat';
-import { 
-  FileText, MonitorPlay, Image as ImageIcon, LayoutTemplate, MessageSquare, 
-  Mail, Zap, CheckCircle2, TrendingUp, Users, ShieldCheck, Search, 
-  Calendar, Clock, Hash, Type, QrCode, Lock, Ruler, Percent, Flame,
-  User, Lightbulb, Terminal, Timer, BookOpen, Brain, ListChecks, Quote, Calculator, FileEdit, Wifi, Gamepad2, LayoutGrid, FileMinus, FilePlus, Star, Sparkles, ArrowRight, Wand2
-} from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useState, useMemo, useEffect } from 'react';
+import {
+  BookOpen, CheckCircle2, Calendar, MessageSquare, Brain, Wand2,
+  FileText, MonitorPlay, Mail, ShieldCheck, FilePlus, ArrowRight,
+  Zap, Users, Star, ChevronRight
+} from 'lucide-react';
 
-const allTools = [
-  // Core AI Tools
-  { name: 'AI Text Summarizer', description: 'Turn long articles and documents into concise, readable summaries.', icon: BookOpen, to: '/ai-text-summarizer', category: 'AI Tools' },
-  { name: 'AI Resume Builder', description: 'Create professional, ATS-friendly resumes in seconds with AI.', icon: LayoutTemplate, to: '/ai-resume-generator', category: 'AI Tools', hot: true },
-  { name: 'AI Homework Helper', description: 'Get instant help and explanations for any homework problem.', icon: Zap, to: '/ai-homework-helper', category: 'AI Tools' },
-  { name: 'AI Essay Writer', description: 'Draft high-quality essays with proper citations and structure.', icon: FileText, to: '/ai-essay-writer', category: 'AI Tools' },
-  { name: 'Paraphrasing Tool', description: 'Rewrite text with 6 AI modes and a synonym intensity slider.', icon: Wand2, to: '/tools/paraphrasing-tool', category: 'AI Tools', isNew: true },
-  { name: 'AI Study Planner', description: 'Generate personalized study schedules based on your exams.', icon: Calendar, to: '/ai-study-planner', category: 'AI Tools' },
-  { name: 'AI Notes Generator', description: 'Turn your lecture recordings or text into concise notes.', icon: MessageSquare, to: '/ai-notes-generator', category: 'AI Tools' },
-  { name: 'AI Quiz Generator', description: 'Create practice quizzes from your study material instantly.', icon: CheckCircle2, to: '/ai-quiz-generator', category: 'AI Tools' },
-  { name: 'AI Assignment Generator', description: 'Generate structured assignments and rubrics for any topic.', icon: ListChecks, to: '/ai-assignment-generator', category: 'AI Tools' },
-  { name: 'Chat with PDF', description: 'Upload books or papers and ask the AI questions about them.', icon: MessageSquare, to: '/chat-pdf', category: 'AI Tools', hot: true },
-  { name: 'Presentation Builder', description: 'Generate complete, beautifully structured PowerPoint outlines.', icon: MonitorPlay, to: '/presentation-generator', category: 'AI Tools' },
-  { name: 'AI Email Writer', description: 'Draft professional, perfectly toned emails for any situation.', icon: Mail, to: '/email-writer', category: 'AI Tools' },
-
-  // Text & Writing Tools
-  { name: 'Grammar Checker', description: 'Ensure your writing is flawless with our AI checker.', icon: ShieldCheck, to: '/tools/grammar-checker', category: 'Writing', hot: true },
-  { name: 'Word Counter', description: 'Fast and accurate word and character counting tool.', icon: Type, to: '/tools/word-counter', category: 'Writing' },
-  { name: 'Citation Generator', description: 'Perfect APA, MLA, and Chicago style citations instantly.', icon: Quote, to: '/tools/citation-generator', category: 'Writing' },
-  { name: 'Essay Topic Generator', description: "Beat writer's block with 10 fresh ideas for your topic.", icon: Lightbulb, to: '/tools/essay-topic-generator', category: 'Writing' },
-  
-  // Study & Productivity
-  { name: 'Free Student Games', description: 'Take a productive study break with 12 free brain-training games.', icon: Flame, to: '/free-games', category: 'Study', isNew: true },
-  { name: 'Pomodoro Timer', description: 'Boost focus with 25-minute study sprints and breaks.', icon: BookOpen, to: '/tools/study-timer', category: 'Study' },
-  { name: 'Exam Countdown', description: 'Track your deadlines in real-time. Never miss an exam.', icon: Timer, to: '/tools/exam-countdown', category: 'Study' },
-  { name: 'Homework Planner', description: 'Organize your assignments and set priorities efficiently.', icon: ListChecks, to: '/tools/homework-planner', category: 'Study' },
-  { name: 'Study Timetable', description: 'AI-generated personalized weekly study schedules.', icon: Calendar, to: '/tools/study-timetable-generator', category: 'Study' },
-  { name: 'GPA Calculator', description: 'Calculate your semester and cumulative GPA accurately.', icon: Calculator, to: '/tools/gpa-calculator', category: 'Study' },
-  { name: 'Practice Questions', description: 'Generate random practice questions to test your knowledge.', icon: Brain, to: '/tools/random-question-generator', category: 'Study' },
-  
-  // Free Utilities
-  { name: 'QR Code Generator', description: 'Create free QR codes for links, text, and documents.', icon: QrCode, to: '/tools/qr-generator', category: 'Utilities' },
-  { name: 'Image to PDF', description: 'Convert your photos into high-quality PDF documents.', icon: FileText, to: '/tools/image-to-pdf', category: 'Utilities' },
-  { name: 'PDF Footer Editor', description: 'Stamp your name & enrollment number on every PDF page footer.', icon: FileEdit, to: '/tools/pdf-footer-editor', category: 'Utilities', isNew: true },
-  { name: 'Image Compressor', description: 'Reduce image file size without losing quality.', icon: ImageIcon, to: '/tools/image-compressor', category: 'Utilities' },
-  { name: 'Unit Converter', description: 'Switch between metric and imperial units with ease.', icon: Ruler, to: '/total-unit-converter', category: 'Utilities' },
-  { name: 'Password Generator', description: 'Generate secure, random passwords for your accounts.', icon: Lock, to: '/tools/password-generator', category: 'Utilities' },
-  { name: 'Age Calculator', description: 'Find out exactly how old you are in days and months.', icon: Clock, to: '/tools/age-calculator', category: 'Utilities' },
-  { name: 'Percent Calculator', description: 'Quickly find percentages for math and grades.', icon: Percent, to: '/tools/percentage-calculator', category: 'Utilities' },
-  { name: 'Name Generator', description: 'Random names for creative projects and personas.', icon: User, to: '/tools/random-name-generator', category: 'Utilities' },
-  { name: 'AI Prompt Gen', description: 'Master AI tools with perfectly engineered prompts.', icon: Terminal, to: '/tools/ai-prompt-generator', category: 'Utilities' },
-  { name: 'Internet Speed Test', description: 'Measure your real-time download/upload Mbps and ping latency.', icon: Wifi, to: '/tools/internet-speed-test', category: 'Utilities', hot: true },
-  { name: 'Instagram Captions', description: 'Generate engaging hashtags and captions for social media.', icon: Hash, to: '/instagram-caption-generator', category: 'Utilities' },
+const WORKFLOW_STEPS = [
+  { step: '01', icon: BookOpen,     title: 'Generate Notes',    desc: 'Paste your lecture text or topic. Get structured, exam-ready notes instantly.', to: '/ai-notes-generator', color: 'from-indigo-500 to-violet-500' },
+  { step: '02', icon: CheckCircle2, title: 'Practice with Quiz', desc: 'Turn those notes into MCQs and short-answer questions for active recall.', to: '/ai-quiz-generator',   color: 'from-emerald-500 to-teal-500' },
+  { step: '03', icon: Calendar,     title: 'Plan Your Schedule', desc: 'Input your exam dates and get a personalised week-by-week study plan.', to: '/ai-study-planner',    color: 'from-amber-500 to-orange-500' },
+  { step: '04', icon: MessageSquare,title: 'Chat with Your PDF', desc: 'Upload textbooks and research papers. Ask anything, get instant answers.', to: '/chat-pdf',            color: 'from-purple-500 to-pink-500' },
 ];
 
-const TRENDING = [
-  { name: 'Internet Speed Test', icon: Wifi, to: '/tools/internet-speed-test', color: 'from-sky-500 to-indigo-500' },
-  { name: 'AI Resume Builder', icon: LayoutTemplate, to: '/ai-resume-generator', color: 'from-indigo-500 to-violet-500' },
-  { name: 'Grammar Checker', icon: ShieldCheck, to: '/tools/grammar-checker', color: 'from-emerald-500 to-teal-500' },
-  { name: 'Chat with PDF', icon: MessageSquare, to: '/chat-pdf', color: 'from-purple-500 to-pink-500' },
-  { name: 'PDF Merge', icon: FilePlus, to: '/free-pdf-tools', color: 'from-rose-500 to-orange-400' },
-  { name: 'GPA Calculator', icon: Calculator, to: '/tools/gpa-calculator', color: 'from-amber-500 to-yellow-400' },
-  { name: 'Memory Game', icon: Gamepad2, to: '/memory-card-game', color: 'from-blue-500 to-cyan-400' },
-  { name: 'Essay Writer', icon: FileText, to: '/ai-essay-writer', color: 'from-fuchsia-500 to-pink-500' },
+const CORE_TOOLS = [
+  { icon: BookOpen,     label: 'AI Notes Generator',  desc: 'Struggling to make sense of your lecture recordings or dense textbook chapters? Our AI Notes Generator converts any raw text, topic, or study material into structured, exam-ready notes in seconds — formatted with headings, bullet points, and key definitions automatically highlighted.', problem: 'The Problem It Solves', problemText: 'You spend 2 hours making notes and still miss key concepts. This tool does it in 30 seconds.', to: '/ai-notes-generator',  color: 'from-indigo-500 to-violet-500' },
+  { icon: CheckCircle2, label: 'AI Quiz Generator',   desc: 'Reading your notes twice is passive learning — it feels productive but doesn\'t build real memory. The AI Quiz Generator transforms your study material into MCQs, true/false, and short-answer questions that force active recall, the most effective study technique known to science.', problem: 'The Problem It Solves', problemText: 'You read the same chapter 3 times and still fail the test. Active recall via quizzes fixes this.', to: '/ai-quiz-generator',   color: 'from-emerald-500 to-teal-500' },
+  { icon: Calendar,     label: 'AI Study Planner',    desc: 'When exam season hits, most students open a blank calendar and guess. Our AI Study Planner takes your exam dates, subjects, and current confidence level, then generates a week-by-week schedule that prioritises your weakest subjects without overwhelming you.', problem: 'The Problem It Solves', problemText: 'You don\'t know where to start when you have 6 subjects and 3 weeks. This creates your road map.', to: '/ai-study-planner',    color: 'from-amber-500 to-orange-500' },
+  { icon: MessageSquare,label: 'Chat with PDF',       desc: 'Stop reading 300-page textbooks cover-to-cover hoping to find the answer. Chat with PDF lets you upload any academic document and ask it direct questions — ideal for literature reviews, research papers, case studies, and dense academic texts.', problem: 'The Problem It Solves', problemText: 'You have a 400-page textbook and 2 days left. Chat with PDF finds answers in seconds.', to: '/chat-pdf',            color: 'from-purple-500 to-pink-500' },
 ];
 
-const categories = ['All', 'AI Tools', 'Utilities', 'Writing', 'Study'];
-
-const stats = [
-  { value: '50+', name: 'Free Tools', icon: Zap },
-  { value: '100K+', name: 'Students Helped', icon: Users },
-  { value: '0', name: 'Registration Required', icon: ShieldCheck },
-  { value: '24/7', name: 'Always Available', icon: TrendingUp },
+const ALL_TOOLS = [
+  { icon: Brain,       label: 'AI Essay Writer',       desc: 'Structured, cited essays from any prompt.', to: '/ai-essay-writer',          color: 'from-blue-500 to-cyan-500' },
+  { icon: Wand2,       label: 'Paraphrasing Tool',     desc: 'Rewrite text in 6 AI modes. Avoid plagiarism.', to: '/tools/paraphrasing-tool', color: 'from-rose-500 to-pink-500' },
+  { icon: ShieldCheck, label: 'Grammar Checker',       desc: 'AI-powered grammar and style correction.', to: '/tools/grammar-checker',    color: 'from-teal-500 to-emerald-500' },
+  { icon: FileText,    label: 'AI Resume Builder',     desc: 'ATS-friendly resumes in minutes.', to: '/ai-resume-generator',        color: 'from-indigo-500 to-violet-500' },
+  { icon: MonitorPlay, label: 'Presentation Builder',  desc: 'AI-generated slide outlines, beautifully structured.', to: '/presentation-generator',  color: 'from-amber-500 to-yellow-500' },
+  { icon: Mail,        label: 'Email Writer',          desc: 'Professional emails to professors and employers.', to: '/email-writer',              color: 'from-sky-500 to-blue-500' },
+  { icon: Brain,       label: 'Homework Helper',       desc: 'Step-by-step solutions and explanations.', to: '/ai-homework-helper',       color: 'from-violet-500 to-purple-500' },
+  { icon: FilePlus,    label: 'PDF Tools',             desc: 'Merge, split, compress and watermark PDFs.', to: '/free-pdf-tools',           color: 'from-rose-500 to-orange-500' },
 ];
 
-const testimonials = [
-  { content: 'StudentAI saved my semester. I used the AI Essay Writer to structure my 3000-word paper in 20 minutes. Absolute lifesaver.', author: 'Priya S.', role: 'Engineering Student', image: 'https://i.pravatar.cc/100?img=47' },
-  { content: 'The AI Resume Builder is incredible. Got 3 interview calls in a week after updating my resume using this tool.', author: 'Marcus J.', role: 'MBA Graduate', image: 'https://i.pravatar.cc/100?img=68' },
-  { content: 'Chat with PDF is the best study tool I have found. I asked my 400-page textbook questions and got instant answers.', author: 'Aisha K.', role: 'Pre-Med Student', image: 'https://i.pravatar.cc/100?img=32' },
+const TESTIMONIALS = [
+  { text: 'The AI Notes Generator saved my semester. I converted 4 hours of lecture recordings into structured notes in under a minute.', name: 'Priya S.', role: 'Engineering Student' },
+  { text: 'Chat with PDF is unreal. I asked my 400-page textbook questions and got cited answers instantly. My exam prep dropped from 3 weeks to 5 days.', name: 'Aisha K.', role: 'Pre-Med Student' },
+  { text: 'The AI Resume Builder got me 3 interview calls in a week. It knew exactly what recruiters want to see.', name: 'Marcus J.', role: 'MBA Graduate' },
 ];
-
-const CATEGORY_COLORS = {
-  'AI Tools':    { grad: 'from-indigo-500 to-violet-500', light: 'bg-indigo-50 dark:bg-indigo-900/20', text: 'text-indigo-600 dark:text-indigo-400' },
-  'Utilities':   { grad: 'from-sky-500 to-cyan-500',     light: 'bg-sky-50 dark:bg-sky-900/20',       text: 'text-sky-600 dark:text-sky-400' },
-  'Writing':     { grad: 'from-emerald-500 to-teal-500', light: 'bg-emerald-50 dark:bg-emerald-900/20',text: 'text-emerald-600 dark:text-emerald-400' },
-  'Study':       { grad: 'from-amber-500 to-orange-500', light: 'bg-amber-50 dark:bg-amber-900/20',   text: 'text-amber-600 dark:text-amber-400' },
-};
 
 export default function Home() {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState('All');
-
-  // Scroll-reveal
-  useEffect(() => {
-    const els = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-    }, { threshold: 0.12 });
-    els.forEach(el => io.observe(el));
-    return () => io.disconnect();
-  }, []);
-
-  const filteredTools = useMemo(() => {
-    return allTools.filter(tool => {
-      const matchesSearch = tool.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                           tool.description.toLowerCase().includes(searchQuery.toLowerCase());
-      const matchesCategory = activeCategory === 'All' || tool.category === activeCategory;
-      return matchesSearch && matchesCategory;
-    });
-  }, [searchQuery, activeCategory]);
-
   return (
     <div className="min-h-screen pt-16 pb-12 flex flex-col items-center overflow-hidden">
-      <SEO 
-        title="Home" 
-        description="Access free AI tools for students: resume generator, homework helper, essay writer, presentation builder, and PDF utilities to boost your productivity." 
+      <SEO
+        title="Your AI Study Assistant — Free AI Tools for Students"
+        canonical="/"
+        description="StudentAI Tools is a focused AI Study Assistant for students. Generate notes, create quizzes, plan your study schedule, and chat with your textbooks — all free, no sign-up."
       />
 
-      {/* ──────────── HERO ──────────── */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-6 mb-16 relative overflow-hidden">
-        {/* Grid bg */}
+      {/* ── HERO ── */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mt-8 mb-16 relative overflow-hidden">
         <div className="hero-grid absolute inset-0 -z-10" />
-        {/* Orbs */}
         <div className="hero-orb w-[500px] h-[350px] bg-indigo-500/20 -left-32 -top-16" style={{ animationDelay: '0s' }} />
         <div className="hero-orb w-[380px] h-[380px] bg-purple-500/15 right-0 top-8" style={{ animationDelay: '2.5s' }} />
-        <div className="hero-orb w-[260px] h-[260px] bg-pink-500/10 left-1/3 bottom-0" style={{ animationDelay: '4.5s' }} />
-        {/* Floating particles */}
-        {[{s:8,l:'15%',t:'18%',c:'bg-indigo-400/40',dur:'6s',delay:'0s'},{s:5,l:'80%',t:'25%',c:'bg-purple-400/30',dur:'8s',delay:'1s'},{s:6,l:'55%',t:'70%',c:'bg-pink-400/30',dur:'7s',delay:'2s'},{s:4,l:'30%',t:'60%',c:'bg-indigo-300/40',dur:'9s',delay:'0.5s'},{s:7,l:'70%',t:'65%',c:'bg-violet-400/30',dur:'7.5s',delay:'1.5s'}].map((p,i) => (
-          <div key={i} className={`particle ${p.c}`} style={{ width:p.s, height:p.s, left:p.l, top:p.t, '--dur':p.dur, '--delay':p.delay }} />
-        ))}
 
         <div className="relative z-10 py-8">
-          {/* Pill badge */}
           <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-50 dark:bg-indigo-900/30 border border-indigo-200 dark:border-indigo-700/50 text-indigo-600 dark:text-indigo-400 text-sm font-semibold mb-8 animate-fade-in-up">
-            <Sparkles className="w-4 h-4 animate-spin-slow" />
-            50+ Free Tools for Students · No Login · Always Free
+            <Zap className="w-4 h-4" />
+            Built for students — 100% Free · No Login Required
           </div>
 
           <h1 className="text-5xl md:text-7xl font-extrabold text-slate-900 dark:text-white tracking-tight mb-6 leading-[1.1] animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-            All-in-One Free<br />
-            <span className="text-shimmer">Student AI Tools</span>
+            Your AI<br />
+            <span className="text-shimmer">Study Assistant</span>
           </h1>
 
-          <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-slate-500 dark:text-slate-300 mb-10 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
-            PDF tools, AI writing, study helpers and games —{' '}
-            <span className="font-semibold text-slate-700 dark:text-slate-200">everything in one place.</span>{' '}
-            100% free, no sign-up needed.
+          <p className="mt-4 max-w-2xl mx-auto text-lg md:text-xl text-slate-500 dark:text-slate-300 mb-6 leading-relaxed animate-fade-in-up" style={{ animationDelay: '0.2s' }}>
+            Upload notes → Generate summaries → Practice quizzes → Plan your study schedule.
+            <span className="block mt-1 font-semibold text-slate-700 dark:text-slate-200">Study smarter, not harder.</span>
           </p>
 
-          {/* CTAs */}
+          {/* Workflow pill */}
+          <div className="flex flex-wrap justify-center items-center gap-2 mb-10 animate-fade-in-up" style={{ animationDelay: '0.25s' }}>
+            {['📝 Upload Notes', '→', '🧠 Generate Summary', '→', '❓ Practice Quiz', '→', '📅 Plan Schedule'].map((s, i) => (
+              s === '→'
+                ? <ChevronRight key={i} className="w-4 h-4 text-slate-400 hidden sm:block" />
+                : <span key={i} className="px-3 py-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-full text-sm font-semibold text-slate-700 dark:text-slate-200 shadow-sm">{s}</span>
+            ))}
+          </div>
+
           <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mb-12 animate-fade-in-up" style={{ animationDelay: '0.3s' }}>
-            <Link to="/ai-homework-helper" className="btn-primary btn-glow px-8 py-4 text-lg flex items-center gap-2 w-full sm:w-auto justify-center">
-              <Zap className="w-5 h-5" /> Try AI Tools Free
+            <Link to="/ai-notes-generator" className="btn-primary btn-glow px-8 py-4 text-lg flex items-center gap-2 w-full sm:w-auto justify-center">
+              <BookOpen className="w-5 h-5" /> Start with Notes AI
             </Link>
-            <Link to="/free-pdf-tools" className="flex items-center gap-2 w-full sm:w-auto justify-center px-8 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:-translate-y-0.5 transition-all shadow-sm">
-              Explore Tools <ArrowRight className="w-5 h-5" />
+            <Link to="/free-tools" className="flex items-center gap-2 w-full sm:w-auto justify-center px-8 py-4 rounded-xl text-lg font-bold text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 border-2 border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600 hover:-translate-y-0.5 transition-all shadow-sm">
+              Explore All Tools <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
 
-          {/* Trust badges */}
           <div className="flex flex-wrap justify-center gap-3 text-sm font-semibold text-slate-500 dark:text-slate-400 animate-fade-in-up" style={{ animationDelay: '0.4s' }}>
-            {['100% Free','No Registration','Works on Mobile','Student Optimized','Used by 2M+ Students'].map(b => (
-              <div key={b} className="flex items-center gap-1.5 bg-white/80 dark:bg-slate-800/60 backdrop-blur px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700/50 shadow-sm hover:border-indigo-300 dark:hover:border-indigo-600 transition-colors">
+            {['100% Free', 'No Registration', 'Works on Mobile', 'Student Optimized', 'AdSense Safe'].map(b => (
+              <div key={b} className="flex items-center gap-1.5 bg-white/80 dark:bg-slate-800/60 backdrop-blur px-4 py-2 rounded-full border border-slate-200 dark:border-slate-700/50 shadow-sm">
                 <CheckCircle2 className="w-4 h-4 text-emerald-500" />{b}
               </div>
             ))}
@@ -169,204 +96,116 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ──────────── TRENDING MARQUEE ──────────── */}
-      <section className="w-full mb-16 reveal">
-        <div className="flex items-center gap-3 mb-5 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="p-2.5 bg-gradient-to-br from-rose-500 to-orange-400 rounded-xl text-white shadow-lg shadow-rose-500/30">
-            <Flame className="w-5 h-5" />
-          </div>
-          <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">🔥 Trending Right Now</h2>
+      {/* ── 4-STEP WORKFLOW ── */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">How StudentAI Works</h2>
+          <p className="text-slate-500 dark:text-slate-400 max-w-xl mx-auto">A proven 4-step study system. Follow it once and you'll never study the old way again.</p>
         </div>
-        <div className="marquee-wrap">
-          <div className="marquee-track gap-3 px-2">
-            {[...TRENDING, ...TRENDING].map((tool, i) => (
-              <Link key={i} to={tool.to}
-                className="flex items-center gap-2.5 px-5 py-3 mx-1.5 rounded-2xl bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 shadow-sm hover:shadow-md hover:-translate-y-0.5 hover:border-indigo-300 dark:hover:border-indigo-600 transition-all group whitespace-nowrap"
-              >
-                <div className={`w-8 h-8 rounded-lg bg-gradient-to-br ${tool.color} flex items-center justify-center flex-shrink-0 shadow-sm group-hover:scale-110 transition-transform`}>
-                  <tool.icon className="w-4 h-4 text-white" />
-                </div>
-                <span className="text-sm font-bold text-slate-700 dark:text-slate-200">{tool.name}</span>
-              </Link>
-            ))}
-          </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {WORKFLOW_STEPS.map((step) => (
+            <Link key={step.step} to={step.to} className="group relative bg-white dark:bg-slate-800/60 p-7 rounded-3xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 hover:-translate-y-2 transition-all duration-300 overflow-hidden">
+              <div className={`absolute -right-8 -top-8 w-28 h-28 bg-gradient-to-br ${step.color} opacity-0 group-hover:opacity-10 rounded-full blur-2xl transition-all`} />
+              <div className="text-6xl font-extrabold text-slate-100 dark:text-slate-700/50 leading-none mb-3 tabular-nums">{step.step}</div>
+              <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${step.color} flex items-center justify-center mb-4 shadow-md group-hover:scale-110 transition-transform`}>
+                <step.icon className="w-5 h-5 text-white" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">{step.title}</h3>
+              <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{step.desc}</p>
+              <div className="mt-4 flex items-center gap-1 text-indigo-600 dark:text-indigo-400 text-xs font-bold opacity-0 group-hover:opacity-100 transition-all">Try it free <ArrowRight className="w-3 h-3" /></div>
+            </Link>
+          ))}
         </div>
       </section>
 
-
-
-      {/* ──────────── FREE GAMES (Gamified) ──────────── */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">
-        <div className="flex items-center justify-between mb-7">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 bg-gradient-to-br from-indigo-500 to-violet-500 rounded-xl text-white shadow-lg shadow-indigo-500/30">
-              <Gamepad2 className="w-5 h-5 animate-bounce" />
+      {/* ── CORE 4 TOOLS SPOTLIGHT ── */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl md:text-4xl font-extrabold text-slate-900 dark:text-white mb-3">The Core 4 Study Tools</h2>
+          <p className="text-slate-500 dark:text-slate-400 max-w-xl mx-auto">These four tools, used together, cover 90% of what makes a successful student. Start here.</p>
+        </div>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {CORE_TOOLS.map((tool) => (
+            <div key={tool.to} className="group bg-white dark:bg-slate-800/60 rounded-3xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-1 transition-all duration-300 overflow-hidden">
+              <div className={`h-2 bg-gradient-to-r ${tool.color}`} />
+              <div className="p-8">
+                <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${tool.color} flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform`}>
+                  <tool.icon className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{tool.label}</h3>
+                <p className="text-slate-500 dark:text-slate-400 leading-relaxed mb-4 text-sm">{tool.desc}</p>
+                <div className="bg-slate-50 dark:bg-slate-700/40 rounded-xl p-4 mb-5">
+                  <p className="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">{tool.problem}</p>
+                  <p className="text-sm font-semibold text-slate-700 dark:text-slate-200">{tool.problemText}</p>
+                </div>
+                <Link to={tool.to} className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r ${tool.color} text-white font-bold text-sm shadow-md hover:-translate-y-0.5 transition-all`}>
+                  Try it free <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
             </div>
-            <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">
-              🎮 Free Games
-              <span className="badge-new ml-3">NEW</span>
-            </h2>
-          </div>
-          <Link to="/free-games" className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 group">
-            View All <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          ))}
+        </div>
+      </section>
+
+      {/* ── MORE TOOLS GRID ── */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
+        <div className="flex items-center justify-between mb-8">
+          <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white">More Study Tools</h2>
+          <Link to="/free-tools" className="text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:underline flex items-center gap-1 group">
+            View all <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
           </Link>
         </div>
-
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { name: 'Logic Puzzle', desc: 'Sharpen deduction skills.', icon: Brain, to: '/logic-puzzle-game', color: 'from-orange-500 to-amber-400' },
-            { name: 'Typing Test', desc: 'Boost your WPM speed.', icon: Hash, to: '/typing-speed-test', color: 'from-blue-600 to-indigo-500' },
-            { name: 'Sudoku Pro', desc: 'Daily math challenge.', icon: LayoutGrid, to: '/sudoku-game', color: 'from-purple-500 to-pink-500' },
-            { name: 'Snake Retro', desc: 'Classic focus game.', icon: Gamepad2, to: '/snake-game', color: 'from-emerald-500 to-teal-400' }
-          ].map((game, idx) => (
-            <Link key={idx} to={game.to} className="group relative bg-white dark:bg-slate-800/60 p-5 rounded-3xl border border-slate-100 dark:border-slate-700/50 hover:shadow-xl hover:-translate-y-2 transition-all duration-300 overflow-hidden cursor-pointer shadow-sm">
-              <div className={`absolute -right-6 -bottom-6 w-24 h-24 bg-gradient-to-br ${game.color} opacity-10 group-hover:opacity-25 rounded-full blur-xl transition-all`} />
-              <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${game.color} text-white flex items-center justify-center mb-5 shadow-lg group-hover:scale-110 transition-transform`}>
-                <game.icon className="w-6 h-6" />
+          {ALL_TOOLS.map((tool) => (
+            <Link key={tool.to} to={tool.to} className="group bg-white dark:bg-slate-800/60 p-5 rounded-2xl border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+              <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${tool.color} flex items-center justify-center mb-3 shadow-md group-hover:scale-110 transition-transform`}>
+                <tool.icon className="w-5 h-5 text-white" />
               </div>
-              <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-1.5">{game.name}</h3>
-              <p className="text-slate-500 dark:text-slate-400 text-xs font-medium">{game.desc}</p>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white mb-1">{tool.label}</h3>
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{tool.desc}</p>
             </Link>
           ))}
         </div>
       </section>
 
-      {/* ──────────── ALL TOOLS GRID ──────────── */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-5xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
-            All Tools for Academic Success
-          </h2>
-          <p className="text-lg text-slate-500 dark:text-slate-400 max-w-2xl mx-auto mb-8">
-            Everything you need to study faster, write better, and succeed — all in one place.
-          </p>
-
-          {/* Search */}
-          <div className="max-w-xl mx-auto mb-8 relative group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
-            <input
-              type="text"
-              placeholder="Search tools like 'Resume AI, Grammar, Speed Test...'"
-              className="w-full pl-12 pr-4 py-4 bg-white dark:bg-slate-800 border-2 border-slate-100 dark:border-slate-700 rounded-2xl text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-400 transition-all shadow-sm"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-          </div>
-
-          {/* Category Tabs */}
-          <div className="flex flex-wrap justify-center gap-2.5 mb-3">
-            {categories.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`px-5 py-2 rounded-full text-sm font-bold transition-all ${
-                  activeCategory === cat 
-                  ? 'bg-gradient-to-r from-indigo-600 to-purple-600 text-white shadow-lg shadow-indigo-500/30 scale-105' 
-                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 border border-slate-200 dark:border-slate-700 hover:border-indigo-300 dark:hover:border-indigo-600'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredTools.length > 0 ? (
-            filteredTools.map((tool) => {
-              const colors = CATEGORY_COLORS[tool.category] || CATEGORY_COLORS['AI Tools'];
-              return (
-                <Link
-                  key={tool.name}
-                  to={tool.to}
-                  className="group relative bg-white dark:bg-slate-800/60 p-7 rounded-3xl shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 border border-slate-100 dark:border-slate-700/50 hover:-translate-y-2 transition-all duration-300 cursor-pointer flex flex-col h-full overflow-hidden"
-                >
-                  {/* Hover bg glow */}
-                  <div className={`absolute -right-10 -top-10 w-36 h-36 bg-gradient-to-br ${colors.grad} opacity-0 group-hover:opacity-10 rounded-full blur-2xl transition-all duration-300`} />
-
-                  {/* Badges */}
-                  <div className="absolute top-5 right-5 flex gap-1.5">
-                    {tool.hot && <span className="text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-rose-100 dark:bg-rose-900/30 text-rose-500">🔥 HOT</span>}
-                    {tool.isNew && <span className="badge-new">NEW</span>}
-                  </div>
-
-                  {/* Icon */}
-                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${colors.grad} flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}>
-                    <tool.icon className="h-7 w-7 text-white" />
-                  </div>
-
-                  {/* Category  */}
-                  <span className={`text-xs font-bold uppercase tracking-wider px-2 py-0.5 rounded-md ${colors.light} ${colors.text} mb-3 self-start`}>
-                    {tool.category}
-                  </span>
-
-                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">{tool.name}</h3>
-                  <p className="text-slate-500 dark:text-slate-400 leading-relaxed flex-grow">{tool.description}</p>
-
-                  <div className="mt-5 flex items-center gap-1 text-indigo-600 dark:text-indigo-400 text-sm font-bold opacity-0 group-hover:opacity-100 group-hover:gap-2 transition-all duration-200">
-                    Open tool <ArrowRight className="w-4 h-4" />
-                  </div>
-                </Link>
-              );
-            })
-          ) : (
-            <div className="col-span-full py-20 text-center">
-              <div className="w-20 h-20 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-6 text-slate-400">
-                <Search className="w-10 h-10" />
-              </div>
-              <h3 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">No tools found</h3>
-              <p className="text-slate-500 dark:text-slate-400">Try adjusting your search or category filters.</p>
-              <button 
-                onClick={() => { setSearchQuery(''); setActiveCategory('All'); }}
-                className="mt-6 text-indigo-600 dark:text-indigo-400 font-bold hover:underline"
-              >
-                Clear all filters
-              </button>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* ──────────── STATS ──────────── */}
-      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 reveal">
+      {/* ── STATS ── */}
+      <section className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-24">
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-          {stats.map((stat, idx) => (
-            <div key={idx} className="stat-card bg-white dark:bg-slate-800/60 p-8 rounded-3xl text-center border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:shadow-indigo-500/10 hover:-translate-y-2 transition-all duration-300 group">
-              <div className="mx-auto w-14 h-14 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-5 shadow-lg shadow-indigo-500/20 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
-                <stat.icon className="h-7 w-7 text-white" />
+          {[
+            { value: '20+', label: 'AI Study Tools', icon: Zap },
+            { value: '100K+', label: 'Students Helped', icon: Users },
+            { value: '0', label: 'Registration Required', icon: CheckCircle2 },
+            { value: '24/7', label: 'Always Available', icon: Star },
+          ].map((s, i) => (
+            <div key={i} className="bg-white dark:bg-slate-800/60 p-8 rounded-3xl text-center border border-slate-100 dark:border-slate-700/50 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 group">
+              <div className="mx-auto w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-600 rounded-2xl flex items-center justify-center mb-4 shadow-lg group-hover:scale-110 transition-transform">
+                <s.icon className="h-6 w-6 text-white" />
               </div>
-              <div className="text-4xl font-extrabold text-slate-900 dark:text-white mb-2 tabular-nums">{stat.value}</div>
-              <div className="text-slate-500 dark:text-slate-400 font-medium text-sm">{stat.name}</div>
+              <div className="text-4xl font-extrabold text-slate-900 dark:text-white mb-1 tabular-nums">{s.value}</div>
+              <div className="text-slate-500 dark:text-slate-400 font-medium text-sm">{s.label}</div>
             </div>
           ))}
         </div>
       </section>
 
-      {/* ──────────── TESTIMONIALS ──────────── */}
-      <section className="w-full bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white py-24 my-10 relative overflow-hidden reveal">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-purple-600/20 blur-[120px] rounded-full animate-float" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-indigo-600/20 blur-[120px] rounded-full animate-float" style={{ animationDelay: '3s' }} />
+      {/* ── TESTIMONIALS ── */}
+      <section className="w-full bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white py-20 mb-16 relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-purple-600/20 blur-[100px] rounded-full" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/20 text-indigo-300 text-sm font-semibold mb-6">
-              <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" /> Trusted by students worldwide
-            </div>
-            <h2 className="text-3xl md:text-5xl font-extrabold mb-4">Loved by Students Worldwide</h2>
-            <p className="text-xl text-slate-400 max-w-2xl mx-auto">Real stories from real students.</p>
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-extrabold mb-3">Loved by Students Worldwide</h2>
+            <p className="text-slate-400">Real stories from real students.</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {testimonials.map((testimonial, idx) => (
-              <div key={idx} className="bg-white/5 backdrop-blur-md p-8 rounded-3xl border border-white/10 hover:bg-white/10 hover:-translate-y-2 hover:border-indigo-500/30 transition-all duration-300 group">
-                <div className="flex items-center gap-1 mb-5">
-                  {Array(5).fill(0).map((_, i) => <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />)}
+            {TESTIMONIALS.map((t, i) => (
+              <div key={i} className="bg-white/5 backdrop-blur-md p-7 rounded-3xl border border-white/10 hover:bg-white/10 hover:-translate-y-1 transition-all duration-300">
+                <div className="flex gap-1 mb-4">
+                  {Array(5).fill(0).map((_, j) => <Star key={j} className="h-4 w-4 fill-yellow-400 text-yellow-400" />)}
                 </div>
-                <p className="text-base leading-relaxed text-slate-300 mb-7 italic">"{testimonial.content}"</p>
-                <div className="flex items-center gap-4">
-                  <img src={testimonial.image} alt={testimonial.author} className="w-12 h-12 rounded-full border-2 border-indigo-500/40 group-hover:border-indigo-400 transition-colors" />
-                  <div>
-                    <h4 className="font-bold text-white">{testimonial.author}</h4>
-                    <span className="text-slate-400 text-sm">{testimonial.role}</span>
-                  </div>
+                <p className="text-slate-300 italic leading-relaxed mb-5 text-sm">"{t.text}"</p>
+                <div>
+                  <div className="font-bold text-white text-sm">{t.name}</div>
+                  <div className="text-slate-400 text-xs">{t.role}</div>
                 </div>
               </div>
             ))}
@@ -374,29 +213,19 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ──────────── CTA ──────────── */}
-      <section className="w-full max-w-5xl mx-auto px-4 text-center mt-6 mb-24 relative">
+      {/* ── CTA ── */}
+      <section className="w-full max-w-5xl mx-auto px-4 text-center mb-16">
         <div className="relative bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 rounded-[3rem] p-12 md:p-20 overflow-hidden">
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_rgba(255,255,255,0.15)_0%,_transparent_60%)]" />
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,_rgba(255,255,255,0.1)_0%,_transparent_60%)]" />
           <div className="relative z-10">
-            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-5">Ready to study smarter?</h2>
-            <p className="text-lg text-white/80 mb-10 max-w-2xl mx-auto leading-relaxed">
-              Join thousands of students saving hours every week using our AI suite. 100% free, always.
-            </p>
-            <Link
-              to="/ai-resume-generator"
-              className="inline-flex items-center gap-2 bg-white text-indigo-700 hover:bg-indigo-50 font-extrabold px-10 py-5 rounded-2xl text-lg transition-all shadow-2xl hover:shadow-white/20 hover:-translate-y-1 active:scale-95"
-            >
-              <Zap className="w-5 h-5" />
-              Get Started For Free
+            <h2 className="text-4xl md:text-5xl font-extrabold text-white mb-4">Ready to study smarter?</h2>
+            <p className="text-lg text-white/80 mb-8 max-w-xl mx-auto">Join thousands of students saving hours every week. 100% free, always.</p>
+            <Link to="/ai-notes-generator" className="inline-flex items-center gap-2 bg-white text-indigo-700 hover:bg-indigo-50 font-extrabold px-10 py-4 rounded-2xl text-lg transition-all shadow-2xl hover:-translate-y-0.5">
+              <BookOpen className="w-5 h-5" /> Start with AI Notes — Free
             </Link>
           </div>
         </div>
       </section>
-
-      {/* Floating Quick Tools */}
-      <QuickToolsFloat />
     </div>
   );
 }

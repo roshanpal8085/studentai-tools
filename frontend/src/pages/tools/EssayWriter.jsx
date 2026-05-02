@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import SEO from '../../components/SEO';
@@ -45,7 +45,8 @@ const EssayWriter = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
-        title="Free AI Essay Writer — Generate Academic Essays Instantly (2026)" 
+        title="Free AI Essay Writer â€” Generate Academic Essays Instantly (2026)" 
+        canonical="/ai-essay-writer"
         description="Generate well-structured argumentative, persuasive and descriptive essays in seconds. Our free AI Essay Writer is used by 2M+ students. No signup needed."
         keywords="ai essay writer, free essay generator, academic essay AI, argumentative essay writer, student AI essay tool 2026"
         schema={[

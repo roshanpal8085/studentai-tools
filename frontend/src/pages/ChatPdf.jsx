@@ -93,6 +93,7 @@ const ChatPdf = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900 flex flex-col items-center">
       <SEO 
         title="Chat with PDF - Talk to any Document with AI" 
+        canonical="/chat-pdf"
         description="Upload research papers, textbooks, or manuals and instantly get answers. Our AI understands PDF context for accurate summaries and explanations." 
       />
       
@@ -247,45 +248,99 @@ const ChatPdf = () => {
           Ad Placement - Academic Research Hubs
         </div>
 
-        {/* Informational Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 py-16 border-t border-slate-200 dark:border-slate-800">
-          <div className="space-y-12">
-            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">Interactive <span className="text-indigo-600">Research</span></h2>
-            <div className="space-y-10">
-              {[
-                { title: 'Semantic Extraction', desc: 'Our AI doesn\'t just search for keywords; it understands the semantic relationships between concepts in your document.', icon: Brain },
-                { title: 'Citational Precision', desc: 'Ask for specific page numbers or sections to verify AI claims directly against the source material.', icon: ShieldCheck },
-                { title: 'Infinite Context', desc: 'Whether it\'s a 2-page essay or a 500-page medical textbook, the AI maintains a consistent global view of the content.', icon: Zap }
-              ].map((item, i) => (
-                <div key={i} className="flex gap-6 group">
-                   <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                     <item.icon className="w-7 h-7" />
-                   </div>
-                   <div>
-                     <h3 className="text-xl font-bold dark:text-white mb-2">{item.title}</h3>
-                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
-                   </div>
+        {/* Comprehensive SEO Content for AdSense E-E-A-T */}
+        <div className="mt-16 pt-16 border-t border-slate-200 dark:border-slate-800">
+          <div className="max-w-4xl mx-auto space-y-16">
+            
+            <section>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-6">How to Use Chat with PDF to Cut Research Time in Half</h2>
+              <div className="prose prose-indigo dark:prose-invert max-w-none prose-p:leading-relaxed prose-lg text-slate-600 dark:text-slate-400">
+                <p>
+                  Reading a dense, 50-page academic paper from start to finish is often a highly inefficient way to extract information. You usually only need specific data points: the methodology used, the primary conclusions, or the limitations of the study.
+                </p>
+                <p>
+                  <strong>Chat with PDF</strong> transforms static documents into interactive databases. By leveraging semantic extraction, the AI "reads" the entire document instantly, allowing you to query it directly. Here is how to construct your queries for the best results:
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 not-prose">
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">1</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">The Broad Summary</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Always start broad to orient yourself. Ask: <em>"Summarize the core argument of this paper in three bullet points, avoiding technical jargon."</em></p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">2</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Targeted Extraction</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">If writing a literature review, extract exactly what you need. Ask: <em>"What specific methodology did the authors use in their second experiment?"</em></p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">3</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Conceptual Clarification</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">When you hit a dense paragraph, copy it into the chat and ask: <em>"Explain this concept as if I am a high school student, and provide a real-world example."</em></p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">4</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Verify with Citations</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Never take the AI's word blindly. Ask: <em>"What were the exact statistics reported for Group B? Quote the relevant sentence."</em></p>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            </section>
 
-          <div className="glass-card rounded-[3rem] p-10 md:p-14 relative overflow-hidden h-fit">
-            <h2 className="text-2xl font-extrabold dark:text-white mb-8">Chat PDF FAQ</h2>
-            <div className="space-y-6">
-              {[
-                { q: 'Is my data secure?', a: 'Document context is processed in a secure sandbox and is never used to train global AI models. Your data remains yours.' },
-                { q: 'Can it summarize entire books?', a: 'Yes! The AI can provide high-level summaries or dive deep into specific chapters of large texts.' },
-                { q: 'Does it support scanned PDFs?', a: 'It works best with text-based PDFs. For scanned images, we recommend running OCR before uploading.' }
-              ].map((faq, i) => (
-                <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
-                  <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4 text-indigo-500" /> {faq.q}
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+            <section className="bg-indigo-50 dark:bg-indigo-900/10 rounded-[3rem] p-8 md:p-12 border border-indigo-100 dark:border-indigo-800/30">
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                <Brain className="w-6 h-6 text-indigo-500" /> Example: Interviewing a Research Paper
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">Document Loaded</h3>
+                  <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl text-sm text-slate-600 dark:text-slate-400 leading-relaxed border border-slate-200 dark:border-slate-700 h-80 flex flex-col items-center justify-center text-center">
+                    <FileText className="w-12 h-12 text-indigo-300 mb-3" />
+                    <strong>"The Impact of Sleep Deprivation on Cognitive Load Processing in University Undergraduates"</strong>
+                    <p className="mt-2 text-xs">PDF Document Â· 34 Pages</p>
+                  </div>
                 </div>
-              ))}
-            </div>
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">Chat Interaction</h3>
+                  <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl text-sm text-slate-900 dark:text-slate-200 border border-indigo-200 dark:border-indigo-700 shadow-lg shadow-indigo-500/10 h-80 overflow-y-auto space-y-4">
+                    <div className="flex flex-row-reverse gap-3">
+                      <div className="w-8 h-8 rounded-full bg-indigo-600 flex-shrink-0"></div>
+                      <div className="bg-slate-100 dark:bg-slate-800 p-3 rounded-lg rounded-tr-none text-slate-800 dark:text-slate-200">
+                        Did the authors find any difference between male and female students regarding sleep deprivation?
+                      </div>
+                    </div>
+                    <div className="flex gap-3">
+                      <div className="w-8 h-8 rounded-full bg-indigo-100 flex-shrink-0 flex items-center justify-center"><Bot className="w-4 h-4 text-indigo-600" /></div>
+                      <div className="bg-indigo-50 dark:bg-indigo-900/30 p-3 rounded-lg rounded-tl-none border border-indigo-100 dark:border-indigo-800 text-slate-800 dark:text-slate-200">
+                        Based on the document, yes. The authors note on page 14 that while both groups experienced a 22% drop in baseline memory recall after 24 hours of deprivation, female students demonstrated a statistically significant higher resilience in spatial-reasoning tasks compared to the male cohort (p &lt; 0.05).
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-8">Frequently Asked Questions</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { q: 'Is my uploaded document private?', a: 'Yes. Your document is processed securely in memory to generate the semantic index, and is never used to train our AI models. Once you clear the chat or close the window, the document context is immediately purged from our servers.' },
+                  { q: 'Is there a file size limit?', a: 'Currently, the maximum file size is 50MB. This is generally large enough for massive 500-page textbooks or highly detailed research papers.' },
+                  { q: 'Does this tool work with scanned PDFs or images?', a: 'Chat with PDF requires text-based PDFs to function properly. If your PDF is a scanned image of a book, you must first run it through an OCR (Optical Character Recognition) tool before uploading it here.' },
+                  { q: 'What languages are supported?', a: 'While the interface is in English, the AI can process PDFs written in over 50 languages, including Spanish, French, German, Hindi, and Mandarin. You can even upload a paper in German and ask it questions in English.' },
+                  { q: 'Can I upload formats other than PDF?', a: 'Currently, the tool only accepts .pdf files. If you have a Word document (.docx) or PowerPoint (.pptx), simply export it as a PDF from your native application before uploading.' },
+                  { q: 'Will the AI hallucinate information not in the text?', a: 'The AI is strictly prompt-engineered to only answer based on the context provided in the uploaded document. If the answer is not in the text, it is instructed to explicitly tell you: "I cannot find this information in the document."' }
+                ].map((faq, i) => (
+                  <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <h3 className="font-bold text-slate-900 dark:text-white mb-3 flex items-start gap-3">
+                      <HelpCircle className="w-5 h-5 text-indigo-500 flex-shrink-0 mt-0.5" />
+                      {faq.q}
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </div>

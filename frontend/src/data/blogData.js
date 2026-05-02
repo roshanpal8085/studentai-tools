@@ -2966,5 +2966,773 @@ Students who use AI this way consistently produce better work than students who 
 
 Start your next essay with your own brain dump. Then bring in our [AI Essay Writer](/ai-essay-writer) to help you build on what your thinking produces. The result will be the best essay you've ever written — because it will genuinely be yours.
     `
+  },
+  {
+    id: 11,
+    title: "How to Use AI for Exams: A Step-by-Step System",
+    slug: "how-to-use-ai-for-exams",
+    excerpt: "A proven step-by-step system for using AI tools to prepare for any exam — without academic dishonesty.",
+    date: "May 2, 2026",
+    readTime: "10 min read",
+    category: "Exam Prep",
+    image: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80",
+    content: `# How to Use AI for Exams: A Step-by-Step System
+
+The students achieving top scores in 2026 are not those who study the most hours — they study the most effectively. AI is the key difference.
+
+## Step 1: Run a Diagnostic Quiz First
+
+Before opening a single textbook, use the [AI Quiz Generator](/ai-quiz-generator) to find your actual knowledge gaps. Paste your syllabus, generate 20 questions, and take them cold. Your score tells you exactly where to focus — not where you *feel* unprepared.
+
+This single step saves most students 30–40% of wasted study time on topics they already know.
+
+## Step 2: Build Structured Notes on Weak Topics
+
+For every weak area identified in Step 1, use [AI Notes Generator](/ai-notes-generator) to convert raw lecture content into structured, exam-ready notes.
+
+Choose your format by subject type:
+- **Cornell Method** for humanities and social sciences
+- **Outline Style** for sciences and mathematics  
+- **Q&A Format** for language and definition-heavy subjects
+
+Cornell notes are especially powerful because the "cue" column becomes your self-testing tool during revision.
+
+## Step 3: Chat with Your Textbook
+
+Upload your PDF textbooks to [Chat with PDF](/chat-pdf) and ask exam-style questions: *"What are the three most likely exam questions from Chapter 6?"* or *"Explain the difference between X and Y in simple terms."*
+
+This targeted approach surfaces information 10x faster than re-reading.
+
+## Step 4: Build Your Schedule on Day One
+
+Use [AI Study Planner](/ai-study-planner) before you begin studying. Enter your exam dates and a confidence score (1–10) for each topic. The AI allocates more time to your weakest areas automatically.
+
+## Step 5: Active Recall in the Final 3 Days
+
+Stop reading. Start testing. Return to [AI Quiz Generator](/ai-quiz-generator) and generate fresh question sets on weak topics daily.
+
+Research from cognitive psychology consistently shows that students who test themselves in the 72 hours before an exam outperform re-readers by 30–35%.
+
+## Step 6: Paraphrase for Essay Exams
+
+For essay-based subjects, use [Paraphrasing Tool](/tools/paraphrasing-tool) to rewrite key arguments in your own words. This builds natural fluency with the ideas — the kind that survives exam pressure.
+
+## Mistakes to Avoid
+
+- Starting less than 5 days before the exam
+- Using AI to write answers instead of to understand concepts
+- Skipping the diagnostic — the system only works if you act on what it reveals
+- Neglecting sleep: no AI system compensates for fatigue on exam day
+
+## The Bottom Line
+
+AI does not take exams for you. It eliminates the inefficiency in your preparation. Use these six steps and you will walk into your next exam knowing you focused on the right material — and that makes all the difference.
+
+Start with [AI Study Planner](/ai-study-planner) today.`
+  },
+  {
+    id: 12,
+    title: "Best Way to Study Using AI Tools in 2026",
+    slug: "best-way-to-study-with-ai",
+    excerpt: "Forget passive reading. The evidence-backed AI study system that top students use to cut study time in half while improving grades.",
+    date: "May 2, 2026",
+    readTime: "9 min read",
+    category: "Study Hacks",
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&q=80",
+    content: `# Best Way to Study Using AI Tools in 2026
+
+The biggest lie in education is that studying more equals studying better. Research is unambiguous: it is not the quantity of study hours that determines outcomes — it is the quality of cognitive engagement during those hours.
+
+## Why Traditional Study Methods Fail
+
+Passive re-reading feels productive but produces minimal long-term retention. Highlighting feels organised but does not build understanding. Re-copying notes feels diligent but is just transcription.
+
+Three techniques consistently outperform these passive methods:
+1. **Active Recall** — Retrieving information from memory strengthens it
+2. **Spaced Repetition** — Reviewing at increasing intervals prevents forgetting
+3. **Elaborative Interrogation** — Asking "why" and "how" builds deep understanding
+
+AI tools are uniquely designed to support all three.
+
+## The 4-Phase AI Study System
+
+### Phase 1: Structure (Day 1)
+Convert raw material into organised notes using [AI Notes Generator](/ai-notes-generator). This 20-minute process replaces 2–3 hours of manual note-rewriting. Choose Cornell Method for most subjects.
+
+### Phase 2: Test (Day 3)
+Two days later, use [AI Quiz Generator](/ai-quiz-generator) to test retention without looking at your notes first. The discomfort of retrieval is exactly where learning happens. Do not skip this phase.
+
+### Phase 3: Deepen (Day 4)
+For every question you missed, use [AI Homework Helper](/ai-homework-helper) to get thorough explanations with examples. Ask: *"Explain this concept step by step with two real-world examples."*
+
+### Phase 4: Synthesise (Day 5–7)
+Upload PDFs to [Chat with PDF](/chat-pdf) and ask synthesis questions connecting multiple topics. This is where knowledge becomes flexible understanding that handles unseen exam questions.
+
+## The Most Common AI Study Mistakes
+
+**Using AI passively.** Reading AI-generated notes without testing yourself is still passive learning. The quiz phase is non-negotiable.
+
+**Over-relying on AI for writing.** Use it to structure and check — never to replace your thinking. Academic integrity matters.
+
+**Ignoring the diagnostic.** Most students skip the initial test and study what feels familiar. Study what you don't know.
+
+## What to Expect
+
+Students who follow this system report:
+- 30–50% reduction in total study hours
+- Better performance on unfamiliar question formats (which require genuine understanding)
+- Reduced exam anxiety, because they have evidence of mastery before walking in
+
+Begin with [AI Notes Generator](/ai-notes-generator) on your hardest subject today.`
+  },
+  {
+    id: 13,
+    title: "How to Convert Notes into Quizzes Using AI",
+    slug: "notes-to-quiz-ai-guide",
+    excerpt: "Active recall is the most powerful study technique known to science. Here is exactly how to turn any study notes into effective practice quizzes using AI.",
+    date: "May 2, 2026",
+    readTime: "8 min read",
+    category: "Study Hacks",
+    image: "https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?auto=format&fit=crop&w=800&q=80",
+    content: `# How to Convert Notes into Quizzes Using AI
+
+In 1885, psychologist Hermann Ebbinghaus discovered the "forgetting curve" — the finding that humans forget approximately 50% of new information within 24 hours, and up to 90% within a week, without active review.
+
+The solution discovered since then is active recall: testing yourself on material rather than passively re-reading it. Students who use active recall outperform re-readers by 50–80% on delayed tests.
+
+The challenge has always been creating the tests. Until now.
+
+## The Notes-to-Quiz Pipeline
+
+### Step 1: Generate Structured Notes First
+
+The quality of your quiz depends entirely on the quality of your source material. Before generating questions, use [AI Notes Generator](/ai-notes-generator) to create well-structured notes from your raw lecture content.
+
+Good structured notes produce better quiz questions because:
+- Key concepts are clearly defined
+- Relationships between ideas are explicit  
+- Important terms are isolated and visible
+
+### Step 2: Copy Your Notes into Quiz Generator
+
+Navigate to [AI Quiz Generator](/ai-quiz-generator) and paste your structured notes into the input field.
+
+**Question type selection guide:**
+- **Multiple Choice** — Best for recall of specific facts, definitions, and formulas
+- **True/False** — Effective for testing common misconceptions
+- **Short Answer** — Best for understanding concepts and relationships
+- **Fill in the Blank** — Powerful for memorising key terminology
+
+For most study sessions, use a mix of Multiple Choice and Short Answer. This combination tests both recognition and true recall.
+
+### Step 3: Set the Right Difficulty
+
+Match difficulty to your study timeline:
+- **Easy/Medium** — 7+ days before the exam (build familiarity)
+- **Hard** — 3–5 days before (stress-test understanding)
+- **Hard** — Final 48 hours (only your weakest topics)
+
+### Step 4: Review Wrong Answers Thoroughly
+
+The most valuable moment in the quiz is a wrong answer, not a right one. For every question you miss, use [AI Homework Helper](/ai-homework-helper) to understand the concept properly.
+
+Do not just read the correct answer and move on. Ask the AI to explain *why* the correct answer is right and *why* your chosen answer was wrong.
+
+## The Spaced Repetition Approach
+
+For maximum retention, generate a fresh quiz set every 2–3 days on the same topic. Slightly different questions on the same concepts build stronger memory pathways than repeating identical questions.
+
+A 14-day study schedule using this approach:
+- Day 1: Notes generation
+- Day 3: First quiz (easy/medium)
+- Day 5: Second quiz (medium) on missed topics  
+- Day 8: Third quiz (hard) on all topics
+- Day 11: Fourth quiz (hard) on weakest topics
+- Day 13: Final review quiz
+
+## Why This Works Better Than Re-Reading
+
+When you re-read notes, your brain recognises the material and creates an illusion of understanding. When you take a test, your brain must actively reconstruct information — a process that directly strengthens memory.
+
+The discomfort of not knowing an answer immediately is not a sign of failure. It is precisely the state where learning is most efficient.
+
+Start your next study session with [AI Quiz Generator](/ai-quiz-generator) and experience the difference.`
+  },
+  {
+    id: 14,
+    title: "How to Write Assignments Faster with AI (Without Cheating)",
+    slug: "write-assignments-faster-ai",
+    excerpt: "AI can cut your assignment writing time in half while actually improving quality. Here is the ethical, effective approach every student should know.",
+    date: "May 2, 2026",
+    readTime: "9 min read",
+    category: "Writing",
+    image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
+    content: `# How to Write Assignments Faster with AI (Without Cheating)
+
+The average university student spends 4–6 hours on a 1500-word assignment. Of that time, research shows that less than 90 minutes is spent actually writing. The rest goes to staring at a blank page, reorganising structure, second-guessing arguments, and editing at the wrong stage.
+
+AI eliminates these inefficiencies without replacing the thinking that makes an assignment genuinely yours.
+
+## The Ethical Line: Where AI Helps vs. Where It Harms
+
+**Ethical AI use:**
+- Generating a structural outline you then write from
+- Checking grammar and clarity after you have written a draft
+- Paraphrasing a source reference to express it in your own words
+- Generating essay topic ideas when you are stuck
+- Getting a step-by-step explanation of a concept you need to cite
+
+**Problematic AI use:**
+- Submitting AI-generated text as your own thinking
+- Using AI to answer questions you have not engaged with
+- Copying AI output without understanding or editing it
+
+The distinction is simple: AI should accelerate your thinking, not replace it.
+
+## The 5-Stage AI Assignment Workflow
+
+### Stage 1: Topic Generation (if needed)
+If you have assignment choice, use [Essay Topic Generator](/tools/essay-topic-generator) to find a topic that is specific, arguable, and manageable. Avoid broad topics that require encyclopedic coverage.
+
+### Stage 2: Understand the Topic Deeply
+Before writing anything, use [AI Homework Helper](/ai-homework-helper) to get a thorough explanation of the core concepts. Ask it to explain the topic as if you are a student encountering it for the first time, then ask follow-up questions until you genuinely understand.
+
+### Stage 3: Build Your Outline
+Use [AI Essay Writer](/ai-essay-writer) to generate a structural outline. Provide your topic, word count, and the specific argument you want to make. Review the suggested structure, rearrange sections that do not fit your thinking, and add your own main points.
+
+This outline becomes your writing guide — you simply flesh out each section with your own research and thinking.
+
+### Stage 4: Write Your Draft (You Do This Part)
+Using the outline as a skeleton, write the actual assignment yourself. Do not ask AI to write paragraphs for you. The outline handles the structure; your writing handles the substance.
+
+This stage is faster than you expect because you no longer face the blank page problem. You know exactly what each paragraph needs to accomplish.
+
+### Stage 5: Edit and Polish
+Run your completed draft through [Grammar Checker](/tools/grammar-checker) to catch technical errors. Then use [Paraphrasing Tool](/tools/paraphrasing-tool) on any direct quotations you want to integrate more naturally into your prose.
+
+## Time Savings by Stage
+
+| Stage | Without AI | With AI |
+|-------|-----------|---------|
+| Topic selection | 30 min | 5 min |
+| Understanding concepts | 90 min | 20 min |
+| Creating outline | 45 min | 10 min |
+| Writing draft | 90 min | 90 min |
+| Editing | 60 min | 20 min |
+| **Total** | **315 min** | **145 min** |
+
+## The Result: Better Work, Faster
+
+AI-assisted assignments are not worse than fully manual ones — they are typically better structured and better edited. The time saved on logistics goes directly into the quality of your actual thinking and arguments.
+
+Begin your next assignment with [AI Essay Writer](/ai-essay-writer) to generate your outline.`
+  },
+  {
+    id: 15,
+    title: "AI Study Planner: Complete Guide for Students",
+    slug: "ai-study-planner-complete-guide",
+    excerpt: "Everything you need to know about using an AI study planner to organise your exam preparation — from setting it up to following it successfully.",
+    date: "May 2, 2026",
+    readTime: "10 min read",
+    category: "Productivity",
+    image: "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?auto=format&fit=crop&w=800&q=80",
+    content: `# AI Study Planner: Complete Guide for Students
+
+Most students approach exam season the same way: open a calendar, try to divide subjects equally across available days, and then abandon the plan by Day 3 when real life gets in the way.
+
+The AI Study Planner on StudentAI works differently. It creates a plan that reflects your actual needs — not an imaginary ideal version of yourself.
+
+## What Makes an AI Study Plan Different
+
+A manual study plan assumes:
+- You have equal knowledge across all subjects
+- You need equal time for every topic
+- Your motivation is consistent daily
+
+An AI-generated plan accounts for:
+- Your current confidence level per subject (you input this)
+- The proximity of each exam (earlier exams get more urgent attention)
+- Natural study load distribution to prevent burnout
+
+The result is a schedule that is realistic, prioritised, and actually followable.
+
+## How to Set Up Your Study Plan
+
+### Step 1: List Every Exam
+
+Navigate to [AI Study Planner](/ai-study-planner). Enter each upcoming exam with:
+- Subject name
+- Exam date
+- Your current confidence level (1–10, where 10 = completely confident)
+
+Be brutally honest about your confidence scores. Overestimating leads to the plan giving you too little time on difficult subjects.
+
+### Step 2: Input Your Available Hours
+
+Specify your daily study availability — how many hours per day you can realistically commit. Include:
+- School/university hours to subtract
+- Commute time
+- Family commitments
+- A honest assessment of your evening energy level
+
+### Step 3: Review and Adjust the Output
+
+The AI generates a week-by-week schedule. Before committing, check:
+- Does it give your hardest subject proportionally more time?
+- Are there rest days built in?
+- Does the final 3 days before each exam have lighter, review-focused sessions?
+
+Adjust any blocks that feel impossible before you start.
+
+## Using Your Plan Effectively
+
+### The Non-Negotiable Rule: Treat Study Blocks Like Classes
+Your plan only works if you treat scheduled study blocks as non-negotiable commitments — the same way you treat actual classes. Missing one is not a moral failure, but reschedule it immediately, not "later."
+
+### Weekly Check-Ins
+Every Sunday, spend 10 minutes reviewing what you covered the previous week. Update your confidence scores for each topic. A subject that was 4/10 last week might be 6/10 now — and your plan should reflect that improvement by reallocating time to where it is still needed.
+
+### Combine with Other Tools
+Your study planner works best alongside:
+- [AI Notes Generator](/ai-notes-generator) for creating structured study material
+- [AI Quiz Generator](/ai-quiz-generator) for active recall sessions within each study block
+- [AI Homework Helper](/ai-homework-helper) for concepts that resist understanding
+
+## Common Planning Mistakes
+
+**Planning too many hours.** Four focused hours of study beats eight distracted ones. Sustainable plans produce better results than ambitious ones that collapse after two days.
+
+**Ignoring weak subjects.** The plan will suggest more time on your lowest-confidence topics. This feels uncomfortable because those are the subjects students prefer to avoid. Do them first, not last.
+
+**Not building in buffer days.** Life happens. A plan with zero flexibility breaks under the first unexpected event. Build two "catch-up" half-sessions per week.
+
+## The Result of Following Your Plan
+
+Students who follow a structured AI study plan consistently report entering exams feeling prepared — not panicked. The difference is simply knowing you have covered the right material in the right proportions.
+
+Create your personalised plan now at [AI Study Planner](/ai-study-planner).`
+  },
+  {
+    id: 16,
+    title: "How to Chat with a PDF and Actually Learn From It",
+    slug: "chat-with-pdf-study-guide",
+    excerpt: "Upload any textbook, research paper, or lecture slide to AI and ask it anything. Here is how students are using Chat with PDF to cut research time by 70%.",
+    date: "May 2, 2026",
+    readTime: "9 min read",
+    category: "Study Hacks",
+    image: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?auto=format&fit=crop&w=800&q=80",
+    content: `# How to Chat with a PDF and Actually Learn From It
+
+The average university student reads the same textbook chapter three times before an exam. Research shows they retain approximately 20% of it. The problem is not intelligence — it is method. Passive reading is a deeply inefficient way to process academic content.
+
+Chat with PDF changes this entirely. Instead of reading at the material, you interact with it.
+
+## What Chat with PDF Actually Does
+
+When you upload a PDF to [Chat with PDF](/chat-pdf), the AI reads and indexes the entire document. You can then ask it questions in plain English and receive accurate, specific answers — typically citing the relevant section.
+
+This is not a search function. It is genuine comprehension. The AI understands context, relationships between ideas, and can synthesise information from multiple sections of the document simultaneously.
+
+## The 5 Best Use Cases for Students
+
+### 1. Textbook Chapter Prep (Before Class)
+Upload the chapter you are about to study. Ask: *"What are the 5 most important concepts in this chapter?"* and *"What should I understand before I can understand this topic?"*
+
+This pre-reading creates a mental framework that makes the actual lecture significantly more comprehensible.
+
+### 2. Research Paper Summaries (Literature Reviews)
+Research papers are notoriously dense. Upload a paper and ask: *"Summarise the methodology in simple terms,"* *"What were the three main findings?"* and *"What limitations did the authors acknowledge?"*
+
+What used to take 45 minutes of careful reading now takes 8 minutes of targeted questioning.
+
+### 3. Exam Targeted Review
+Upload your textbook and ask exam-style questions directly: *"What are the likely exam questions from Chapter 7?"* and *"Explain the difference between [concept A] and [concept B] as it appears in this text."*
+
+### 4. Finding Specific Information Instantly
+Need the definition of a specific term? A particular statistic? The conclusion of a specific argument? Ask directly. The AI finds it in seconds — no page flipping, no index searching.
+
+### 5. Understanding Difficult Passages
+When a paragraph simply does not make sense after three readings, paste it into the chat and ask: *"Explain this in simpler language"* or *"Give me a real-world example of what this is describing."*
+
+## How to Ask Better Questions
+
+The quality of your output depends heavily on the quality of your questions. Weak questions produce weak answers.
+
+**Weak:** "Tell me about Chapter 3."
+**Strong:** "What is the central argument of Chapter 3 and what evidence does the author provide to support it?"
+
+**Weak:** "What does this mean?"
+**Strong:** "The author says X. Can you explain what they mean by Y in this context and why it matters to the overall argument?"
+
+**Weak:** "Summarise this."
+**Strong:** "Summarise this in three bullet points, focusing on what a student would need to know for an exam on this topic."
+
+## Combining Chat with PDF with Other Tools
+
+For maximum effectiveness, use Chat with PDF as the first step in a broader study workflow:
+
+1. **Upload and question** your PDF with Chat with PDF to extract key concepts
+2. **Generate structured notes** from those concepts using [AI Notes Generator](/ai-notes-generator)
+3. **Create practice questions** from those notes using [AI Quiz Generator](/ai-quiz-generator)
+4. **Build your schedule** around your weakest areas using [AI Study Planner](/ai-study-planner)
+
+## What to Upload
+
+Chat with PDF works with any text-based PDF:
+- University textbook chapters
+- Research and journal articles
+- Lecture slide PDFs
+- Case studies
+- Government and policy documents
+- Past exam papers (to analyse question patterns)
+
+It does not work well with scanned handwritten documents or image-heavy PDFs with minimal text.
+
+## The Learning Difference
+
+Students who use Chat with PDF report a qualitative shift in how they experience dense academic material. Instead of dreading a 40-page reading, they approach it as a conversation — asking, probing, and clarifying until they genuinely understand.
+
+That shift from passive reading to active interrogation is exactly what separates students who understand material from students who have merely exposed themselves to it.
+
+Try [Chat with PDF](/chat-pdf) on your next required reading. Upload it, ask five targeted questions, and notice the difference in comprehension.`
+  },
+  {
+    id: 17,
+    title: "Grammar Mistakes Students Make (And How AI Fixes Them)",
+    slug: "grammar-mistakes-students-ai",
+    excerpt: "The 8 most common grammar errors in student essays — with before and after examples showing exactly how AI grammar tools fix them.",
+    date: "May 2, 2026",
+    readTime: "8 min read",
+    category: "Writing",
+    image: "https://images.unsplash.com/photo-1455390582262-044cdead277a?auto=format&fit=crop&w=800&q=80",
+    content: `# Grammar Mistakes Students Make (And How AI Fixes Them)
+
+Grammar errors in student essays are not just cosmetic problems. Research on academic marking consistently shows that poor grammar reduces perceived credibility — even when the underlying ideas are strong. Examiners form impressions quickly, and a dense paragraph of comma splices and subject-verb disagreements signals carelessness, not intelligence.
+
+The good news: modern AI grammar tools catch these errors reliably, explain them clearly, and suggest corrections that preserve your original voice.
+
+## The 8 Most Common Student Grammar Errors
+
+### 1. The Comma Splice
+**What it is:** Joining two independent clauses with just a comma.
+
+**Example with error:** "The economy grew rapidly in the 1990s, this led to significant social change."
+
+**Fixed:** "The economy grew rapidly in the 1990s. This led to significant social change." (or use a semicolon, or add "which")
+
+AI grammar checkers flag comma splices reliably and suggest three options: period, semicolon, or coordinating conjunction.
+
+### 2. Subject-Verb Disagreement
+**What it is:** The subject and verb do not match in number.
+
+**Example with error:** "The results of the study shows a significant correlation."
+
+**Fixed:** "The results of the study show a significant correlation."
+
+The trick: the subject is "results" (plural), not "study." Students often match the verb to the nearest noun, which is wrong.
+
+### 3. Dangling Modifiers
+**What it is:** A descriptive phrase that does not clearly attach to the right noun.
+
+**Example with error:** "Having studied all night, the exam felt manageable."
+
+**Fixed:** "Having studied all night, I found the exam manageable."
+
+The original implies the exam did the studying. AI grammar tools catch these surprisingly well.
+
+### 4. Inconsistent Tense
+**What it is:** Switching between past and present tense without reason.
+
+**Example with error:** "The researcher collected data and then analyses it carefully."
+
+**Fixed:** "The researcher collected data and then analysed it carefully."
+
+### 5. Passive Voice Overuse
+**What it is:** Using passive construction when active would be clearer.
+
+**Passive:** "The experiment was conducted by the team."
+**Active:** "The team conducted the experiment."
+
+Passive voice is not always wrong — it is appropriate in scientific writing when the action matters more than the actor. But overusing it makes prose feel bureaucratic and distant.
+
+### 6. Apostrophe Errors
+**What it is:** Confusing its/it's, their/they're, or adding apostrophes to plurals.
+
+**Example with error:** "Each student must submit their's before the deadline. It's results will be reviewed."
+
+**Fixed:** "Each student must submit theirs before the deadline. Its results will be reviewed."
+
+### 7. Run-On Sentences
+**What it is:** Multiple clauses strung together without proper punctuation.
+
+**Example with error:** "AI has transformed education students can now access personalised learning tools that adapt to their individual needs and this has led to improved outcomes across different demographic groups."
+
+**Fixed:** Break into 2–3 sentences, each with a clear subject and single main idea.
+
+### 8. Vague Pronoun Reference
+**What it is:** A pronoun that could refer to multiple nouns.
+
+**Example with error:** "The teacher told the student that he needed to revise his essay."
+
+**Fixed:** Rewrite to clarify: "The teacher told the student, 'You need to revise your essay.'"
+
+## How to Use AI Grammar Checker Effectively
+
+Navigate to [Grammar Checker](/tools/grammar-checker) and paste your completed essay draft. Do not use it while writing — editing and writing simultaneously breaks creative flow.
+
+Review each suggestion individually. Not every AI suggestion improves your writing; sometimes the original phrasing is better for stylistic reasons. Accept corrections that are clearly errors; use your judgment on style suggestions.
+
+## The Right Order for Editing
+
+1. **Structural edit** — Does your argument flow logically? (Do this yourself)
+2. **Clarity edit** — Is each sentence saying exactly what you mean? (Do this yourself)
+3. **Grammar check** — Are there technical errors? (Use AI Grammar Checker here)
+4. **Final read** — Does it sound like you? (Do this yourself)
+
+Running grammar checks before you have finished thinking about content wastes time, because structural changes will introduce new errors anyway.
+
+Run your next essay through [Grammar Checker](/tools/grammar-checker) before submission.`
+  },
+  {
+    id: 18,
+    title: "Paraphrasing vs. Plagiarism: What Every Student Must Know",
+    slug: "paraphrasing-vs-plagiarism-guide",
+    excerpt: "The line between legitimate paraphrasing and academic plagiarism is clearer than most students think. This guide explains it precisely — with examples and AI tool tips.",
+    date: "May 2, 2026",
+    readTime: "9 min read",
+    category: "Writing",
+    image: "https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?auto=format&fit=crop&w=800&q=80",
+    content: `# Paraphrasing vs. Plagiarism: What Every Student Must Know
+
+Academic plagiarism cases have risen dramatically in the past five years, partly because students genuinely do not understand where the line is. Plagiarism is not simply copying and pasting — and paraphrasing is not simply swapping a few words with synonyms.
+
+This guide explains the distinction clearly, with concrete examples and guidance on using AI paraphrasing tools ethically.
+
+## What Plagiarism Actually Is
+
+Plagiarism is presenting someone else's ideas or words as your own, without proper attribution. It includes:
+
+- **Direct copying** — Word-for-word reproduction without quotation marks and citation
+- **Mosaic plagiarism** — Changing a few words while keeping the original structure and ideas without citation
+- **Paraphrase plagiarism** — Restating someone's ideas in your own words but without citing the source
+- **Self-plagiarism** — Submitting your own previous work for a new assignment without disclosure
+
+Notice: paraphrase plagiarism is real. Even if you completely rewrite a passage in your own words, if you do not cite the original source, it is still plagiarism.
+
+## What Legitimate Paraphrasing Is
+
+Legitimate paraphrasing means: taking someone else's idea, restating it entirely in your own words AND sentence structure, and then citing the original source.
+
+**Original text:** "The introduction of smartphones in the early 2000s fundamentally altered human communication patterns, creating always-on connectivity that blurred the boundaries between work and personal life."
+
+**Mosaic plagiarism (wrong):** "The arrival of smartphones in the early 2000s fundamentally changed human communication, creating constant connectivity that blurred work and personal boundaries."
+*(Same structure, synonym swaps — this is plagiarism even with a citation)*
+
+**Legitimate paraphrase (correct):** "Before smartphones became widespread, work and personal communication existed in relatively distinct spheres. Mobile technology eliminated these boundaries, making individuals continuously reachable and fundamentally reshaping how people relate to both their professional and private lives (Author, Year)."
+*(Different structure, genuinely restated, cited)*
+
+## How AI Paraphrasing Tools Help — and Their Limits
+
+[AI Paraphrasing Tool](/tools/paraphrasing-tool) on StudentAI offers multiple rewriting modes, including Academic, Creative, Formal, and Fluency modes. These genuinely restructure text rather than just swapping synonyms.
+
+**Legitimate use:** Paste a difficult-to-understand source passage. Use the paraphrasing tool to get a restatement you can understand clearly. Then, using that understanding, write the passage in your own words. Cite the original source.
+
+**Problematic use:** Paste an entire paragraph from a source, run it through paraphrasing, and submit it with minimal changes. Even AI-paraphrased content must be cited. Using it to avoid citation is still plagiarism.
+
+**The key test:** Could you explain this idea in a conversation without looking at any tool output? If yes, you genuinely understand it and can write it authentically. If no, more engagement with the source material is needed.
+
+## Citation: The Non-Negotiable Element
+
+Every idea that originates with another person — whether quoted directly or paraphrased — must be cited. The citation tells your reader: "This idea belongs to someone else; here is who."
+
+Use [Citation Generator](/tools/citation-generator) to produce properly formatted APA, MLA, or Chicago citations from your source details. Correct citation formatting takes seconds with this tool; incorrect formatting costs marks.
+
+## Turnitin and AI Detection
+
+Modern plagiarism detection tools like Turnitin check for both direct copying and structural similarity. They also increasingly flag AI-generated content. This means:
+
+- Submitting AI-generated essays without disclosure will likely be detected
+- Paraphrasing without structural change may still be flagged as similar
+- Citing your sources properly is your evidence of legitimate academic engagement
+
+## The Practical Rules
+
+1. **Always cite** — even for paraphrased material
+2. **Rewrite completely** — structure, not just vocabulary
+3. **Understand before writing** — use AI to aid comprehension, not to write for you
+4. **Use quotation marks** for direct quotations, no matter how short
+5. **Check your institution's policy** — definitions and consequences vary
+
+Academic integrity is not bureaucratic box-ticking. It is the foundation of what makes your degree credible. A qualification earned with your own work is worth something; one built on borrowed ideas without credit is not.
+
+Use [Paraphrasing Tool](/tools/paraphrasing-tool) ethically — as a comprehension aid and a writing reference, never as a submission shortcut.`
+  },
+  {
+    id: 19,
+    title: "How to Build a Study Schedule That Actually Works",
+    slug: "effective-study-schedule-ai",
+    excerpt: "Most study schedules fail by Day 3. Here is the psychology-backed approach to building one that actually survives contact with real life — with AI doing the heavy lifting.",
+    date: "May 2, 2026",
+    readTime: "9 min read",
+    category: "Productivity",
+    image: "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?auto=format&fit=crop&w=800&q=80",
+    content: `# How to Build a Study Schedule That Actually Works
+
+Most study schedules fail for the same reason: they are designed by an idealised version of yourself, for a world where nothing unexpected happens.
+
+The schedule you build on Sunday night, when motivation is high and the week ahead looks clean, rarely survives Wednesday. This is not a willpower problem — it is a planning problem.
+
+Here is how to build one that actually works, using psychology and AI to make it realistic from the start.
+
+## Why Traditional Study Schedules Fail
+
+**Mistake 1: Equal time allocation**
+Spending equal time on every subject regardless of your actual knowledge level is inefficient. If you understand Physics at 8/10 and Economics at 3/10, you need five times more Economics, not equal time for both.
+
+**Mistake 2: No buffer**
+A schedule with zero flexibility breaks the moment anything unexpected happens — and something unexpected always happens. One missed session cascades into guilt, which cascades into avoidance.
+
+**Mistake 3: Front-loading easy tasks**
+Students unconsciously schedule familiar, comfortable subjects first and save the difficult ones for "later." Later never comes.
+
+**Mistake 4: Too long per session**
+90-minute study blocks with no breaks rely on a level of sustained focus that is neurologically unrealistic for most people. Research suggests focused attention degrades significantly after 45–50 minutes without a break.
+
+## The Psychology-Backed Approach
+
+### Principle 1: Diagnose Before You Schedule
+Before building your schedule, use [AI Quiz Generator](/ai-quiz-generator) to assess your actual knowledge level per subject. Take 10 questions per subject and score yourself honestly. This data — not your gut feeling — should drive time allocation.
+
+### Principle 2: Prioritise the Uncomfortable
+Schedule your hardest, most-avoided subject first in each study day, when cognitive resources are at their peak. Your brain is sharpest in the morning (for most people); do not waste it on familiar material.
+
+### Principle 3: Use the 50/10 Method
+Study for 50 minutes. Rest for 10 minutes. Repeat. This Pomodoro-adjacent approach maintains focus quality across longer study periods. Use [Study Timer](/tools/study-timer) to automate this rhythm.
+
+### Principle 4: Plan at the Week Level, Not Day Level
+Day-level planning feels controlled but creates guilt on days when plans collapse. Week-level planning creates flexibility: if Tuesday's session gets missed, move it to Thursday without cascading failure.
+
+## Using AI Study Planner
+
+[AI Study Planner](/ai-study-planner) builds your schedule using:
+- Your exam dates
+- Your confidence score per subject (you input this honestly)
+- Your available daily hours
+
+The AI automatically allocates more time to your weakest subjects and adjusts urgency based on exam proximity. What takes most students 2 hours of calendar wrestling takes the tool approximately 2 minutes.
+
+## The Weekly Review Ritual (10 Minutes, Every Sunday)
+
+The most important habit in any study schedule is not studying — it is reviewing your schedule weekly.
+
+Every Sunday, spend 10 minutes:
+1. Noting which sessions you completed and which you missed
+2. Updating your confidence scores based on the week's progress
+3. Adjusting next week's plan to compensate
+
+This prevents the "I'll catch up later" drift that causes most study plans to silently collapse.
+
+## What a Good Schedule Actually Looks Like
+
+- **Subject with most exam urgency first each day**
+- **No session longer than 90 minutes without a break**
+- **At least one complete rest day per week**
+- **Revision-only mode in the final 48 hours before each exam** (no new content)
+- **Catch-up slots built in** — not as optional extras, but as scheduled blocks
+
+## The Schedule vs. The List
+
+Many students use task lists instead of schedules. Lists feel productive to create but do not commit you to anything. A scheduled block with a specific time is a commitment. The difference in execution rate is substantial.
+
+Build your schedule now with [AI Study Planner](/ai-study-planner).`
+  },
+  {
+    id: 20,
+    title: "Resume Tips for Students: How AI Makes You Hireable",
+    slug: "resume-tips-students-ai",
+    excerpt: "Most student resumes fail in 6 seconds. Here is how to build one that actually gets past ATS scanners and impresses real recruiters — using AI tools.",
+    date: "May 2, 2026",
+    readTime: "10 min read",
+    category: "Career",
+    image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?auto=format&fit=crop&w=800&q=80",
+    content: `# Resume Tips for Students: How AI Makes You Hireable
+
+Recruiters spend an average of 6–7 seconds reviewing a resume before deciding whether to read further. Most student resumes fail that test — not because the student lacks experience, but because the resume does not communicate value quickly and clearly.
+
+AI resume tools have fundamentally changed what is possible for students entering the job market. Here is what you need to know.
+
+## Why Student Resumes Typically Fail
+
+**Problem 1: Responsibility descriptions, not achievement statements**
+Most students list what they were *supposed to do* in a role, not what they actually *achieved*.
+
+Bad: "Responsible for social media management"
+Good: "Grew Instagram engagement by 40% in one semester through a consistent video content strategy"
+
+The first is a job description. The second is evidence of competence.
+
+**Problem 2: Failing the ATS filter**
+Most companies use Applicant Tracking Systems (ATS) to filter resumes before a human sees them. ATS systems scan for specific keywords from the job description. A resume without those keywords gets rejected automatically — regardless of quality.
+
+**Problem 3: Generic objective statements**
+"I am a hard-working, motivated student seeking an opportunity to grow" says nothing that differentiates you. Every applicant says this.
+
+**Problem 4: Irrelevant content**
+A computer science internship application does not need your GCSE Art grade. Students often include everything, making it harder for recruiters to find the relevant signals.
+
+## How AI Resume Builder Transforms Your Application
+
+[AI Resume Builder](/ai-resume-generator) on StudentAI addresses all four problems:
+
+### Achievement Transformation
+Input your raw experience: "I managed Instagram for the college drama club." The AI converts this into achievement language: "Managed social media presence for 200-member student organisation, growing follower count by 35% and increasing event attendance through targeted content."
+
+### ATS Optimisation
+The tool analyses job descriptions and incorporates relevant keywords naturally into your resume. This dramatically improves your pass-through rate on automated screening.
+
+### Professional Summary Generation
+Instead of generic statements, the AI generates a specific, targeted professional summary based on your actual background and the role you are applying for.
+
+### Relevance Filtering
+The AI helps prioritise which experiences are most relevant for each application type, so your resume leads with your strongest evidence.
+
+## The Sections Every Student Resume Needs
+
+**1. Professional Summary (3 sentences)**
+Who you are, what you bring, what you are looking for. Specific, not generic.
+
+**2. Education**
+Degree, institution, expected graduation date, relevant modules, GPA if strong (above 3.5/70%).
+
+**3. Skills**
+Technical skills (programming languages, software, tools) and relevant soft skills with evidence. Do not just list skills — show where you used them.
+
+**4. Experience**
+Reverse chronological. Include internships, part-time work, volunteering, and significant extracurriculars. Use achievement-focused bullet points for each role.
+
+**5. Projects** (especially for technical fields)
+Academic and personal projects often demonstrate more relevant skills than work history for students. Include what the project did, what technology you used, and what result it achieved.
+
+## Tailoring for Every Application
+
+The biggest mistake students make is sending the same resume to every employer. Recruiters notice generic applications immediately.
+
+For each application:
+1. Read the job description carefully
+2. Note the 5–8 most important keywords and requirements
+3. Use [AI Resume Builder](/ai-resume-generator) to generate a tailored version that incorporates those specifics
+4. Adjust your professional summary to reference the company or role directly
+
+This takes an additional 10 minutes per application and dramatically increases callback rates.
+
+## Common AI Resume Mistakes to Avoid
+
+**Over-inflating achievements:** AI suggestions are starting points. Do not claim credit for results you cannot explain in an interview.
+
+**Losing your voice:** Edit AI output to sound like you. Recruiters can tell when a resume sounds written by committee.
+
+**Forgetting formatting:** Even perfect content fails with bad formatting. Keep it to one page (for students), use consistent fonts, and ensure readability on both screen and print.
+
+Start your application process with [AI Resume Builder](/ai-resume-generator) today. Your competition is already using AI — the question is whether you are using it more effectively than they are.`
   }
 ];

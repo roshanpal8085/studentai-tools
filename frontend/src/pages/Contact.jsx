@@ -1,4 +1,5 @@
 import { Helmet } from 'react-helmet-async';
+import SEO from '../components/SEO';
 import { Send, Mail, MapPin, MessageSquare, Loader2 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -18,7 +19,11 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen pt-24 pb-20 bg-slate-50 dark:bg-slate-900 relative">
-      <Helmet><title>Contact Us - StudentAI Tools</title></Helmet>
+      <SEO
+        title="Contact Us"
+        canonical="/contact"
+        description="Get in touch with StudentAI Tools. Ask questions about our free AI tools, report bugs, or discuss partnership opportunities."
+      />
       
       {/* Background decoration */}
       <div className="absolute top-40 left-0 w-full overflow-hidden pointer-events-none opacity-40 dark:opacity-20 flex justify-center">

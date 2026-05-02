@@ -45,6 +45,7 @@ const QuizGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Quiz Generator - Personalized Practice Tests" 
+        canonical="/ai-quiz-generator"
         description="Convert any study material into custom practice quizzes. Generate Multiple Choice, True/False, or Short Answer questions to master active recall."
         keywords="ai quiz generator, practice test maker, study quiz creator, free ai quiz, student tools"
         schema={{
@@ -176,45 +177,96 @@ const QuizGenerator = () => {
           Ad Placement - Educational Product Sponsorships
         </div>
 
-        {/* Informational Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 py-16 border-t border-slate-200 dark:border-slate-800">
-          <div className="space-y-12">
-            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">Science of <span className="text-indigo-600">Active Recall</span></h2>
-            <div className="space-y-10">
-              {[
-                { title: 'Information Retrieval', desc: 'Recalling information from memory is significantly more effective than passive reading for long-term retention.', icon: Zap },
-                { title: 'Gap Identification', desc: 'Quizzes expose exactly what you do not know, allowing you to focus your study time on high-impact areas.', icon: ClipboardCheck },
-                { title: 'Exam Confidence', desc: 'Simulating exam conditions lowers anxiety and prepares your brain for the actual test-taking environment.', icon: Brain }
-              ].map((item, i) => (
-                <div key={i} className="flex gap-6 group">
-                   <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                     <item.icon className="w-7 h-7" />
-                   </div>
-                   <div>
-                     <h3 className="text-xl font-bold dark:text-white mb-2">{item.title}</h3>
-                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
-                   </div>
+        {/* Comprehensive SEO Content for AdSense E-E-A-T */}
+        <div className="mt-16 pt-16 border-t border-slate-200 dark:border-slate-800">
+          <div className="max-w-4xl mx-auto space-y-16">
+            
+            <section>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-6">How to Use the AI Quiz Generator to Master Active Recall</h2>
+              <div className="prose prose-indigo dark:prose-invert max-w-none prose-p:leading-relaxed prose-lg text-slate-600 dark:text-slate-400">
+                <p>
+                  Psychologists and educational researchers consistently rank <strong>Active Recall</strong> as the single most effective study technique for long-term memory retention. Unlike passive reading—which creates a false sense of familiarity—active recall forces your brain to retrieve information, strengthening the neural pathways associated with that memory.
+                </p>
+                <p>
+                  However, creating practice tests manually is incredibly time-consuming. The <strong>AI Quiz Generator</strong> bridges this gap, instantly converting your study materials into rigorous practice questions. Here is how to incorporate it into your study routine:
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 not-prose">
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">1</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Input Structured Material</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">For the highest quality quizzes, paste structured notes (like Cornell Notes) rather than unstructured text. Clean inputs lead to highly specific, exam-style questions.</p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">2</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Vary Question Formats</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Use <strong>Multiple Choice</strong> to build initial familiarity, then switch to <strong>Short Answer</strong> 3-4 days before the exam to rigorously test your unaided recall.</p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">3</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Take the Quiz 'Cold'</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Do not review your notes immediately before taking the quiz. The cognitive struggle of trying to remember the answer is exactly what cements the memory.</p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">4</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Analyze the Mistakes</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Every quiz includes an answer key. Treat wrong answers as diagnostic data—they tell you exactly which paragraphs of your textbook you actually need to review.</p>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            </section>
 
-          <div className="glass-card rounded-[3rem] p-10 md:p-14 relative overflow-hidden h-fit">
-            <h2 className="text-2xl font-extrabold dark:text-white mb-8">Practice FAQ</h2>
-            <div className="space-y-6">
-              {[
-                { q: 'Does it generate the answers too?', a: 'Yes! Every quiz includes a complete answer key at the bottom so you can self-correct immediately.' },
-                { q: 'Can I generate long-form questions?', a: 'Selecting "Short Answer" will generate questions that require deep thinking and written responses.' },
-                { q: 'What is the "Mixed Format"?', a: 'It provides a variety of question types (MCQ, True/False, Fill-blanks) to simulate a real-world examination.' }
-              ].map((faq, i) => (
-                <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
-                  <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4 text-indigo-500" /> {faq.q}
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+            <section className="bg-indigo-50 dark:bg-indigo-900/10 rounded-[3rem] p-8 md:p-12 border border-indigo-100 dark:border-indigo-800/30">
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                <Zap className="w-6 h-6 text-indigo-500" /> Example: Study Text to Practice Test
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">Input (Economics Notes)</h3>
+                  <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl text-sm text-slate-600 dark:text-slate-400 leading-relaxed border border-slate-200 dark:border-slate-700 h-72 overflow-y-auto">
+                    "Inflation is the rate at which the general level of prices for goods and services is rising, and consequently, the purchasing power of currency is falling. Central banks attempt to limit inflation, and avoid deflation, in order to keep the economy running smoothly. The two main causes of inflation are Demand-Pull inflation (when aggregate demand outweighs aggregate supply) and Cost-Push inflation (when the cost of production increases, decreasing aggregate supply)."
+                  </div>
                 </div>
-              ))}
-            </div>
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">Output (Multiple Choice)</h3>
+                  <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl text-sm text-slate-900 dark:text-slate-200 border border-indigo-200 dark:border-indigo-700 shadow-lg shadow-indigo-500/10 h-72 overflow-y-auto">
+                    <strong>1. What happens to the purchasing power of currency during inflation?</strong><br/>
+                    A) It increases<br/>
+                    B) It remains stable<br/>
+                    C) It falls<br/>
+                    D) It becomes irrelevant<br/><br/>
+                    <strong>2. Which type of inflation occurs when aggregate demand outweighs aggregate supply?</strong><br/>
+                    A) Cost-Push inflation<br/>
+                    B) Demand-Pull inflation<br/>
+                    C) Deflationary inflation<br/>
+                    D) Structural inflation<br/><br/>
+                    <em>Answer Key: 1-C, 2-B</em>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-8">Frequently Asked Questions</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { q: 'Does the AI generate the answer key as well?', a: 'Yes! Every generated quiz automatically includes a complete answer key at the very bottom, allowing you to self-grade immediately after practicing.' },
+                  { q: 'Can I generate long-form or essay questions?', a: 'Selecting the "Short Answer" format will generate open-ended questions that require deep conceptual thinking and written responses, rather than simple multiple-choice recognition.' },
+                  { q: 'What is the "Mixed Format" option?', a: 'The Mixed Format intelligently combines Multiple Choice, True/False, and Short Answer questions into a single test. This is the best option for simulating real-world examination papers.' },
+                  { q: 'How many questions can I generate at once?', a: 'You can generate up to 20 questions in a single batch. For larger topics, we recommend generating multiple 10-question quizzes across different study sessions (Spaced Repetition).' },
+                  { q: 'Is it considered cheating to use AI for practice tests?', a: 'No. Generating practice tests is a globally recognized, ethical study technique. You are simply automating the creation of flashcards/practice questions. You still have to do the mental work of answering them.' },
+                  { q: 'What happens if the AI generates a wrong answer?', a: 'Our AI is fine-tuned for high accuracy based specifically on the text you provide. However, you should always verify any surprising answers against your original source text as an added layer of review.' }
+                ].map((faq, i) => (
+                  <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <h3 className="font-bold text-slate-900 dark:text-white mb-3 flex items-start gap-3">
+                      <HelpCircle className="w-5 h-5 text-indigo-500 flex-shrink-0 mt-0.5" />
+                      {faq.q}
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </div>

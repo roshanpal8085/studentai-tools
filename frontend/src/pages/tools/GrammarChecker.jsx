@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { SpellCheck, Loader2, Sparkles, CheckCircle, HelpCircle, Zap, ShieldCheck, Search, Copy, Info } from 'lucide-react';
 import axios from 'axios';
 import SEO from '../../components/SEO';
@@ -37,6 +37,7 @@ const GrammarChecker = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="Free AI Grammar & Proofreading Checker - Premium Standards" 
+        canonical="/tools/grammar-checker"
         description="Fix spelling, syntax, and punctuation errors instantly with our AI-powered grammar engine. Get flawless essays and professional emails for free online."
         keywords="ai grammar checker, grammar corrector, free proofreading, spelling checker, sentence fixer"
         schema={{
@@ -163,10 +164,10 @@ const GrammarChecker = () => {
                 { q: 'Is it completely free?', a: 'Yes! Our AI-powered advanced proofreading module is 100% free with absolutely no hidden monthly limits or "premium-only" semantic features.' },
                 { q: 'Does it support alternative dialects?', a: 'Currently, the underlying model engine heavily excels at Standard US and UK English syntax, supporting rigorous academic and professional formalisms.' },
                 { q: 'Why is there a character limit?', a: 'To ensure processing speed and server stability, the model analyzes syntax chunks across strict blocks up to 5000 characters per individual ping.' },
-                { q: 'Can it fix my entire essay at once?', a: 'For essays under 5,000 characters (roughly 700–800 words), yes — paste the full text. For longer essays, break them into sections of 2–3 paragraphs each for the most accurate corrections.' },
+                { q: 'Can it fix my entire essay at once?', a: 'For essays under 5,000 characters (roughly 700â€“800 words), yes â€” paste the full text. For longer essays, break them into sections of 2â€“3 paragraphs each for the most accurate corrections.' },
                 { q: 'Will it change my writing voice?', a: 'Our AI is instructed to fix errors while preserving your unique writing voice and tone. It corrects grammar, not style. Your phrasing and sentence structure choices are preserved unless they contain a grammatical error.' },
                 { q: 'What kind of errors does it catch?', a: 'Subject-verb disagreement, tense consistency errors, run-on sentences, comma splices, incorrect article usage (a/an/the), homophone confusion (there/their/they\'re), dangling modifiers, and passive voice overuse.' },
-                { q: 'Is this better than Grammarly?', a: 'For quick academic corrections without a subscription, yes. Our tool provides AI-level semantic understanding similar to Grammarly Premium — for free. For professional publishing work, Grammarly\'s tone detector and citation tools are more comprehensive.' },
+                { q: 'Is this better than Grammarly?', a: 'For quick academic corrections without a subscription, yes. Our tool provides AI-level semantic understanding similar to Grammarly Premium â€” for free. For professional publishing work, Grammarly\'s tone detector and citation tools are more comprehensive.' },
                 { q: 'Does it check for plagiarism?', a: 'No, this tool focuses exclusively on grammar and writing quality. For plagiarism checking, use tools like Turnitin, PlagScan, or DupliChecker before submitting academic work.' },
               ].map((faq, i) => (
                 <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
@@ -184,7 +185,7 @@ const GrammarChecker = () => {
         <div className="mb-16 py-12 border-t border-slate-200 dark:border-slate-800">
           <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-3 text-center">8 Grammar Mistakes Every Student Makes (And How to Fix Them)</h2>
           <p className="text-slate-500 dark:text-slate-400 text-center max-w-2xl mx-auto mb-12">
-            These are the most common grammatical errors found in student essays and assignments. Understanding them will make you a significantly better writer — with or without AI help.
+            These are the most common grammatical errors found in student essays and assignments. Understanding them will make you a significantly better writer â€” with or without AI help.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {[
@@ -192,7 +193,7 @@ const GrammarChecker = () => {
                 mistake: '1. Subject-Verb Disagreement',
                 wrong: '"The team of researchers are working on the project."',
                 right: '"The team of researchers is working on the project."',
-                tip: 'The subject is "team" (singular), not "researchers." Always identify the true subject — ignoring the prepositional phrase — before choosing the verb form.'
+                tip: 'The subject is "team" (singular), not "researchers." Always identify the true subject â€” ignoring the prepositional phrase â€” before choosing the verb form.'
               },
               {
                 mistake: '2. Comma Splices',
@@ -204,7 +205,7 @@ const GrammarChecker = () => {
                 mistake: '3. Dangling Modifiers',
                 wrong: '"Having studied all night, the exam seemed easy."',
                 right: '"Having studied all night, I found the exam easy."',
-                tip: 'The introductory phrase "Having studied all night" must refer to the subject. The exam didn\'t study — you did. The subject of the main sentence must logically perform the action in the modifier.'
+                tip: 'The introductory phrase "Having studied all night" must refer to the subject. The exam didn\'t study â€” you did. The subject of the main sentence must logically perform the action in the modifier.'
               },
               {
                 mistake: '4. There/Their/They\'re Confusion',
@@ -234,18 +235,18 @@ const GrammarChecker = () => {
                 mistake: '8. Apostrophe Misuse in Plurals',
                 wrong: '"The student\'s submitted their assignment\'s on time."',
                 right: '"The students submitted their assignments on time."',
-                tip: 'Apostrophes indicate possession or contraction — never a simple plural. "Students" (plural) never needs an apostrophe. "Student\'s" means "belonging to one student."'
+                tip: 'Apostrophes indicate possession or contraction â€” never a simple plural. "Students" (plural) never needs an apostrophe. "Student\'s" means "belonging to one student."'
               },
             ].map((err, i) => (
               <div key={i} className="bg-white dark:bg-slate-800/60 border border-slate-100 dark:border-slate-700 rounded-2xl p-6">
                 <h3 className="font-bold text-slate-900 dark:text-white mb-3 text-sm">{err.mistake}</h3>
                 <div className="space-y-2 mb-3">
                   <div className="flex items-start gap-2">
-                    <span className="text-red-500 font-bold text-xs mt-0.5 flex-shrink-0">✗</span>
+                    <span className="text-red-500 font-bold text-xs mt-0.5 flex-shrink-0">âœ—</span>
                     <p className="text-red-600 dark:text-red-400 text-xs italic leading-relaxed">{err.wrong}</p>
                   </div>
                   <div className="flex items-start gap-2">
-                    <span className="text-emerald-500 font-bold text-xs mt-0.5 flex-shrink-0">✓</span>
+                    <span className="text-emerald-500 font-bold text-xs mt-0.5 flex-shrink-0">âœ“</span>
                     <p className="text-emerald-600 dark:text-emerald-400 text-xs italic leading-relaxed">{err.right}</p>
                   </div>
                 </div>

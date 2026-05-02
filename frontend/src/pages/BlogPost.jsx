@@ -38,6 +38,9 @@ const BlogPost = () => {
       <SEO 
         title={post.title}
         description={post.excerpt} 
+        canonical={`/blog/${post.slug}`}
+        ogType="article"
+        ogImage={post.image}
         schema={{
           "@context": "https://schema.org",
           "@type": "Article",
@@ -45,12 +48,18 @@ const BlogPost = () => {
           "description": post.excerpt,
           "image": post.image,
           "datePublished": post.date,
-          "author": { "@type": "Organization", "name": "StudentAI Tools", "url": "https://studentaitools.in" },
+          "dateModified": post.date,
+          "author": {
+            "@type": "Person",
+            "name": "Roshan Pal",
+            "url": "https://studentaitools.in/about",
+            "jobTitle": "Founder & Lead Engineer",
+            "worksFor": { "@type": "Organization", "name": "StudentAI Tools", "url": "https://studentaitools.in" }
+          },
           "publisher": { "@type": "Organization", "name": "StudentAI Tools", "logo": { "@type": "ImageObject", "url": "https://studentaitools.in/logo.png" } },
           "mainEntityOfPage": { "@type": "WebPage", "@id": `https://studentaitools.in/blog/${post.slug}` }
         }}
       />
-      <link rel="canonical" href={`https://studentaitools.in/blog/${post.slug}`} />
       
       {/* Article Header */}
       <div className="w-full h-[400px] relative">
@@ -71,6 +80,23 @@ const BlogPost = () => {
             <div className="flex items-center gap-1"><Clock className="w-4 h-4"/> {post.readTime}</div>
           </div>
           <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight">{post.title}</h1>
+        </div>
+      </div>
+
+      {/* Author Byline — E-E-A-T Trust Signal */}
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+        <div className="flex items-center gap-4 p-5 bg-slate-50 dark:bg-slate-800/60 rounded-2xl border border-slate-200 dark:border-slate-700">
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-400 to-sky-500 flex items-center justify-center text-white font-black text-lg flex-shrink-0 shadow-md">RP</div>
+          <div>
+            <p className="font-bold text-slate-900 dark:text-white text-sm">
+              Written by <Link to="/about" className="text-indigo-600 dark:text-indigo-400 hover:underline">Roshan Pal</Link>
+            </p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Founder &amp; Lead Engineer, StudentAI Tools &middot; {post.date} &middot; {post.readTime} read</p>
+          </div>
+          <div className="ml-auto hidden sm:flex items-center gap-2">
+            <span className="px-3 py-1 rounded-full bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 text-xs font-semibold border border-indigo-200 dark:border-indigo-800">Human-Reviewed</span>
+            <span className="px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 text-xs font-semibold border border-emerald-200 dark:border-emerald-800">No AI Filler</span>
+          </div>
         </div>
       </div>
 

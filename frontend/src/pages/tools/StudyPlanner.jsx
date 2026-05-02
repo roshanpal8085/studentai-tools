@@ -45,7 +45,8 @@ const StudyPlanner = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
-        title="Free AI Study Planner — Personalized Exam Study Schedule Generator (2026)" 
+        title="Free AI Study Planner â€” Personalized Exam Study Schedule Generator (2026)" 
+        canonical="/ai-study-planner"
         description="Generate a personalised AI study plan for any exam in seconds. Uses Spaced Repetition and Active Recall. Free, no signup required. Perfect for JEE, NEET, UPSC, finals."
         keywords="ai study planner, free study schedule generator, personalized exam prep plan, best study planner for students 2026, how to make study schedule with AI"
         schema={[
@@ -64,7 +65,7 @@ const StudyPlanner = () => {
             "mainEntity": [
               { "@type": "Question", "name": "How many subjects can I add to the study planner?", "acceptedAnswer": { "@type": "Answer", "text": "You can add as many subjects as you need in the 'Subjects to Cover' field, separated by commas. We recommend focusing on 3-5 major subjects per plan for better focus and realistic scheduling." } },
               { "@type": "Question", "name": "Can the AI study planner handle tight exam deadlines?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The '48 Hour Crash Course' option generates a high-yield, triage-focused plan that identifies the most important topics to cover when time is critically short." } },
-              { "@type": "Question", "name": "What is the difference between 'Practice Questions' and 'Mastering Theory' focus goals?", "acceptedAnswer": { "@type": "Answer", "text": "If you understand the concepts but underperform in exams, choose 'Practice Questions' — the plan will allocate more time to timed mock tests. If the content is new or unfamiliar, choose 'Mastering Theory' to focus on conceptual understanding first." } },
+              { "@type": "Question", "name": "What is the difference between 'Practice Questions' and 'Mastering Theory' focus goals?", "acceptedAnswer": { "@type": "Answer", "text": "If you understand the concepts but underperform in exams, choose 'Practice Questions' â€” the plan will allocate more time to timed mock tests. If the content is new or unfamiliar, choose 'Mastering Theory' to focus on conceptual understanding first." } },
               { "@type": "Question", "name": "Is this study planner free to use?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, the AI Study Planner is completely free with no account creation or credit card required. It is supported by non-intrusive advertising." } },
               { "@type": "Question", "name": "Does the study plan use Spaced Repetition?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The AI schedules subject reviews at scientifically optimal intervals to move information from short-term to long-term memory, based on the principles of Spaced Repetition and Active Recall." } },
               { "@type": "Question", "name": "Can I use this for competitive exams like JEE, NEET or UPSC?", "acceptedAnswer": { "@type": "Answer", "text": "Absolutely. Simply enter your exam name (e.g. JEE Mains), your available preparation time, and your subjects. The AI will generate a structured daily schedule adapted to the scale of competitive exam preparation." } }
@@ -201,48 +202,102 @@ const StudyPlanner = () => {
           Ad Placement - Productivity Tools & Courses
         </div>
 
-        {/* Informational Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 py-16 border-t border-slate-200 dark:border-slate-800">
-          <div className="space-y-12">
-            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">Science of <span className="text-emerald-600">Preparation</span></h2>
-            <div className="space-y-10">
-              {[
-                { title: 'Spaced Repetition', desc: 'Our AI schedules reviews at increasing intervals to move information from short-term to long-term memory.', icon: Zap },
-                { title: 'Active Recall Slots', desc: 'Every plan includes dedicated time for self-testing, the most effective way to reinforce core concepts.', icon: Target },
-                { title: 'Cognitive Load Balance', desc: 'Avoids cramming by distributing subjects across your timeframe, preventing mental exhaustion and burnout.', icon: BarChart3 }
-              ].map((item, i) => (
-                <div key={i} className="flex gap-6 group">
-                   <div className="w-14 h-14 rounded-2xl bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                     <item.icon className="w-7 h-7" />
-                   </div>
-                   <div>
-                     <h3 className="text-xl font-bold dark:text-white mb-2">{item.title}</h3>
-                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
-                   </div>
+        {/* Comprehensive SEO Content for AdSense E-E-A-T */}
+        <div className="mt-16 pt-16 border-t border-slate-200 dark:border-slate-800">
+          <div className="max-w-4xl mx-auto space-y-16">
+            
+            <section>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-6">How to Build an AI Study Schedule That Actually Works</h2>
+              <div className="prose prose-emerald dark:prose-invert max-w-none prose-p:leading-relaxed prose-lg text-slate-600 dark:text-slate-400">
+                <p>
+                  Most study schedules fail for a simple reason: they are built by an idealized version of yourself for a world where nothing unexpected ever happens. When you manually block out 8 hours of uninterrupted study time, you are setting yourself up for burnout and guilt when reality intervenes.
+                </p>
+                <p>
+                  The <strong>AI Study Planner</strong> takes a different approach. It uses the principles of Spaced Repetition and Cognitive Load Theory to build a flexible, highly optimized roadmap that respects your actual mental bandwidth. Here is how to get the most out of it:
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 not-prose">
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">1</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Be Specific About Constraints</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Instead of broadly saying "Finals Prep," specify your exact constraints in the Pain Points field: "I only have 3 hours a day, and I am currently failing Organic Chemistry."</p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">2</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Diagnose Your Weaknesses</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">The AI prioritizes subjects intelligently. If you list three subjects, explicitly tell the AI which one is your weakest so it can front-load that subject when your brain is freshest.</p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">3</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Respect the Buffer Zones</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Our AI deliberately includes break days and catch-up blocks. Do not skip these. They are mathematically necessary to prevent the cascading failure of a missed study session.</p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-emerald-100 dark:bg-emerald-900/40 text-emerald-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">4</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Execute with the 50/10 Rule</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">When you execute the plan, study in 50-minute blocks followed by 10 minutes of complete detachment from screens. This maintains your attention span across a 4-hour session.</p>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            </section>
 
-          <div className="glass-card rounded-[3rem] p-10 md:p-14 relative overflow-hidden h-fit">
-            <h2 className="text-2xl font-extrabold dark:text-white mb-8">Planning FAQ</h2>
-            <div className="space-y-6">
-              {[
-                { q: 'How many subjects can I add?', a: 'You can add as many as needed, but we suggest focusing on 3-5 major subjects per plan for better focus and realistic scheduling.' },
-                { q: 'Can it handle tight deadlines?', a: 'Yes, the "48 Hour Crash Course" option helps you identify high-yield topics when time is critically short.' },
-                { q: 'Which focus goal should I choose?', a: 'If you know the material but fail exams, choose "Practice Questions". If the concepts are new, choose "Mastering Theory".' },
-                { q: 'Is this study planner free?', a: 'Yes, 100% free with no account creation or credit card required. Supported by non-intrusive advertising.' },
-                { q: 'Does it use Spaced Repetition?', a: 'Yes. The AI schedules subject reviews at scientifically optimal intervals to move information from short-term to long-term memory.' },
-                { q: 'Can I use it for JEE, NEET or UPSC prep?', a: 'Absolutely. Enter your exam name, available preparation time, and subjects. The AI adapts the plan to the scale of competitive exam preparation.' }
-              ].map((faq, i) => (
-                <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
-                  <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4 text-emerald-500" /> {faq.q}
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+            <section className="bg-emerald-50 dark:bg-emerald-900/10 rounded-[3rem] p-8 md:p-12 border border-emerald-100 dark:border-emerald-800/30">
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                <Calendar className="w-6 h-6 text-emerald-500" /> Example: Chaotic Inputs to Structured Plan
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">User Inputs</h3>
+                  <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl text-sm text-slate-600 dark:text-slate-400 leading-relaxed border border-slate-200 dark:border-slate-700 h-80 overflow-y-auto">
+                    <strong>Exam:</strong> Calculus 101 Midterm<br/>
+                    <strong>Timeframe:</strong> 1 Week<br/>
+                    <strong>Subjects:</strong> Limits, Derivatives, Chain Rule, Implicit Differentiation<br/>
+                    <strong>Pain Points:</strong> I understand Limits perfectly, but I completely fail at the Chain Rule. I need to focus mostly on practice problems rather than reading the textbook again.
+                  </div>
                 </div>
-              ))}
-            </div>
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">AI Generated Output</h3>
+                  <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl text-sm text-slate-900 dark:text-slate-200 border border-emerald-200 dark:border-emerald-700 shadow-lg shadow-emerald-500/10 h-80 overflow-y-auto">
+                    <strong>Day 1: Triage & Foundation</strong><br/>
+                    â€¢ [45m] Quick Review: Limits (Verify foundation)<br/>
+                    â€¢ [90m] Deep Dive: Mechanics of the Chain Rule<br/>
+                    â€¢ [30m] 5 Basic Chain Rule Practice Problems<br/><br/>
+                    
+                    <strong>Day 2: Heavy Practice</strong><br/>
+                    â€¢ [20m] Spaced Repetition: Yesterday's Chain Rule errors<br/>
+                    â€¢ [90m] Deep Dive: Implicit Differentiation<br/>
+                    â€¢ [60m] Drill: 15 mixed Derivatives problems<br/><br/>
+                    
+                    <strong>Day 3: The Weak Spot</strong><br/>
+                    â€¢ [120m] Intensive Drill: Chain Rule specifically applied to Implicit functions.<br/>
+                    â€¢ [30m] Review incorrect answers with professor/TA.<br/><br/>
+                    <em>(Continues for 7 days, ending in a timed mock exam)</em>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-8">Frequently Asked Questions</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { q: 'How many subjects should I include in one plan?', a: 'For optimal results, we recommend focusing on 3-5 major subjects per plan. If you are studying for 8 different finals, it is better to generate two separate 4-subject plans to maintain clarity and focus.' },
+                  { q: 'Can the AI handle last-minute cramming?', a: 'Yes. By selecting the "48 Hour Crash Course" timeframe, the AI switches from long-term retention strategies to high-yield triage. It will tell you exactly what to ignore and what to memorize to maximize immediate points.' },
+                  { q: 'What is the difference between "Practice Questions" and "Mastering Theory"?', a: 'If you already read the book but perform poorly on tests, choose Practice Questions; the AI will schedule more mock exams. If the material is completely new, choose Mastering Theory; the AI will allocate more time to reading and summarizing.' },
+                  { q: 'Is this study planner truly free?', a: 'Yes, the AI Study Planner is 100% free. You do not need to create an account or provide a credit card. We sustain the platform through educational partnerships and non-intrusive ads.' },
+                  { q: 'Does the study plan utilize Spaced Repetition?', a: 'Yes. The underlying prompt engineering specifically instructs the AI to schedule reviews of older material at increasing intervals (e.g., reviewing Day 1 topics briefly on Day 3 and Day 6).' },
+                  { q: 'Is this appropriate for competitive exams like the SAT or GRE?', a: 'Absolutely. Because the AI is adaptive, you simply enter "SAT" as your goal and list your specific weak sections (e.g., "Reading Comprehension, Geometry"). The AI scales the rigor of the plan accordingly.' }
+                ].map((faq, i) => (
+                  <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <h3 className="font-bold text-slate-900 dark:text-white mb-3 flex items-start gap-3">
+                      <HelpCircle className="w-5 h-5 text-emerald-500 flex-shrink-0 mt-0.5" />
+                      {faq.q}
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </div>

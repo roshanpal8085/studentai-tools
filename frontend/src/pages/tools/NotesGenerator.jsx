@@ -44,6 +44,7 @@ const NotesGenerator = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Notes Generator - Structured Study Notes for Students" 
+        canonical="/ai-notes-generator"
         description="Transform lecture transcripts, long articles, or book chapters into structured, high-quality study notes. Supports Cornell Method, Outlines, and more."
         keywords="ai notes generator, study notes maker, cornell notes system, transcript to notes, student ai"
         schema={{
@@ -161,45 +162,95 @@ const NotesGenerator = () => {
           Ad Placement - Targeted for Study Context
         </div>
 
-        {/* Informational Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 py-16 border-t border-slate-200 dark:border-slate-800">
-          <div className="space-y-12">
-            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">Master the <span className="text-primary">Art of Learning</span></h2>
-            <div className="space-y-10">
-              {[
-                { title: 'The Cornell Method', desc: 'A proven system that divides your notes into cues, details, and summaries for maximum retention and easy review.', icon: Layers },
-                { title: 'Hierarchical Outlining', desc: 'Logical structures that make it easy to see the "Big Picture" while keeping track of all the small details.', icon: BookOpen },
-                { title: 'Information Filtering', desc: 'Our AI automatically removes conversational filler from transcripts, leaving only the essential academic content.', icon: Sparkles }
-              ].map((item, i) => (
-                <div key={i} className="flex gap-6 group">
-                   <div className="w-14 h-14 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 text-primary flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                     <item.icon className="w-7 h-7" />
-                   </div>
-                   <div>
-                     <h3 className="text-xl font-bold dark:text-white mb-2">{item.title}</h3>
-                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
-                   </div>
+        {/* Comprehensive SEO Content for AdSense E-E-A-T */}
+        <div className="mt-16 pt-16 border-t border-slate-200 dark:border-slate-800">
+          <div className="max-w-4xl mx-auto space-y-16">
+            
+            <section>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-6">How to Use the AI Notes Generator for Maximum Retention</h2>
+              <div className="prose prose-indigo dark:prose-invert max-w-none prose-p:leading-relaxed prose-lg text-slate-600 dark:text-slate-400">
+                <p>
+                  Most students spend hours manually transcribing textbook chapters or lecture recordings, mistaking the physical act of writing for actual learning. The <strong>AI Notes Generator</strong> is designed to automate the mechanical formatting process, giving you back the hours you need for active recall and genuine comprehension.
+                </p>
+                <p>
+                  Whether you are preparing for high-stakes finals, board exams, or weekly quizzes, structuring your material correctly is the first step. Here is a proven, step-by-step workflow:
+                </p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 not-prose">
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">1</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Select Your Input</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Copy up to 5,000 words from your source material. This works best with lecture transcripts, long articles, textbook chapters, or even disorganized personal notes.</p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">2</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Choose the Right Format</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Select <strong>Cornell Method</strong> for subjects requiring factual memorization (history, biology). Use <strong>Mind Map / Outline</strong> for conceptual subjects (philosophy, advanced physics).</p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">3</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Generate and Review</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">The AI will extract key concepts, dates, formulas, and definitions. Read through the output immediately to ensure it aligns with your professor's emphasis.</p>
+                  </div>
+                  <div className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 rounded-xl flex items-center justify-center font-bold text-lg mb-4">4</div>
+                    <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Active Recall Testing</h3>
+                    <p className="text-sm text-slate-600 dark:text-slate-400">Do not just read the generated notes. Take the output and paste it directly into our <strong>AI Quiz Generator</strong> to create practice questions based on your new notes.</p>
+                  </div>
                 </div>
-              ))}
-            </div>
-          </div>
+              </div>
+            </section>
 
-          <div className="glass-card rounded-[3rem] p-10 md:p-14 relative overflow-hidden h-fit">
-            <h2 className="text-2xl font-extrabold dark:text-white mb-8">Generation FAQ</h2>
-            <div className="space-y-6">
-              {[
-                { q: 'What kind of content can I use?', a: 'Any text-based content: lecture transcripts, textbook chapters, web articles, PDFs, or even your own rough notes.' },
-                { q: 'Is there a word limit?', a: 'You can paste up to 10,000 words per session. For larger books, we suggest processing one chapter at a time.' },
-                { q: 'Which format is best for exams?', a: 'The Cornell Method is highly recommended for active recall, while Outline style is great for quick overviews.' }
-              ].map((faq, i) => (
-                <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
-                  <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4 text-primary" /> {faq.q}
-                  </h3>
-                  <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+            <section className="bg-indigo-50 dark:bg-indigo-900/10 rounded-[3rem] p-8 md:p-12 border border-indigo-100 dark:border-indigo-800/30">
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                <Sparkles className="w-6 h-6 text-indigo-500" /> Example: Raw Text to Cornell Notes
+              </h2>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">Input (Raw Lecture Transcript)</h3>
+                  <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl text-sm text-slate-600 dark:text-slate-400 leading-relaxed border border-slate-200 dark:border-slate-700 h-64 overflow-y-auto">
+                    "So today we're going to talk about mitochondria. A lot of people just call it the powerhouse of the cell, which is true, but it's more complex. Basically, it generates most of the chemical energy needed to power the cell's biochemical reactions. This energy is stored in a small molecule called ATP. Interestingly, mitochondria have their own small chromosome, their own DNA, which is different from the DNA in the nucleus..."
+                  </div>
                 </div>
-              ))}
-            </div>
+                <div>
+                  <h3 className="text-sm font-bold uppercase tracking-widest text-slate-500 mb-3">Output (Cornell Format)</h3>
+                  <div className="bg-white dark:bg-slate-900 p-5 rounded-2xl text-sm text-slate-900 dark:text-slate-200 border border-indigo-200 dark:border-indigo-700 shadow-lg shadow-indigo-500/10 h-64 overflow-y-auto">
+                    <strong>Cues / Keywords:</strong><br/>
+                    â€¢ Mitochondria Function<br/>
+                    â€¢ ATP (Adenosine Triphosphate)<br/>
+                    â€¢ Mitochondrial DNA (mtDNA)<br/><br/>
+                    <strong>Main Notes:</strong><br/>
+                    â€¢ Primary function: Generates chemical energy for cellular reactions.<br/>
+                    â€¢ Energy is stored in ATP molecules.<br/>
+                    â€¢ Unique characteristic: Possesses its own independent DNA (separate from nuclear DNA).<br/><br/>
+                    <strong>Summary:</strong><br/>
+                    Mitochondria are organelles that produce the cell's energy (ATP) and uniquely contain their own genetic material, distinct from the cell nucleus.
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-8">Frequently Asked Questions</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { q: 'Is the AI Notes Generator free for students?', a: 'Yes. All core tools on StudentAI, including the Notes Generator, are 100% free with no hidden paywalls or registration requirements. The platform is supported by non-intrusive educational advertisements.' },
+                  { q: 'What is the maximum word count I can process at once?', a: 'You can currently process up to 5,000 words per generation. For entire textbooks or extremely long lectures, we strongly recommend processing material chapter-by-chapter for the highest quality extraction.' },
+                  { q: 'Which note-taking format is best for university exams?', a: 'The Cornell Method is scientifically proven to improve retention because it forces you to separate key cues from detailed notes, creating a built-in study guide. However, for subjects like Math or Physics, the Outline format may be more effective for listing step-by-step procedures.' },
+                  { q: 'Will the AI hallucinate or invent false information?', a: 'Our AI is strictly instructed to only extract and format information present in the text you provide. It acts as an organizer, not an author. However, you should always review the output to ensure critical nuance from your specific lecture wasn\'t simplified.' },
+                  { q: 'Can I use this for non-academic content?', a: 'Absolutely. While optimized for students, professionals use this tool to summarize long meetings, distill dense corporate reports, and create quick reference guides from lengthy emails.' },
+                  { q: 'Does it save my notes automatically?', a: 'To protect your privacy, we do not store your raw inputs or generated notes on our servers after your session ends. Always use the "Copy Notes" button to save your work to Google Docs, Notion, or Word.' }
+                ].map((faq, i) => (
+                  <div key={i} className="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-200 dark:border-slate-700 shadow-sm">
+                    <h3 className="font-bold text-slate-900 dark:text-white mb-3 flex items-start gap-3">
+                      <HelpCircle className="w-5 h-5 text-indigo-500 flex-shrink-0 mt-0.5" />
+                      {faq.q}
+                    </h3>
+                    <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
+                  </div>
+                ))}
+              </div>
+            </section>
           </div>
         </div>
       </div>

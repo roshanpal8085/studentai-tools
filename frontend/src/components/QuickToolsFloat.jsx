@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Zap, X, FilePlus, FileText, Wifi, ShieldCheck, Gamepad2 } from 'lucide-react';
+import { Zap, X, BookOpen, CheckCircle2, Calendar, MessageSquare, FilePlus, ShieldCheck } from 'lucide-react';
 
 const QUICK_TOOLS = [
-  { label: 'PDF Merge', path: '/free-pdf-tools', icon: FilePlus, color: 'bg-rose-500' },
-  { label: 'Resume AI', path: '/ai-resume-generator', icon: FileText, color: 'bg-indigo-500' },
-  { label: 'Speed Test', path: '/tools/internet-speed-test', icon: Wifi, color: 'bg-sky-500' },
-  { label: 'Grammar', path: '/tools/grammar-checker', icon: ShieldCheck, color: 'bg-emerald-500' },
-  { label: 'Games', path: '/free-games', icon: Gamepad2, color: 'bg-purple-500' },
+  { label: 'Notes AI',    path: '/ai-notes-generator',    icon: BookOpen,     color: 'bg-indigo-500' },
+  { label: 'Quiz AI',     path: '/ai-quiz-generator',     icon: CheckCircle2, color: 'bg-emerald-500' },
+  { label: 'Study Plan',  path: '/ai-study-planner',      icon: Calendar,     color: 'bg-amber-500' },
+  { label: 'Chat PDF',    path: '/chat-pdf',              icon: MessageSquare,color: 'bg-purple-500' },
+  { label: 'Grammar',     path: '/tools/grammar-checker', icon: ShieldCheck,  color: 'bg-teal-500' },
+  { label: 'PDF Merge',   path: '/free-pdf-tools',        icon: FilePlus,     color: 'bg-rose-500' },
 ];
 
 export default function QuickToolsFloat() {
@@ -45,7 +46,7 @@ export default function QuickToolsFloat() {
         {open ? (
           <><X className="w-4 h-4" /> Close</>
         ) : (
-          <><Zap className="w-4 h-4 animate-pulse" /> Quick Tools</>
+          <><Zap className="w-4 h-4 animate-pulse" /> Study Tools</>
         )}
       </button>
     </div>

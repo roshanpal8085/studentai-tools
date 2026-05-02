@@ -532,6 +532,73 @@ const ParaphrasingTool = () => {
             </div>
           </div>
         </div>
+
+        {/* ── SEO E-E-A-T Content ───────────────────────────────────────────── */}
+        <div className="prose prose-lg prose-indigo dark:prose-invert max-w-4xl mx-auto mb-20 space-y-12">
+          <section className="bg-white dark:bg-slate-800/50 rounded-[3rem] p-10 md:p-14 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-6">How to Paraphrase Effectively Without Committing Plagiarism</h2>
+            <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+              Plagiarism isn't just about copying and pasting. It also includes "patchwriting"—the act of taking a source sentence and simply swapping out a few words with synonyms. If the sentence structure and logical flow remain identical to the original author's work, it is still considered academic misconduct at most universities.
+            </p>
+            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+              A true paraphrase demonstrates that you fully understand the source material. It requires breaking down the original concept and rebuilding it from the ground up using your own voice and sentence structure. Our <strong>AI Paraphrasing Tool</strong> is specifically engineered to help you achieve this by restructuring entire sentences rather than just swapping synonyms.
+            </p>
+
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-8 mb-4">The 4-Step Academic Paraphrasing Method</h3>
+            <div className="space-y-6">
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 flex items-center justify-center font-bold flex-shrink-0">1</div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Read and Hide</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Read the original passage until you completely understand its meaning. Then, look away or close the tab so you cannot see the exact wording.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 flex items-center justify-center font-bold flex-shrink-0">2</div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Draft from Memory</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Write down the core idea using your own vocabulary. Don't worry if it sounds clunky at first; the goal is to capture the essence independently.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 flex items-center justify-center font-bold flex-shrink-0">3</div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Refine with AI</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Paste your clunky draft into our Paraphraser. Select the <strong>Formal</strong> mode to elevate the academic tone, ensuring it reads professionally while remaining entirely your own structural concept.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 flex items-center justify-center font-bold flex-shrink-0">4</div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Cite the Source</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Even if the words are entirely new, the <em>idea</em> still belongs to the original author. Always append an APA, MLA, or Harvard citation to the end of your paraphrased sentence.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-6">Choosing the Right Mode for Your Writing</h2>
+            <div className="grid md:grid-cols-2 gap-6 not-prose">
+              <div className="bg-slate-100 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-2 mb-2"><GraduationCap className="w-5 h-5"/> Formal Mode</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Best for research papers, essays, and cover letters. This mode removes slang, avoids contractions, and utilizes a more sophisticated vocabulary suitable for university-level submissions.</p>
+              </div>
+              <div className="bg-slate-100 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-sky-600 dark:text-sky-400 flex items-center gap-2 mb-2"><Feather className="w-5 h-5"/> Fluency Mode</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Ideal for ESL (English as a Second Language) students. This mode doesn't aggressively change your words; instead, it fixes awkward phrasing to make the text read as if written by a native speaker.</p>
+              </div>
+              <div className="bg-slate-100 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-orange-500 flex items-center gap-2 mb-2"><Scissors className="w-5 h-5"/> Shorten Mode</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Perfect for hitting tight word counts. If your essay limit is 1000 words and you are at 1100, use this mode to strip away redundant adjectives and condense sentences without losing facts.</p>
+              </div>
+              <div className="bg-slate-100 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-pink-500 flex items-center gap-2 mb-2"><Sparkles className="w-5 h-5"/> Creative Mode</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Use this for creative writing assignments, blog posts, or speeches where you need to inject emotion, rhetorical devices, and engaging vocabulary into a boring, factual paragraph.</p>
+              </div>
+            </div>
+          </section>
+        </div>
       </div>
 
       {/* ── Locked Mode Modal ──────────────────────────────────────────── */}

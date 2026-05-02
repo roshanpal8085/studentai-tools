@@ -1,4 +1,13 @@
 User-agent: *
 Allow: /
 
+# Block irrelevant crawl paths
+Disallow: /api/
+Disallow: /*.json$
+
+# Crawl-delay for non-Google bots
+User-agent: Bingbot
+Crawl-delay: 10
+
+# Priority Sitemap
 Sitemap: https://studentaitools.in/sitemap.xml

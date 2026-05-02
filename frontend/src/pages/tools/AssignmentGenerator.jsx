@@ -4,7 +4,7 @@ import ReactMarkdown from 'react-markdown';
 import SEO from '../../components/SEO';
 import { 
   FileEdit, Loader2, Send, CheckCircle, HelpCircle, 
-  FileText, Sparkles, Layout, Target, ListChecks, Copy, Check 
+  Target, ListChecks, Copy, Check, Layout, BookOpen, Clock, AlertTriangle, Zap
 } from 'lucide-react';
 
 const AssignmentGenerator = () => {
@@ -44,52 +44,68 @@ const AssignmentGenerator = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
-        title="AI Assignment Generator - Create Comprehensive Academic Tasks" 
-        description="Design detailed academic assignments in seconds. Our AI generates objectives, instructions, and grading rubrics perfect for students and educators."
-        keywords="ai assignment generator, assignment maker, academic task creator, studentai tools, teacher tools"
-        schema={{
-          "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          "name": "AI Assignment Generator",
-          "operatingSystem": "Web",
-          "applicationCategory": "EducationalApplication",
-          "description": "Professional AI tool for generating structured academic assignments with rubrics and objectives.",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
-        }}
+        title="Free AI Assignment Generator - Structure Academic Tasks Instantly" 
+        canonical="/ai-assignment-generator"
+        description="Struggling to structure your academic assignment? Use our free AI Assignment Generator to instantly create outlines, objectives, and rubrics. Perfect for all academic levels."
+        keywords="ai assignment generator, free assignment maker, structure academic task, assignment outline ai, studentai tools, assignment creator 2026"
+        schema={[
+          {
+            "@context": "https://schema.org",
+            "@type": "SoftwareApplication",
+            "name": "AI Assignment Generator",
+            "operatingSystem": "Web",
+            "applicationCategory": "EducationalApplication",
+            "description": "Professional AI tool for generating structured academic assignments, complete with rubrics, learning objectives, and methodological steps.",
+            "offers": { "@type": "Offer", "price": "0", "priceCurrency": "INR" }
+          },
+          {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+              { "@type": "Question", "name": "Is the AI Assignment Generator completely free to use?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, our tool is 100% free for both students and educators. There are no hidden fees, no credit card requirements, and absolutely no need to create an account before using it." } },
+              { "@type": "Question", "name": "Can students use this to write their assignments?", "acceptedAnswer": { "@type": "Answer", "text": "This tool generates the *structure* of an assignment (the outline, objectives, and rubric), not the final essay. It is designed to help students understand what is expected of them and outline their approach before they begin writing." } },
+              { "@type": "Question", "name": "What academic levels are supported by the generator?", "acceptedAnswer": { "@type": "Answer", "text": "We support Middle School, High School, Undergraduate, and Postgraduate levels. The AI automatically adjusts the vocabulary, expected depth of research, and rubric strictness based on the level you select." } },
+              { "@type": "Question", "name": "Will this tool generate a grading rubric?", "acceptedAnswer": { "@type": "Answer", "text": "Yes! Every assignment structure generated includes a detailed grading rubric. This helps educators grade fairly and helps students understand exactly what criteria they must meet to achieve top marks." } },
+              { "@type": "Question", "name": "How specific can I get with the instructions?", "acceptedAnswer": { "@type": "Answer", "text": "Very specific. You can ask the AI to 'include a methodology section requiring 3 peer-reviewed journals' or 'make sure the presentation component is graded out of 20 points.' It will seamlessly integrate these constraints." } }
+            ]
+          }
+        ]}
       />
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Header */}
         <div className="text-center mb-12">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-violet-50 dark:bg-violet-900/30 text-violet-600 mb-4 transition-transform hover:rotate-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-violet-50 dark:bg-violet-900/30 text-violet-600 mb-4 transition-transform hover:-translate-y-1">
             <FileEdit className="w-8 h-8" />
           </div>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white mb-4 tracking-tight">
-            AI <span className="text-gradient">Assignment Generator</span>
+          <h1 className="text-4xl md:text-6xl font-extrabold text-slate-900 dark:text-white mb-5 tracking-tight">
+            AI <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-600 to-indigo-600">Assignment Generator</span>
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Architect perfect academic tasks. Instantly generate assignments with objectives, rubrics, and detailed instructions for any level.
+            Stop staring at a blank page. Generate professional, highly-structured assignment outlines, learning objectives, and grading rubrics in under 10 seconds.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-16">
-          {/* Form Panel */}
-          <div className="lg:col-span-5 glass-card rounded-[2.5rem] p-8 md:p-10 h-fit">
+        {/* Tool Interface */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-20">
+          {/* Settings Panel */}
+          <div className="lg:col-span-5 bg-white dark:bg-slate-800/80 rounded-[2.5rem] p-8 md:p-10 shadow-xl border border-slate-200/60 dark:border-slate-700/60 h-fit">
             <div className="flex items-center justify-between mb-8">
               <h2 className="text-2xl font-bold dark:text-white flex items-center gap-2">
-                <Target className="w-6 h-6 text-violet-500" /> Design Lab
+                <Target className="w-6 h-6 text-violet-500" /> Task Parameters
               </h2>
               <Sparkles className="w-5 h-5 text-violet-500 animate-pulse" />
             </div>
 
             <form onSubmit={handleGenerate} className="space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                 <div className="sm:col-span-2">
-                  <label className="block text-xs font-black text-slate-500 mb-2 uppercase tracking-widest ml-1">Assignment Topic</label>
+                  <label className="block text-xs font-black text-slate-500 mb-2 uppercase tracking-widest ml-1">Core Topic / Subject</label>
                   <input 
                     required
                     type="text"
-                    placeholder="e.g., Quantum Mechanics Fundamentals..."
-                    className="w-full px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-violet-500 outline-none transition-all dark:text-white text-sm"
+                    placeholder="e.g., The Impact of Artificial Intelligence on Modern Healthcare..."
+                    className="w-full px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-violet-500 outline-none transition-all dark:text-white text-sm"
                     value={topic}
                     onChange={(e) => setTopic(e.target.value)}
                   />
@@ -99,7 +115,7 @@ const AssignmentGenerator = () => {
                   <select 
                     value={level} 
                     onChange={(e) => setLevel(e.target.value)}
-                    className="w-full px-4 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-violet-500 outline-none transition-all dark:text-white appearance-none cursor-pointer"
+                    className="w-full px-4 py-3.5 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-violet-500 outline-none transition-all dark:text-white appearance-none cursor-pointer text-sm font-medium"
                   >
                     <option>Middle School</option>
                     <option>High School</option>
@@ -110,10 +126,10 @@ const AssignmentGenerator = () => {
               </div>
 
               <div>
-                <label className="block text-xs font-black text-slate-500 mb-2 uppercase tracking-widest ml-1">Specific Instructions (Optional)</label>
+                <label className="block text-xs font-black text-slate-500 mb-2 uppercase tracking-widest ml-1">Specific Constraints (Optional)</label>
                 <textarea 
-                  placeholder="e.g., Include ethical considerations, 3 diagrams required, follow APA style..."
-                  className="w-full h-40 px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-white/50 dark:bg-slate-900/50 focus:ring-2 focus:ring-violet-500 outline-none transition-all dark:text-white resize-none text-sm leading-relaxed"
+                  placeholder="e.g., Must include a case study, require 3 primary sources, use APA formatting, focus heavily on ethical implications..."
+                  className="w-full h-36 px-5 py-4 rounded-2xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-900/50 focus:ring-2 focus:ring-violet-500 outline-none transition-all dark:text-white resize-none text-sm leading-relaxed"
                   value={instructions}
                   onChange={(e) => setInstructions(e.target.value)}
                 />
@@ -122,97 +138,205 @@ const AssignmentGenerator = () => {
               <button 
                 disabled={loading || !topic.trim()}
                 type="submit" 
-                className="w-full bg-violet-600 hover:bg-violet-700 text-white font-extrabold py-5 rounded-2xl transition-all shadow-xl shadow-violet-500/20 flex justify-center items-center gap-3 disabled:opacity-50 group"
+                className="w-full bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 disabled:opacity-50 text-white font-extrabold py-5 rounded-2xl transition-all shadow-xl shadow-violet-500/30 flex justify-center items-center gap-3 group"
               >
-                {loading ? <Loader2 className="animate-spin w-6 h-6" /> : <FileEdit className="w-5 h-5 group-hover:-rotate-12 transition-transform" />}
-                <span>{loading ? 'Processing Architecture...' : 'Generate Assignment'}</span>
+                {loading ? <Loader2 className="animate-spin w-6 h-6" /> : <Send className="w-5 h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all" />}
+                <span>{loading ? 'Structuring Document...' : 'Generate Assignment Outline'}</span>
               </button>
             </form>
           </div>
 
           {/* Result Panel */}
-          <div className="lg:col-span-7 rounded-[2.5rem] bg-white dark:bg-slate-900 shadow-2xl border border-slate-100 dark:border-slate-800 overflow-hidden flex flex-col min-h-[600px]">
-             <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 backdrop-blur flex items-center justify-between">
+          <div className="lg:col-span-7 rounded-[2.5rem] bg-white dark:bg-slate-900 shadow-2xl border border-slate-200/60 dark:border-slate-700/60 overflow-hidden flex flex-col min-h-[600px]">
+             <div className="px-8 py-6 border-b border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30 flex items-center justify-between">
                <h2 className="text-xl font-bold dark:text-white flex items-center gap-2">
-                 <Layout className="w-6 h-6 text-violet-500" /> Structured Outcome
+                 <Layout className="w-6 h-6 text-violet-500" /> Assignment Brief
                </h2>
                <button 
                  disabled={!result || loading} 
                  onClick={handleCopy} 
-                 className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                 className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold uppercase tracking-wider transition-all ${
                    copied 
-                   ? 'bg-emerald-500 text-white shadow-emerald-500/20' 
-                   : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-violet-50 hover:text-violet-600'
+                   ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' 
+                   : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 hover:border-violet-300 hover:text-violet-600'
                  }`}
                >
                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                 {copied ? 'Copied' : 'Copy Tasks'}
+                 {copied ? 'Copied to Clipboard' : 'Copy Text'}
                </button>
              </div>
              
-             <div className="flex-grow p-8 md:p-14 overflow-auto custom-scrollbar bg-slate-50/20 dark:bg-transparent">
-               {error && <div className="p-4 bg-red-50 text-red-600 rounded-2xl mb-6 border border-red-100 text-sm font-bold">{error}</div>}
+             <div className="flex-grow p-8 md:p-12 overflow-auto custom-scrollbar bg-white dark:bg-slate-900">
+               {error && <div className="p-5 bg-red-50 text-red-700 rounded-2xl mb-6 border border-red-100 text-sm font-bold flex items-center gap-3"><AlertTriangle className="w-5 h-5" />{error}</div>}
                
                {result ? (
-                 <div className="prose prose-violet dark:prose-invert max-w-none prose-p:leading-relaxed prose-headings:text-slate-900 dark:prose-headings:text-white prose-li:my-1">
+                 <div className="prose prose-violet dark:prose-invert max-w-none prose-p:leading-loose prose-headings:text-slate-900 dark:prose-headings:text-white prose-li:my-2 prose-strong:text-slate-900 dark:prose-strong:text-slate-200">
                    <ReactMarkdown>{result}</ReactMarkdown>
                  </div>
                ) : (
-                 <div className="flex flex-col items-center justify-center h-full text-slate-400 py-20 opacity-30 text-center">
-                   <Target className="w-24 h-24 mb-6" />
-                   <p className="text-2xl font-black">Ready to build <br/> the assignment?</p>
-                   <p className="text-sm font-normal mt-4">Objectives, Instructions, and Rubrics will appear here.</p>
+                 <div className="flex flex-col items-center justify-center h-full text-slate-400 py-20 opacity-40 text-center">
+                   <ListChecks className="w-24 h-24 mb-6 text-violet-300" />
+                   <p className="text-2xl font-black text-slate-600 dark:text-slate-400">Structure awaits.</p>
+                   <p className="text-sm font-normal mt-4 max-w-sm">Enter your topic and academic level to generate a comprehensive assignment brief, complete with a rubric.</p>
                  </div>
                )}
              </div>
           </div>
         </div>
 
-        {/* Ad Space Placement */}
-        <div className="w-full h-32 glass-card rounded-3xl flex items-center justify-center text-slate-400 text-sm mb-24 border border-dashed border-slate-300 dark:border-slate-700/50">
-          Ad Placement - Academic Content Context
-        </div>
+        {/* Deep Content Section (SEO & Value) */}
+        <div className="prose prose-lg prose-slate dark:prose-invert max-w-none mb-20 space-y-16">
+          
+          {/* Section 1: The Problem */}
+          <section className="bg-white dark:bg-slate-800/50 rounded-[3rem] p-10 md:p-16 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-6 flex items-center gap-4">
+              <span className="w-12 h-12 rounded-2xl bg-rose-100 dark:bg-rose-900/30 text-rose-600 flex items-center justify-center flex-shrink-0"><AlertTriangle className="w-6 h-6" /></span>
+              The Problem with Unstructured Assignments
+            </h2>
+            <div className="grid md:grid-cols-2 gap-10">
+              <div>
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed mb-4">
+                  Whether you are a student trying to interpret a vague prompt, or an educator trying to design a comprehensive task, poor assignment structure is a universal pain point. An assignment that simply says <em>"Write 2000 words on the French Revolution"</em> is practically guaranteed to produce disorganized, unfocused work.
+                </p>
+                <p className="text-slate-600 dark:text-slate-300 leading-relaxed">
+                  Without clear learning objectives, specific methodological requirements, and a transparent grading rubric, students spend more time guessing what the professor wants than actually researching the topic. This leads to academic anxiety, lower grades, and frustrating grading sessions for educators.
+                </p>
+              </div>
+              <div className="bg-rose-50 dark:bg-rose-900/10 rounded-3xl p-8 border border-rose-100 dark:border-rose-800/30">
+                <h4 className="font-bold text-rose-900 dark:text-rose-300 mb-4">Signs of a Poorly Structured Task:</h4>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3 text-sm text-rose-800 dark:text-rose-200"><span className="text-rose-500 mt-1">âœ—</span> No specific research constraints (e.g., "Use 5 peer-reviewed sources").</li>
+                  <li className="flex items-start gap-3 text-sm text-rose-800 dark:text-rose-200"><span className="text-rose-500 mt-1">âœ—</span> Lack of a clear grading rubric outlining how marks are distributed.</li>
+                  <li className="flex items-start gap-3 text-sm text-rose-800 dark:text-rose-200"><span className="text-rose-500 mt-1">âœ—</span> Ambiguous final deliverables (e.g., is it an essay, a report, or a presentation?).</li>
+                </ul>
+              </div>
+            </div>
+          </section>
 
-        {/* Informational Sections */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-24 py-16 border-t border-slate-200 dark:border-slate-800">
-          <div className="space-y-12">
-            <h2 className="text-4xl font-extrabold text-slate-900 dark:text-white leading-tight">Educational <span className="text-violet-600">Scaffolding</span></h2>
-            <div className="space-y-10">
+          {/* Section 2: Step by Step Guide */}
+          <section>
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-8 text-center">How to Use the AI Assignment Generator</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {[
-                { title: 'Detailed Objectives', desc: 'Every assignment is anchored in Bloom\'s Taxonomy to ensure clear learning outcomes and measurable success.', icon: Target },
-                { title: 'Grading Criteria', desc: 'Includes a professional rubric that helps both students and teachers understand evaluation standards.', icon: ListChecks },
-                { title: 'Project Steps', desc: 'Breaks down complex topics into manageable phases, encouraging a structured approach to deep learning.', icon: Layout }
+                { step: "01", title: "Define the Core Topic", desc: "Start by entering the central theme. Be as broad or as specific as you need. For example: 'The architectural innovations of the Roman Empire'." },
+                { step: "02", title: "Set the Academic Level", desc: "Select the appropriate tier. This dictates the complexity of the vocabulary, the depth of critical analysis expected, and the strictness of the rubric." },
+                { step: "03", title: "Add Custom Constraints", desc: "Use the optional instructions box to add specific requirements: word counts, required formatting (APA/MLA), or mandatory sub-topics." }
               ].map((item, i) => (
-                <div key={i} className="flex gap-6 group">
-                   <div className="w-14 h-14 rounded-2xl bg-violet-50 dark:bg-violet-900/30 text-violet-600 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
-                     <item.icon className="w-7 h-7" />
-                   </div>
-                   <div>
-                     <h3 className="text-xl font-bold dark:text-white mb-2">{item.title}</h3>
-                     <p className="text-slate-600 dark:text-slate-400 leading-relaxed">{item.desc}</p>
-                   </div>
+                <div key={i} className="bg-white dark:bg-slate-800/50 rounded-3xl p-8 border border-slate-200 dark:border-slate-700 relative overflow-hidden group hover:border-violet-300 transition-colors">
+                  <div className="text-5xl font-black text-slate-100 dark:text-slate-800 absolute -top-2 -right-2 group-hover:scale-110 transition-transform">{item.step}</div>
+                  <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3 relative z-10">{item.title}</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed relative z-10">{item.desc}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div className="glass-card rounded-[3rem] p-10 md:p-14 relative overflow-hidden h-fit">
-            <h2 className="text-2xl font-extrabold dark:text-white mb-8">Assignment FAQ</h2>
-            <div className="space-y-6">
+          {/* Section 3: Real Example */}
+          <section className="bg-slate-900 rounded-[3rem] p-10 md:p-16 border border-slate-800 shadow-2xl relative overflow-hidden">
+            <div className="absolute top-0 right-0 w-96 h-96 bg-violet-600/20 blur-[100px] rounded-full pointer-events-none" />
+            <h2 className="text-3xl font-extrabold text-white mb-8">Real Example: See it in Action</h2>
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="lg:w-1/3 bg-slate-800/50 rounded-2xl p-6 border border-slate-700">
+                <div className="text-xs font-black text-violet-400 uppercase tracking-widest mb-4">User Input</div>
+                <div className="space-y-4">
+                  <div>
+                    <span className="block text-slate-500 text-xs mb-1">Topic</span>
+                    <span className="text-white font-medium text-sm">Supply Chain Disruptions during Global Crises</span>
+                  </div>
+                  <div>
+                    <span className="block text-slate-500 text-xs mb-1">Level</span>
+                    <span className="text-white font-medium text-sm">Undergraduate</span>
+                  </div>
+                  <div>
+                    <span className="block text-slate-500 text-xs mb-1">Constraints</span>
+                    <span className="text-white font-medium text-sm">Must include a PESTLE analysis, focus on the semiconductor industry, and require a 10-point presentation.</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="lg:w-2/3 bg-white rounded-2xl p-8">
+                <div className="text-xs font-black text-emerald-600 uppercase tracking-widest mb-4">AI Generated Output (Excerpt)</div>
+                <div className="prose prose-sm max-w-none text-slate-800">
+                  <h4 className="text-lg font-bold text-slate-900">Assignment Brief: Global Supply Chain Resilience</h4>
+                  <p><strong>Objective:</strong> To critically analyze the vulnerabilities of global supply chains during macroeconomic crises, utilizing the semiconductor industry as a primary case study.</p>
+                  <h4 className="text-md font-bold text-slate-900 mt-4">Deliverable 1: The Analytical Report (70%)</h4>
+                  <ul>
+                    <li><strong>Introduction (300 words):</strong> Define modern supply chain globalization.</li>
+                    <li><strong>PESTLE Analysis (800 words):</strong> Apply the PESTLE framework to the semiconductor shortage of 2020-2022.</li>
+                    <li><strong>Strategic Recommendations (400 words):</strong> Propose risk mitigation strategies (e.g., nearshoring).</li>
+                  </ul>
+                  <h4 className="text-md font-bold text-slate-900 mt-4">Grading Rubric (Excerpt)</h4>
+                  <ul>
+                    <li><strong>Critical Analysis (30 points):</strong> Exceptional depth in applying the PESTLE framework; evidence of original thought.</li>
+                    <li><strong>Presentation Clarity (10 points):</strong> Slides are visually coherent, strictly adhering to the 10-slide limit.</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Section 4: Use Cases & Tips */}
+          <section className="grid md:grid-cols-2 gap-10">
+            <div>
+              <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-6">Common Use Cases</h2>
+              <ul className="space-y-4">
+                <li className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center flex-shrink-0 text-indigo-600"><BookOpen className="w-5 h-5" /></div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 dark:text-white">For Students (Reverse Engineering)</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">If your professor gave you a vague prompt, generate a structured assignment based on it to figure out exactly what headings and rubrics you should aim to fulfill.</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center flex-shrink-0 text-emerald-600"><Target className="w-5 h-5" /></div>
+                  <div>
+                    <h4 className="font-bold text-slate-900 dark:text-white">For Educators</h4>
+                    <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Save hours of administrative work. Use the AI to generate the syllabus breakdown, learning outcomes, and grading rubrics for your upcoming semester.</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            
+            <div className="bg-indigo-50 dark:bg-indigo-900/10 rounded-3xl p-8 border border-indigo-100 dark:border-indigo-800/30">
+              <h2 className="text-2xl font-extrabold text-slate-900 dark:text-white mb-6 flex items-center gap-3">
+                <Zap className="w-6 h-6 text-indigo-500" /> Tips for Best Results
+              </h2>
+              <ul className="space-y-4">
+                <li className="flex gap-3 text-sm text-slate-700 dark:text-slate-300">
+                  <strong className="text-indigo-600 dark:text-indigo-400">1.</strong> 
+                  <span><strong>Specify the deliverables.</strong> Tell the AI if you want an essay, a slide deck, a lab report, or a creative project.</span>
+                </li>
+                <li className="flex gap-3 text-sm text-slate-700 dark:text-slate-300">
+                  <strong className="text-indigo-600 dark:text-indigo-400">2.</strong> 
+                  <span><strong>Ask for multiple parts.</strong> Modern assignments often have a written component and a presentation component. Note this in the instructions.</span>
+                </li>
+                <li className="flex gap-3 text-sm text-slate-700 dark:text-slate-300">
+                  <strong className="text-indigo-600 dark:text-indigo-400">3.</strong> 
+                  <span><strong>Define the formatting.</strong> Explicitly state if you need APA 7th edition, double-spacing, or specific margin sizes if it matters to your rubric.</span>
+                </li>
+              </ul>
+            </div>
+          </section>
+
+          {/* Section 5: Extended FAQ */}
+          <section className="mt-16">
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-8 text-center">Frequently Asked Questions</h2>
+            <div className="grid md:grid-cols-2 gap-6">
               {[
-                { q: 'Is it suitable for university level?', a: 'Absolutely. Choosing the "Postgraduate" or "Undergraduate" level adjusts the complexity and depth of the generated tasks.' },
-                { q: 'Can I add specific constraints?', a: 'Yes! Use the instructions field to specify word counts, citation styles, or required sections.' },
-                { q: 'Is the rubric reusable?', a: 'Definitely. The rubric provides a great template for official grading or self-assessment.' }
+                { q: "Is the generated rubric actually usable for grading?", a: "Yes. The AI generates standards-based rubrics that assign point values to specific criteria (e.g., Critical Thinking, Formatting, Research Quality), making it highly practical for real-world grading." },
+                { q: "Can I use this for STEM subjects?", a: "Absolutely. For STEM, the tool will generate assignment structures focused on methodology, data analysis, laboratory procedures, and empirical results rather than essay-style arguments." },
+                { q: "Does the AI save the assignments I generate?", a: "No. StudentAI operates with strict privacy standards. Your prompts and generated assignments are not stored in our databases, ensuring your coursework remains entirely private." },
+                { q: "How long does the generation process take?", a: "Typically under 10 seconds. We utilize state-of-the-art LLMs to ensure that you get high-quality, structured output almost instantaneously." },
+                { q: "What is the difference between High School and Postgraduate outputs?", a: "High school outputs focus on summarizing, understanding, and basic application. Postgraduate outputs demand critical synthesis, primary research, complex theoretical frameworks, and strict peer-reviewed citation standards." }
               ].map((faq, i) => (
-                <div key={i} className="pb-5 border-b border-slate-100 dark:border-slate-800 last:border-0">
-                  <h3 className="font-bold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
-                    <HelpCircle className="w-4 h-4 text-violet-500" /> {faq.q}
-                  </h3>
+                <div key={i} className="bg-white dark:bg-slate-800/40 rounded-2xl p-6 border border-slate-200 dark:border-slate-700">
+                  <h3 className="font-bold text-slate-900 dark:text-white mb-3 text-lg">{faq.q}</h3>
                   <p className="text-slate-600 dark:text-slate-400 text-sm leading-relaxed">{faq.a}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </section>
+
         </div>
       </div>
     </div>

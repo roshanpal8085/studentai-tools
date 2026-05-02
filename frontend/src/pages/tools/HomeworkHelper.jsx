@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import SEO from '../../components/SEO';
@@ -35,7 +35,8 @@ const HomeworkHelper = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
-        title="Free AI Homework Helper — Step-by-Step Solutions for Any Subject (2026)" 
+        title="Free AI Homework Helper â€” Step-by-Step Solutions for Any Subject (2026)" 
+        canonical="/ai-homework-helper"
         description="Stuck on homework? Get instant, step-by-step AI explanations for Maths, Science, History, Literature & more. Free, no signup, works on any device. Used by 2M+ students."
         keywords="ai homework helper, free homework solver, step by step math solutions, free AI tutor for students, ai homework help 2026"
         schema={[
@@ -233,7 +234,7 @@ const HomeworkHelper = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="bg-red-50 dark:bg-red-900/10 border border-red-100 dark:border-red-900/30 rounded-3xl p-8">
               <h3 className="flex items-center gap-2 text-xl font-bold text-red-700 dark:text-red-400 mb-6">
-                <span className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center text-red-600 dark:text-red-400">✗</span>
+                <span className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/50 flex items-center justify-center text-red-600 dark:text-red-400">âœ—</span>
                 The Wrong Way (Cheating)
               </h3>
               <ul className="space-y-4 text-slate-700 dark:text-slate-300 text-sm">
@@ -257,7 +258,7 @@ const HomeworkHelper = () => {
 
             <div className="bg-emerald-50 dark:bg-emerald-900/10 border border-emerald-100 dark:border-emerald-900/30 rounded-3xl p-8">
               <h3 className="flex items-center gap-2 text-xl font-bold text-emerald-700 dark:text-emerald-400 mb-6">
-                <span className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400">✓</span>
+                <span className="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400">âœ“</span>
                 The Right Way (Learning)
               </h3>
               <ul className="space-y-4 text-slate-700 dark:text-slate-300 text-sm">

@@ -1,10 +1,15 @@
 import { Helmet } from 'react-helmet-async';
+import SEO from '../components/SEO';
 import { ShieldAlert, AlertTriangle, Info, Shield, BrainCircuit } from 'lucide-react';
 
 const Disclaimer = () => {
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
-      <Helmet><title>Disclaimer - StudentAI Tools</title></Helmet>
+      <SEO
+        title="Disclaimer"
+        canonical="/disclaimer"
+        description="Read the StudentAI Tools disclaimer covering AI limitations, academic integrity, external links, and advertising disclosures."
+      />
       
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">

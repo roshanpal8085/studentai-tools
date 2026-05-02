@@ -40,6 +40,7 @@ const TextSummarizer = () => {
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
       <SEO 
         title="AI Text Summarizer - Free Online Context Generator" 
+        canonical="/ai-text-summarizer"
         description="Fast and wildly accurate AI text summarizer. Turn long articles, essays, and dense documents into incredibly concise, reliable summaries in seconds."
         keywords="ai text summarizer, article summarizer, free study tool, text condenser, ai summarizer online"
         schema={{
@@ -156,6 +157,62 @@ const TextSummarizer = () => {
         {/* Ad Space Placement */}
         <div className="w-full h-24 glass-card rounded-2xl flex items-center justify-center text-slate-400 text-sm mb-16 border border-dashed border-slate-300 dark:border-slate-700/50">
           Ad Placement - Productivity Tools Hub
+        </div>
+
+        {/* ── SEO E-E-A-T Content ───────────────────────────────────────────── */}
+        <div className="prose prose-lg prose-blue dark:prose-invert max-w-4xl mx-auto mb-20 space-y-12">
+          <section className="bg-white dark:bg-slate-800/50 rounded-[3rem] p-10 md:p-14 border border-slate-200 dark:border-slate-700 shadow-sm">
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-6">How to Use an AI Text Summarizer to Accelerate Your Research</h2>
+            <p className="text-slate-600 dark:text-slate-400 leading-relaxed mb-6">
+              In today's academic and professional environments, we suffer from information overload. You are often required to read dozens of long articles, reports, and textbook chapters just to extract a few key points. A <strong>text summarizer</strong> uses advanced natural language processing to identify the core thesis and supporting evidence of any text, stripping away the filler and giving you exactly what you need.
+            </p>
+            <p className="text-slate-600 dark:text-slate-400 leading-relaxed">
+              Whether you are conducting a literature review, preparing for a seminar, or just trying to decide if a 30-page research paper is actually relevant to your essay, our AI Summarizer can cut your reading time by up to 80%.
+            </p>
+
+            <h3 className="text-xl font-bold text-slate-900 dark:text-white mt-8 mb-4">Top 3 Use Cases for Students and Professionals</h3>
+            <div className="space-y-6">
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">1</div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">The "Should I Read This?" Test</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">Before dedicating two hours to reading a dense academic journal article, paste the introduction and conclusion into the summarizer. The output will immediately tell you if the article contains data relevant to your specific research question.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">2</div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Literature Reviews</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">When writing a literature review, you need to synthesize the findings of multiple authors. Use the "Short" summary setting on several different papers to easily compare their methodologies and conclusions side-by-side.</p>
+                </div>
+              </div>
+              <div className="flex gap-4">
+                <div className="w-10 h-10 rounded-xl bg-blue-100 dark:bg-blue-900/40 text-blue-600 flex items-center justify-center font-bold flex-shrink-0">3</div>
+                <div>
+                  <h4 className="font-bold text-slate-900 dark:text-white">Executive Summaries for Reports</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">If you have just finished writing a massive 20-page business report or capstone project, paste your own writing into the tool. It will generate a perfect, unbiased Executive Summary to place at the beginning of your document.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2 className="text-3xl font-extrabold text-slate-900 dark:text-white mb-6">Choosing the Right Summary Length</h2>
+            <div className="grid md:grid-cols-3 gap-6 not-prose">
+              <div className="bg-slate-100 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-blue-600 dark:text-blue-400 flex items-center gap-2 mb-2">Short (Abstract)</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Generates a 1-3 sentence TL;DR (Too Long; Didn't Read). Perfect for scanning news articles, quick emails, or getting the absolute core thesis of a document.</p>
+              </div>
+              <div className="bg-slate-100 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-indigo-600 dark:text-indigo-400 flex items-center gap-2 mb-2">Medium (Executive)</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Creates a balanced 1-2 paragraph summary. This is the default mode, providing enough context to understand the argument without reading the full text.</p>
+              </div>
+              <div className="bg-slate-100 dark:bg-slate-800/50 p-6 rounded-2xl border border-slate-200 dark:border-slate-700">
+                <h4 className="font-bold text-purple-600 dark:text-purple-400 flex items-center gap-2 mb-2">Long (Outline)</h4>
+                <p className="text-sm text-slate-600 dark:text-slate-400">Produces a highly detailed summary, often including bullet points of key arguments and statistics. Best for studying for exams when you need to remember the nuance.</p>
+              </div>
+            </div>
+          </section>
         </div>
 
         {/* Informational Sections */}
