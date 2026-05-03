@@ -11,7 +11,7 @@ const CookieConsent = () => {
     const consent = localStorage.getItem(COOKIE_KEY);
     if (!consent) {
       // Small delay so it doesn't flash on first paint
-      const t = setTimeout(() => setVisible(true), 1200);
+      const t = setTimeout(() => setVisible(true), 200);
       return () => clearTimeout(t);
     }
   }, []);

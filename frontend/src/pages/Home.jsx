@@ -22,7 +22,7 @@ const CORE_TOOLS = [
 
 const ALL_TOOLS = [
   { icon: Brain,       label: 'AI Essay Writer',       desc: 'Structured, cited essays from any prompt.', to: '/ai-essay-writer',          color: 'from-blue-500 to-cyan-500' },
-  { icon: Wand2,       label: 'Paraphrasing Tool',     desc: 'Rewrite text in 6 AI modes. Avoid plagiarism.', to: '/tools/paraphrasing-tool', color: 'from-rose-500 to-pink-500' },
+  { icon: Wand2,       label: 'Paraphrasing Tool',     desc: 'Rewrite text in 6 AI modes. Cite sources with original language.', to: '/tools/paraphrasing-tool', color: 'from-rose-500 to-pink-500' },
   { icon: ShieldCheck, label: 'Grammar Checker',       desc: 'AI-powered grammar and style correction.', to: '/tools/grammar-checker',    color: 'from-teal-500 to-emerald-500' },
   { icon: FileText,    label: 'AI Resume Builder',     desc: 'ATS-friendly resumes in minutes.', to: '/ai-resume-generator',        color: 'from-indigo-500 to-violet-500' },
   { icon: MonitorPlay, label: 'Presentation Builder',  desc: 'AI-generated slide outlines, beautifully structured.', to: '/presentation-generator',  color: 'from-amber-500 to-yellow-500' },

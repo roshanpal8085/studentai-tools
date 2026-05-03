@@ -81,14 +81,24 @@ export default function Navbar() {
   );
 
   useEffect(() => {
+    let lastScroll = window.scrollY;
+    
     const handleScroll = () => {
       const current = window.scrollY;
       setScrolled(current > 20);
-      if (current > lastScrollY.current && current > 80) {
-        setVisible(false); setActiveDropdown(null);
-      } else { setVisible(true); }
-      lastScrollY.current = current;
+      
+      if (current < 50) {
+        setVisible(true);
+      } else if (current > lastScroll && current > 80) {
+        setVisible(false); 
+        setActiveDropdown(null);
+      } else if (current < lastScroll - 5) {
+        setVisible(true); 
+      }
+      
+      lastScroll = current;
     };
+    
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
