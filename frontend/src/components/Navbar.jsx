@@ -81,38 +81,32 @@ export default function Navbar() {
   );
 
   useEffect(() => {
+    let prevScrollPos = window.scrollY;
+
     const handleScroll = () => {
-      const currentScrollY = window.scrollY;
+      const currentScrollPos = window.scrollY;
       
-      // Update background blur styling
-      setScrolled(currentScrollY > 20);
+      // Handle styling based on scroll position
+      setScrolled(currentScrollPos > 20);
 
-      // Always show at the very top
-      if (currentScrollY <= 50) {
+      // Visibility logic
+      if (currentScrollPos <= 50) {
+        // Always show at the top
         setVisible(true);
-        lastScrollY.current = currentScrollY;
-        return;
-      }
-
-      // Calculate direction and accumulated distance since last definite scroll
-      const scrolledDown = currentScrollY > lastScrollY.current;
-      const scrollDifference = Math.abs(currentScrollY - lastScrollY.current);
-
-      // Only trigger visibility change if scroll is deliberate (e.g., > 5px)
-      // By NOT updating lastScrollY.current otherwise, we accumulate slow micro-scrolls!
-      if (scrollDifference > 5) {
-        if (scrolledDown) {
-          setVisible(false);
+      } else {
+        // Determine direction: true if scrolling UP
+        const isScrollingUp = currentScrollPos < prevScrollPos;
+        setVisible(isScrollingUp);
+        
+        if (!isScrollingUp) {
           setActiveDropdown(null);
-        } else {
-          setVisible(true);
         }
-        // Update reference only when threshold is breached
-        lastScrollY.current = currentScrollY;
       }
+
+      // Update previous position for next event
+      prevScrollPos = currentScrollPos;
     };
 
-    lastScrollY.current = window.scrollY;
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
