@@ -2,7 +2,7 @@ import SEO from '../components/SEO';
 import { Link } from 'react-router-dom';
 import {
   BookOpen, CheckCircle2, Calendar, MessageSquare, Brain, Wand2,
-  FileText, MonitorPlay, Mail, ShieldCheck, FilePlus, ArrowRight,
+  FileText, MonitorPlay, ShieldCheck, FilePlus, ArrowRight,
   Zap, Users, Star, ChevronRight
 } from 'lucide-react';
 
@@ -26,7 +26,7 @@ const ALL_TOOLS = [
   { icon: ShieldCheck, label: 'Grammar Checker',       desc: 'AI-powered grammar and style correction.', to: '/tools/grammar-checker',    color: 'from-teal-500 to-emerald-500' },
   { icon: FileText,    label: 'AI Resume Builder',     desc: 'ATS-friendly resumes in minutes.', to: '/ai-resume-generator',        color: 'from-indigo-500 to-violet-500' },
   { icon: MonitorPlay, label: 'Presentation Builder',  desc: 'AI-generated slide outlines, beautifully structured.', to: '/presentation-generator',  color: 'from-amber-500 to-yellow-500' },
-  { icon: Mail,        label: 'Email Writer',          desc: 'Professional emails to professors and employers.', to: '/email-writer',              color: 'from-sky-500 to-blue-500' },
+  { icon: BookOpen,    label: 'AI Text Summarizer',    desc: 'Long articles into concise, exam-ready notes.', to: '/ai-text-summarizer',   color: 'from-sky-500 to-blue-500' },
   { icon: Brain,       label: 'Homework Helper',       desc: 'Step-by-step solutions and explanations.', to: '/ai-homework-helper',       color: 'from-violet-500 to-purple-500' },
   { icon: FilePlus,    label: 'PDF Tools',             desc: 'Merge, split, compress and watermark PDFs.', to: '/free-pdf-tools',           color: 'from-rose-500 to-orange-500' },
 ];
