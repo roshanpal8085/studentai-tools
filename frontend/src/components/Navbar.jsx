@@ -87,12 +87,12 @@ export default function Navbar() {
       const current = window.scrollY;
       setScrolled(current > 20);
       
-      if (current < 50) {
+      if (current <= 50) {
         setVisible(true);
       } else if (current > lastScroll && current > 80) {
         setVisible(false); 
         setActiveDropdown(null);
-      } else if (current < lastScroll - 5) {
+      } else if (current < lastScroll) {
         setVisible(true); 
       }
       
