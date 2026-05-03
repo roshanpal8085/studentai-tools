@@ -81,24 +81,38 @@ export default function Navbar() {
   );
 
   useEffect(() => {
-    let lastScroll = window.scrollY;
-    
     const handleScroll = () => {
-      const current = window.scrollY;
-      setScrolled(current > 20);
+      const currentScrollY = window.scrollY;
       
-      if (current <= 50) {
+      // Update background blur styling
+      setScrolled(currentScrollY > 20);
+
+      // Always show at the very top
+      if (currentScrollY <= 50) {
         setVisible(true);
-      } else if (current > lastScroll && current > 80) {
-        setVisible(false); 
-        setActiveDropdown(null);
-      } else if (current < lastScroll) {
-        setVisible(true); 
+        lastScrollY.current = currentScrollY;
+        return;
       }
-      
-      lastScroll = current;
+
+      // Calculate direction and accumulated distance since last definite scroll
+      const scrolledDown = currentScrollY > lastScrollY.current;
+      const scrollDifference = Math.abs(currentScrollY - lastScrollY.current);
+
+      // Only trigger visibility change if scroll is deliberate (e.g., > 5px)
+      // By NOT updating lastScrollY.current otherwise, we accumulate slow micro-scrolls!
+      if (scrollDifference > 5) {
+        if (scrolledDown) {
+          setVisible(false);
+          setActiveDropdown(null);
+        } else {
+          setVisible(true);
+        }
+        // Update reference only when threshold is breached
+        lastScrollY.current = currentScrollY;
+      }
     };
-    
+
+    lastScrollY.current = window.scrollY;
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
