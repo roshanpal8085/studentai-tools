@@ -84,7 +84,7 @@ const SEO = ({ title, description, keywords, canonical, ogImage, ogType = 'websi
       )}
 
       {/* AdSense Auto Ads */}
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1647228811800166" crossOrigin="anonymous"></script>
+      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3218995355205467" crossOrigin="anonymous"></script>
     </Helmet>
   );
 };
