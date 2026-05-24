@@ -27,3 +27,5 @@ Thumbs.db
 *.tmp
 build_log*.txt
 git_status.txt
+
+.vercel
