@@ -37,6 +37,7 @@ const BlogPost          = lazy(() => import('./pages/BlogPost'));
 const PdfTools          = lazy(() => import('./pages/PdfTools'));
 const ImageToPdf        = lazy(() => import('./pages/tools/ImageToPdf'));
 const PdfToWord         = lazy(() => import('./pages/tools/PdfToWord'));
+const WordToPdf         = lazy(() => import('./pages/tools/WordToPdf'));
 const PdfFooterEditor   = lazy(() => import('./pages/tools/PdfFooterEditor'));
 
 // ── /free-tools SEO Pillar Page ──────────────────────────────
@@ -127,6 +128,7 @@ function App() {
                 <Route path="/tools/pdf-footer-editor"       element={<PdfFooterEditor />} />
                 <Route path="/tools/image-to-pdf"            element={<ImageToPdf />} />
                 <Route path="/tools/pdf-to-word"             element={<PdfToWord />} />
+                <Route path="/tools/word-to-pdf"             element={<WordToPdf />} />
                 <Route path="/tools/image-compressor"        element={<NotFound />} />
 
                 {/* Games — removed entirely → 404 via NotFound */}

@@ -4,7 +4,7 @@ import SEO from '../components/SEO';
 import axios from 'axios';
 import { 
   FileText, Download, Loader2, UploadCloud, Scissors, 
-  Type, Trash2, CheckCircle, HelpCircle, Zap, ShieldCheck, FileEdit
+  Type, Trash2, CheckCircle, HelpCircle, Zap, ShieldCheck, FileEdit, FileType
 } from 'lucide-react';
 
 const PdfTools = () => {
@@ -213,15 +213,46 @@ const PdfTools = () => {
             </h2>
             <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Add your name &amp; enrollment number to every page footer. Replace existing footers too.</p>
             <div className="flex-grow flex flex-col justify-end">
-              <div className="p-4 bg-indigo-50 dark:bg-indigo-900/10 rounded-xl border border-indigo-100 dark:border-indigo-900/30 mb-4">
-                <p className="text-sm text-indigo-700 dark:text-indigo-400 font-medium leading-relaxed">100% browser-based — your PDF never leaves your device. Supports cover &amp; replace of old footers.</p>
-              </div>
               <Link
                 to="/tools/pdf-footer-editor"
                 className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-extrabold py-4 rounded-xl flex justify-center items-center gap-2 shadow-lg shadow-indigo-500/20 transition-all"
               >
                 <FileEdit className="w-5 h-5" />
                 <span>Open Footer Editor</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* PDF to Word */}
+          <div className="glass-card rounded-[2rem] p-8 flex flex-col group transition-all duration-300 hover:-translate-y-2">
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+              <Type className="w-5 h-5 text-blue-500" /> PDF to Word
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Extract editable text from your locked PDF documents instantly.</p>
+            <div className="flex-grow flex flex-col justify-end">
+              <Link
+                to="/tools/pdf-to-word"
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold py-4 rounded-xl flex justify-center items-center gap-2 shadow-lg shadow-blue-500/20 transition-all"
+              >
+                <FileText className="w-5 h-5" />
+                <span>Convert PDF to Word</span>
+              </Link>
+            </div>
+          </div>
+
+          {/* Word to PDF */}
+          <div className="glass-card rounded-[2rem] p-8 flex flex-col group transition-all duration-300 hover:-translate-y-2">
+            <h2 className="text-xl font-extrabold text-slate-900 dark:text-white mb-2 flex items-center gap-2">
+              <FileType className="w-5 h-5 text-emerald-500" /> Word to PDF
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">Lock formatting and create a shareable PDF from a Word document.</p>
+            <div className="flex-grow flex flex-col justify-end">
+              <Link
+                to="/tools/word-to-pdf"
+                className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 rounded-xl flex justify-center items-center gap-2 shadow-lg shadow-emerald-500/20 transition-all"
+              >
+                <FileText className="w-5 h-5" />
+                <span>Convert Word to PDF</span>
               </Link>
             </div>
           </div>

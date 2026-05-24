@@ -416,6 +416,60 @@ While we started with a focus on helping engineering and medical students in Ind
 Contact Us:
 We are constantly iterating and improving our tools based on student feedback. If you have a feature request, notice a bug, or just want to tell us how our tools helped you pass a tough exam, please reach out to us through our contact page. We are building this platform for you.`,
   },
+  {
+    route: '/tools/pdf-to-word',
+    title: 'Free PDF to Word Converter - Extract & Edit PDF Text Instantly (2026)',
+    description: 'Convert PDF files to editable Word documents instantly for free. No upload required — 100% browser-based, private, and fast. Perfect for students and researchers.',
+    content: `Convert PDF files to editable Word documents instantly for free. No upload required — 100% browser-based, private, and fast. Perfect for students and researchers.
+
+Why You Need a PDF to Word Converter as a Student:
+PDFs are the de facto standard for distributing academic content — journal articles, lecture slides, research reports, and official assignment briefs. But PDFs are notoriously difficult to work with. You cannot simply highlight a paragraph and retype it; you have to manually transcribe every word, losing valuable study time in the process.
+
+This is where a PDF to Word converter becomes an essential part of your academic toolkit. Instead of spending 30 minutes transcribing a key paragraph from a research paper, you can extract the entire document's text in under five seconds and have an editable version ready in your Google Docs or Microsoft Word.
+
+Our free, browser-based converter requires no account, no subscription, and — critically — no file upload to any external server. Your sensitive coursework and research data stays entirely on your device.
+
+How the PDF to Word Conversion Works:
+1. Select Your PDF: Click the upload button or drag and drop any digital (native) PDF from your device. The file is read locally by your browser's file API — nothing is sent to a server.
+2. In-Browser Parsing: A JavaScript PDF parser reads the internal structure of the PDF and extracts all the plain text content, preserving the logical order of paragraphs and headings.
+3. Download & Edit: The extracted text is packaged into a downloadable file. Open it directly in Microsoft Word, LibreOffice, or Google Docs to begin editing immediately.
+
+Frequently Asked Questions:
+Q: Is it free with no hidden limits?
+A: Yes. 100% free, no account required, no watermarks, and no daily conversion cap. The tool is supported by non-intrusive educational advertising.
+Q: Is my file uploaded to a server?
+A: Never. The file is read locally in your browser. Your data stays on your device, making this one of the most privacy-respecting converters available.
+Q: Does it work on scanned PDFs?
+A: No. This tool extracts text from digital (native) PDFs that contain a selectable text layer. Scanned image PDFs require OCR (Optical Character Recognition), which is a separate technology.`
+  },
+  {
+    route: '/tools/word-to-pdf',
+    title: 'Free Word to PDF Converter - Convert DOCX to PDF Instantly (2026)',
+    description: 'Convert Word (.docx) documents to PDF files instantly for free. No upload required — 100% browser-based, private, and fast. Perfect for students and professionals.',
+    content: `Convert Word (.docx) documents to PDF files instantly for free. No upload required — 100% browser-based, private, and fast. Perfect for students and professionals.
+
+Why Convert Word to PDF?
+Word documents are excellent for editing, but they are terrible for sharing. If you send a .docx file to a professor or a recruiter, there is a high chance the formatting will break depending on what version of Microsoft Word or Google Docs they use to open it.
+
+PDF (Portable Document Format) solves this by "freezing" your document. When you convert your Word document to a PDF, it guarantees that your layout, fonts, and images will look exactly the same on every single device, whether it's an iPhone, a Windows PC, or a Mac.
+
+Use this tool to lock your assignments, resumes, and reports before submitting them. Our client-side processor ensures your document never leaves your computer.
+
+Why Choose Our Converter?
+- Zero Server Upload: Your Word document never leaves your device. All parsing happens in-browser, guaranteeing complete data privacy for your sensitive essays and resumes.
+- No Installation Required: Works directly in your browser — Chrome, Firefox, Edge, or Safari. No desktop app, no plugin, no sign-up required.
+- Universal Compatibility: The generated PDF is compatible with all standard PDF readers, grading systems (like Canvas and Blackboard), and Applicant Tracking Systems (ATS).
+
+Frequently Asked Questions:
+Q: Is it completely free?
+A: Yes. 100% free, no account required, and no hidden limits. It is supported by non-intrusive educational advertising.
+Q: Is my file uploaded to a server?
+A: Never. The file is read and converted locally in your browser. Your data stays on your device.
+Q: Does it support images?
+A: Basic text and simple formatting are supported best. Very complex Word documents with floating images may not render perfectly.
+Q: What is the file size limit?
+A: We recommend files under 15MB.`
+  }
 ];
 
 for (const page of toolPages) {

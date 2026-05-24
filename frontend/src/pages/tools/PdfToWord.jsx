@@ -1,6 +1,12 @@
 import { useState, useRef } from 'react';
 import { FileText, UploadCloud, FileDown, Loader2, CheckCircle, HelpCircle, ShieldCheck, Zap, Info, FileCode2 } from 'lucide-react';
 import SEO from '../../components/SEO';
+import * as pdfjsLib from 'pdfjs-dist';
+// Vite specific way to load the worker
+import pdfWorkerUrl from 'pdfjs-dist/build/pdf.worker.mjs?url';
+import { Document, Packer, Paragraph, TextRun } from 'docx';
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorkerUrl;
 
 const PdfToWord = () => {
   const [file, setFile] = useState(null);
@@ -37,22 +43,74 @@ const PdfToWord = () => {
     if (!file) return;
     setLoading(true);
     
-    // Simulate API conversion delay for the UI flow demonstration
-    setTimeout(() => {
-      setLoading(false);
-      setSuccess(true);
+    try {
+      // 1. Read PDF file as ArrayBuffer
+      const arrayBuffer = await file.arrayBuffer();
       
-      // MOCK DOWNLOAD: Create a dummy text file to simulate extraction download
-      // In production, this would be a blob returned from the backend running true pdf-to-docx pipeline
-      const element = document.createElement("a");
-      const fileText = `Extracted Text Placeholder for ${file.name}\n\nIn a production environment, this file would be the converted DOCX output from your backend PDF parser.`;
-      const docBlob = new Blob([fileText], {type: 'text/plain'});
-      element.href = URL.createObjectURL(docBlob);
-      element.download = file.name.replace('.pdf', '_converted.doc');
-      document.body.appendChild(element); // Required for this to work in FireFox
-      element.click();
-      document.body.removeChild(element);
-    }, 2500);
+      // 2. Load PDF document
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const numPages = pdf.numPages;
+      const paragraphs = [];
+
+      // 3. Extract text from each page
+      for (let i = 1; i <= numPages; i++) {
+        const page = await pdf.getPage(i);
+        const textContent = await page.getTextContent();
+        
+        let lastY = -1;
+        let currentParagraph = "";
+        
+        for (const item of textContent.items) {
+          // If the Y coordinate changes significantly, it's a new line
+          if (lastY !== -1 && Math.abs(item.transform[5] - lastY) > 5) {
+            if (currentParagraph.trim()) {
+              paragraphs.push(new Paragraph({ children: [new TextRun(currentParagraph.trim())] }));
+            }
+            currentParagraph = item.str;
+          } else {
+            // Same line, append text
+            currentParagraph += (currentParagraph.length > 0 && !currentParagraph.endsWith(' ') ? " " : "") + item.str;
+          }
+          lastY = item.transform[5];
+        }
+        
+        // Push the last paragraph of the page
+        if (currentParagraph.trim()) {
+           paragraphs.push(new Paragraph({ children: [new TextRun(currentParagraph.trim())] }));
+        }
+        
+        // Add a blank line between pages
+        paragraphs.push(new Paragraph({ children: [new TextRun("")] }));
+      }
+
+      // 4. Create docx document
+      const doc = new Document({
+        sections: [
+          {
+            properties: {},
+            children: paragraphs.length > 0 ? paragraphs : [new Paragraph("No selectable text found in PDF. It might be a scanned image.")],
+          },
+        ],
+      });
+
+      // 5. Generate blob and download
+      const blob = await Packer.toBlob(doc);
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = file.name.replace('.pdf', '.docx');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      setSuccess(true);
+    } catch (error) {
+      console.error("Conversion error:", error);
+      alert("Failed to convert PDF. Ensure it's not password protected or purely scanned images.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -232,7 +290,7 @@ const PdfToWord = () => {
                 { title: 'No Installation Required', desc: 'Works directly in your browser — Chrome, Firefox, Edge, or Safari. No desktop app, no plugin, no sign-up required.', icon: Zap },
                 { title: 'Formatting Preservation', desc: 'Advanced text-layer parsing attempts to maintain paragraph breaks, heading hierarchy, and bullet point structure to minimize your post-edit cleanup time.', icon: Info }
               ].map((item, i) => (
-                <div key={i} className="flex gap-5">
+                <div className="flex gap-5" key={i}>
                   <div className="w-12 h-12 rounded-2xl bg-indigo-50 dark:bg-indigo-900/30 text-indigo-500 flex items-center justify-center flex-shrink-0">
                     <item.icon className="w-6 h-6" />
                   </div>

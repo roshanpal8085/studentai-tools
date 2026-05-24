@@ -9,7 +9,6 @@
     "postbuild": "node scripts/generate-static.mjs && node scripts/generate-sitemap.mjs",
     "preview": "vite preview"
   },
-
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -17,11 +16,14 @@
     "@vitejs/plugin-react": "^6.0.1",
     "axios": "^1.13.6",
     "browser-image-compression": "^2.0.2",
+    "docx": "^9.7.0",
     "html-to-image": "^1.11.13",
     "html2pdf.js": "^0.14.0",
     "jspdf": "^4.2.1",
     "lucide-react": "^0.577.0",
+    "mammoth": "^1.12.0",
     "pdf-lib": "^1.17.1",
+    "pdfjs-dist": "^5.7.284",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-helmet-async": "^3.0.0",
