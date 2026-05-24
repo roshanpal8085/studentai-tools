@@ -35,8 +35,6 @@ const NAV_DROPDOWNS = [
     label: 'PDF Tools',
     wide: true,
     items: [
-      { label: 'PDF to Word',           path: '/tools/pdf-to-word',      icon: TypeIcon,      desc: 'Extract text from PDFs' },
-      { label: 'Word to PDF',           path: '/tools/word-to-pdf',      icon: FileText,      desc: 'Lock documents into PDF' },
       { label: 'Merge PDF',             path: '/tools/merge-pdf',        icon: FilePlus,      desc: 'Combine multiple PDFs into one' },
       { label: 'Split PDF',             path: '/tools/split-pdf',        icon: Scissors,      desc: 'Extract specific page ranges' },
       { label: 'Compress PDF',          path: '/tools/compress-pdf',     icon: UploadCloud,   desc: 'Reduce file size, keep quality' },
@@ -64,8 +62,6 @@ const SEARCH_SHORTCUTS = [
   { label: 'Merge PDF',             path: '/tools/merge-pdf' },
   { label: 'Compress PDF',          path: '/tools/compress-pdf' },
   { label: 'Image to PDF',          path: '/tools/image-to-pdf' },
-  { label: 'PDF to Word',           path: '/tools/pdf-to-word' },
-  { label: 'Word to PDF',           path: '/tools/word-to-pdf' },
 ];
 
 export default function Navbar() {
