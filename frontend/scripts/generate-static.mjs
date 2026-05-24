@@ -45,7 +45,7 @@ function esc(str) {
 }
 
 // ── Helper: inject SEO + content into base HTML ───────────────────────────────
-function buildHtml({ title, description, canonical, content, ogImage = '' }) {
+function buildHtml({ title, description, canonical, content, ogImage = '', schema = null }) {
   const plainContent = stripMarkdown(content);
   // First 160 chars for meta description if not provided
   const metaDesc = description || plainContent.slice(0, 160).replace(/\n/g, ' ');
@@ -60,14 +60,52 @@ function buildHtml({ title, description, canonical, content, ogImage = '' }) {
     .map(p => `<p>${esc(p.trim())}</p>`)
     .join('\n    ');
 
+  const internalLinks = `
+    <h3>Explore More Free Study Tools</h3>
+    <ul>
+      <li><a href="https://studentaitools.in/ai-homework-helper">Free AI Homework Helper</a></li>
+      <li><a href="https://studentaitools.in/ai-quiz-generator">AI Quiz Generator (Active Recall)</a></li>
+      <li><a href="https://studentaitools.in/ai-study-planner">Personalised Study Planner</a></li>
+      <li><a href="https://studentaitools.in/ai-essay-writer">Academic Essay Writer</a></li>
+    </ul>
+  `;
+
   const noscriptBlock = `<noscript>
   <div style="max-width:900px;margin:40px auto;padding:20px;font-family:sans-serif;line-height:1.7;color:#1e293b">
     <h1>${esc(title)}</h1>
     <p><em>${esc(metaDesc)}</em></p>
     <hr/>
     ${paragraphs}
+    <hr/>
+    ${internalLinks}
   </div>
 </noscript>`;
+
+  const globalSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://studentaitools.in/#organization",
+        "name": "StudentAI Tools",
+        "url": "https://studentaitools.in",
+        "logo": { "@type": "ImageObject", "url": "https://studentaitools.in/logo.png" }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://studentaitools.in/#website",
+        "url": "https://studentaitools.in",
+        "name": "StudentAI Tools",
+        "description": "Free AI-powered study tools for students.",
+        "publisher": { "@id": "https://studentaitools.in/#organization" }
+      }
+    ]
+  };
+
+  const schemaScript = `
+  <script type="application/ld+json">${JSON.stringify(globalSchema)}</script>
+  ${schema ? `<script type="application/ld+json">${JSON.stringify(schema)}</script>` : ''}
+  `;
 
   // Replace / inject into the base HTML
   return baseHtml
@@ -83,7 +121,7 @@ function buildHtml({ title, description, canonical, content, ogImage = '' }) {
       /<link\s+rel="canonical"[^>]*>/,
       `<link rel="canonical" href="${esc(fullCanonical)}" />`
     )
-    // Add og:title, og:description, og:image before </head>
+    // Add og:title, og:description, og:image, and schema before </head>
     .replace(
       '</head>',
       `  <meta property="og:title" content="${esc(title)}" />
@@ -91,6 +129,7 @@ function buildHtml({ title, description, canonical, content, ogImage = '' }) {
   <meta property="og:url" content="${esc(fullCanonical)}" />
   ${ogImage ? `<meta property="og:image" content="${esc(ogImage)}" />` : ''}
   <meta name="robots" content="index, follow" />
+  ${schemaScript}
 </head>`
     )
     // Inject noscript content BEFORE the root div
