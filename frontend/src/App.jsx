@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop';
 import CookieConsent from './components/CookieConsent';
+import AdSlot from './components/ads/AdSlot';
 
 // ── Core Pages ──────────────────────────────────────────────
 const Home              = lazy(() => import('./pages/Home'));
@@ -55,6 +56,9 @@ function App() {
         <ScrollToTop />
         <div className="flex flex-col min-h-screen bg-slate-50 dark:bg-slate-900">
           <Navbar />
+          <div className="max-w-7xl mx-auto px-4 w-full pt-2">
+            <AdSlot type="responsive" label="Advertisement" className="my-2" />
+          </div>
           <main className="flex-grow">
             <Suspense fallback={<Loader />}>
               <Routes>
@@ -146,6 +150,9 @@ function App() {
               </Routes>
             </Suspense>
           </main>
+          <div className="max-w-7xl mx-auto px-4 w-full">
+            <AdSlot type="native" label="Sponsored" className="my-4" />
+          </div>
           <Footer />
           <CookieConsent />
         </div>
