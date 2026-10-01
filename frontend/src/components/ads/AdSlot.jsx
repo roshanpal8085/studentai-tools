@@ -41,16 +41,14 @@ export default function AdSlot({ type = 'responsive', label = 'Advertisement', c
       a.innerHTML = `<span>🎁 Featured Partner Offer</span> <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>`;
       container.appendChild(a);
     } else if (actualType === 'native') {
-      const div = document.createElement('div');
-      div.id = 'container-1d472779334bd7805738b6962f93170e';
-      container.appendChild(div);
-
-      const script = document.createElement('script');
-      script.type = 'text/javascript';
-      script.async = true;
-      script.setAttribute('data-cfasync', 'false');
-      script.src = 'https://bicea.org/21/1d472779334bd7805738b6962f93170e';
-      container.appendChild(script);
+      const iframe = document.createElement('iframe');
+      iframe.width = '100%';
+      iframe.height = '120';
+      iframe.style.border = 'none';
+      iframe.style.overflow = 'hidden';
+      iframe.scrolling = 'no';
+      iframe.src = '/ad-native.html';
+      container.appendChild(iframe);
     } else if (actualType === 'desktop') {
       const iframe = document.createElement('iframe');
       iframe.width = '728';
@@ -58,24 +56,7 @@ export default function AdSlot({ type = 'responsive', label = 'Advertisement', c
       iframe.style.border = 'none';
       iframe.style.overflow = 'hidden';
       iframe.scrolling = 'no';
-      iframe.srcDoc = `
-        <!DOCTYPE html>
-        <html>
-        <head><style>body{margin:0;padding:0;overflow:hidden;}</style></head>
-        <body>
-          <script type="text/javascript">
-            window.atOptions = {
-              'key' : '637f879dc3e06bf3d82c497089c8f297',
-              'format' : 'iframe',
-              'height' : 90,
-              'width' : 728,
-              'params' : {}
-            };
-          </script>
-          <script type="text/javascript" src="https://bicea.org/22/637f879dc3e06bf3d82c497089c8f297"></script>
-        </body>
-        </html>
-      `;
+      iframe.src = '/ad-desktop.html';
       container.appendChild(iframe);
     } else if (actualType === 'mobile') {
       const iframe = document.createElement('iframe');
@@ -84,24 +65,7 @@ export default function AdSlot({ type = 'responsive', label = 'Advertisement', c
       iframe.style.border = 'none';
       iframe.style.overflow = 'hidden';
       iframe.scrolling = 'no';
-      iframe.srcDoc = `
-        <!DOCTYPE html>
-        <html>
-        <head><style>body{margin:0;padding:0;overflow:hidden;}</style></head>
-        <body>
-          <script type="text/javascript">
-            window.atOptions = {
-              'key' : '1c27cabb98d6d26c4f9e296bbd8a5c49',
-              'format' : 'iframe',
-              'height' : 50,
-              'width' : 320,
-              'params' : {}
-            };
-          </script>
-          <script type="text/javascript" src="https://bicea.org/22/1c27cabb98d6d26c4f9e296bbd8a5c49"></script>
-        </body>
-        </html>
-      `;
+      iframe.src = '/ad-mobile.html';
       container.appendChild(iframe);
     }
   }, [actualType]);
