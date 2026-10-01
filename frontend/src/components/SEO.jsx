@@ -83,8 +83,6 @@ const SEO = ({ title, description, keywords, canonical, ogImage, ogType = 'websi
           : <script type="application/ld+json">{JSON.stringify(schema)}</script>
       )}
 
-      {/* AdSense Auto Ads */}
-      <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3218995355205467" crossOrigin="anonymous"></script>
     </Helmet>
   );
 };

@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import SEO from '../../components/SEO';
+import { triggerDownloadAd } from '../../utils/adUtils';
 import { FileImage, FileText, Download, Loader2, CheckCircle, HelpCircle, Shield, Zap, Layout, Plus, Trash2, GripVertical } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
@@ -212,7 +213,10 @@ const ImageToPdf = () => {
 
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                                     <button
-                                        onClick={convertToPdf}
+                                        onClick={() => {
+                                            triggerDownloadAd();
+                                            convertToPdf();
+                                        }}
                                         disabled={loading}
                                         className="w-full sm:w-auto bg-violet-600 hover:bg-violet-500 text-white font-black py-4 px-10 rounded-2xl transition-all shadow-xl shadow-violet-600/20 flex items-center justify-center gap-3 active:scale-[0.98] group disabled:opacity-50"
                                     >

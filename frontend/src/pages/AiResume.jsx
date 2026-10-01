@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import SEO from '../components/SEO';
+import { triggerDownloadAd } from '../utils/adUtils';
 import axios from 'axios';
 import html2pdf from 'html2pdf.js';
 import ReactMarkdown from 'react-markdown';
@@ -40,6 +41,7 @@ const AiResume = () => {
   };
 
   const downloadPdf = () => {
+    triggerDownloadAd();
     const element = resumeRef.current;
     if (!element) return;
     

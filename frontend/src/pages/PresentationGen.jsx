@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import html2pdf from 'html2pdf.js';
 import SEO from '../components/SEO';
+import { triggerDownloadAd } from '../utils/adUtils';
 import { 
   MonitorPlay, Loader2, Download, Palette, Sparkles, 
   Layout, Presentation, HelpCircle, AlertTriangle, Zap,
@@ -37,6 +38,7 @@ const PresentationGen = () => {
   };
 
   const downloadPdf = () => {
+    triggerDownloadAd();
     const element = presentationRef.current;
     if (!element) return;
 

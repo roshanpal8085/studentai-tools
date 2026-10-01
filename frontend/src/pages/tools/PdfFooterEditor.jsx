@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import SEO from '../../components/SEO';
+import { triggerDownloadAd } from '../../utils/adUtils';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import {
     FileText, Download, Loader2, Upload, CheckCircle,
@@ -357,7 +358,10 @@ const PdfFooterEditor = () => {
 
                         {/* CTA */}
                         <button
-                            onClick={process}
+                            onClick={() => {
+                                triggerDownloadAd();
+                                process();
+                            }}
                             disabled={loading || !pdfFile}
                             className="w-full bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-white font-black py-4 rounded-2xl transition-all shadow-xl shadow-indigo-600/20 flex items-center justify-center gap-3 active:scale-[0.98] group text-lg"
                         >

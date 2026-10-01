@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import SEO from '../../components/SEO';
+import { triggerDownloadAd } from '../../utils/adUtils';
 import {
   Wand2, Loader2, Copy, Check, ClipboardPaste, Trash2, Download,
   RefreshCw, History, Eye, EyeOff, Sliders, ChevronDown, Sparkles,
@@ -176,6 +177,7 @@ const ParaphrasingTool = () => {
   };
 
   const handleDownload = () => {
+    triggerDownloadAd();
     if (!result) return;
     const blob = new Blob([result], { type: 'text/plain' });
     const url  = URL.createObjectURL(blob);

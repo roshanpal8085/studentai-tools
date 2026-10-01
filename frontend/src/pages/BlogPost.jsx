@@ -34,7 +34,7 @@ const BlogPost = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white dark:bg-slate-900 pb-20">
+    <div className="min-h-screen pt-24 bg-white dark:bg-slate-900 pb-20">
       <SEO 
         title={post.title}
         description={post.excerpt} 

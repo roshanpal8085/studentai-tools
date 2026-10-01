@@ -8,7 +8,7 @@ const path = require('path');
 // Load env vars from the current directory
 dotenv.config({ path: path.join(__dirname, '.env') });
 
-console.log(`[Backend] Environment loaded. Port: ${process.env.PORT || 5000}`);
+
 if (!process.env.GEMINI_API_KEY) {
     console.error("[Backend] CRITICAL: GEMINI_API_KEY is missing from .env!");
 }
@@ -18,6 +18,7 @@ const app = express();
 // Security middleware
 app.use(helmet());
 
+app.set('trust proxy', 1);
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, 
   max: 100, 
@@ -25,7 +26,9 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: process.env.ALLOWED_ORIGIN || 'https://studentaitools.in'
+}));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
@@ -36,7 +39,11 @@ app.use('/api/upload', require('./routes/upload'));
 
 // --- Industry-Standard Fixed-File Endpoints (v5 Pro) ---
 const crypto = require('crypto');
-const MASTER_POOL = crypto.randomBytes(1024 * 1024 * 50); // 50MB master random pool
+let MASTER_POOL = null;
+const getMasterPool = () => {
+    if (!MASTER_POOL) MASTER_POOL = crypto.randomBytes(1024 * 1024 * 50); // 50MB master random pool
+    return MASTER_POOL;
+};
 
 app.get('/api/ping', (req, res) => {
   res.status(200).json({ timestamp: Date.now() });
@@ -58,7 +65,7 @@ app.get('/api/speed-test/:size', (req, res) => {
     res.setHeader('Content-Disposition', `attachment; filename=${sizeStr}`);
     
     // Serve exactly the requested bytes from the master pool
-    res.end(MASTER_POOL.slice(0, size));
+    res.end(getMasterPool().slice(0, size));
 });
 
 // Legacy support for download-test (maps to 25MB)

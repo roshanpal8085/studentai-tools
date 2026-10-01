@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
+import { triggerDownloadAd } from '../utils/adUtils';
 import axios from 'axios';
 import { 
   FileText, Download, Loader2, UploadCloud, Scissors, 
@@ -24,6 +25,7 @@ const PdfTools = () => {
   const [error, setError] = useState('');
 
   const downloadBlob = (data, filename) => {
+    triggerDownloadAd();
     const url = window.URL.createObjectURL(new Blob([data]));
     const link = document.createElement('a');
     link.href = url;

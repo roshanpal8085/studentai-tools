@@ -167,7 +167,7 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center gap-2">
-              <button onClick={() => { setSearchOpen(true); setTimeout(() => searchRef.current?.focus(), 50); }} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all text-sm">
+              <button aria-label="Search tools" onClick={() => { setSearchOpen(true); setTimeout(() => searchRef.current?.focus(), 50); }} className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all text-sm">
                 <Search className="w-4 h-4" />
                 <span className="hidden md:block text-sm">Search tools...</span>
                 <kbd className="hidden md:inline-flex items-center px-1.5 py-0.5 rounded border border-slate-300 dark:border-slate-600 text-[10px] font-medium">⌘K</kbd>
@@ -175,7 +175,7 @@ export default function Navbar() {
               <Link to="/ai-notes-generator" onClick={closeAll} className="hidden sm:flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-4 py-2 rounded-xl font-bold text-sm transition-all shadow-lg shadow-indigo-500/30 hover:-translate-y-0.5 active:scale-95">
                 <Zap className="w-4 h-4" /> Start Studying
               </Link>
-              <button className="lg:hidden p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors" onClick={() => setIsOpen(!isOpen)}>
+              <button aria-label="Toggle mobile menu" className="lg:hidden p-2 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors" onClick={() => setIsOpen(!isOpen)}>
                 {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
             </div>
@@ -190,7 +190,7 @@ export default function Navbar() {
             <div className="flex items-center gap-3 px-4 py-3.5 border-b border-slate-100 dark:border-slate-800">
               <Search className="w-5 h-5 text-slate-400" />
               <input ref={searchRef} type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder='Search study tools — "Notes AI, Quiz, Grammar..."' className="flex-1 bg-transparent text-slate-900 dark:text-white placeholder-slate-400 outline-none text-base" />
-              <button onClick={() => { setSearchOpen(false); setSearchQuery(''); }} className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><X className="w-4 h-4 text-slate-400" /></button>
+              <button aria-label="Close search" onClick={() => { setSearchOpen(false); setSearchQuery(''); }} className="p-1 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800"><X className="w-4 h-4 text-slate-400" /></button>
             </div>
             <div className="py-2 max-h-72 overflow-y-auto">
               {filteredSearch.length > 0 ? filteredSearch.map((item) => (
