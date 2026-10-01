@@ -51,7 +51,7 @@ if (providers.length === 0) {
     console.error("CRITICAL ERROR: No AI providers configured. Add GROQ_API_KEY or GEMINI_API_KEY."); 
 }
 
-console.log(`[AI Engine] Provider chain: ${providers.map(p => p.name).join(' → ')}`);
+// Provider chain initialised — logged once at startup for diagnostics
 
 
 let currentKeyIndex = 0;
@@ -65,7 +65,7 @@ const generateRaw = async (prompt, isJson = false) => {
     while (attempts < providers.length) {
         const provider = providers[currentKeyIndex];
         try {
-            console.log(`[AI Engine] Attempting request using: ${provider.name}`);
+
             let outputText = "";
 
             // ── Groq (Gemma2-9b-it — PRIMARY) ────────────────────────────────
@@ -116,12 +116,7 @@ const generateRaw = async (prompt, isJson = false) => {
                 outputText = outputText.replace(/```json/gi, '').replace(/```/g, '').trim();
             }
 
-            // Log which provider actually served the request
-            if (provider.type === 'ollama') {
-                console.log(`[AI Engine] ✅ Served by Local Gemma (${provider.model}) — FREE, no quota used`);
-            } else {
-                console.log(`[AI Engine] ✅ Served by ${provider.name}`);
-            }
+
 
             return { text: outputText, provider: provider.name };
             
@@ -144,7 +139,6 @@ const generateWithRotation = async (prompt, isJson = false) => {
     const cachedResponse = aiCache.get(hash);
     
     if (cachedResponse) {
-        console.log('[API Cache] HIT: Serving response from memory cache instantly.');
         return cachedResponse;
     }
     
@@ -576,7 +570,6 @@ ${text}`;
       response = await generateWithRotation(prompt, false);
     } catch (firstErr) {
       if (firstErr.message && (firstErr.message.includes('429') || firstErr.message.includes('exhausted'))) {
-        console.log('[Paraphrase] First attempt rate-limited, retrying in 4s...');
         await new Promise(r => setTimeout(r, 4000));
         response = await generateWithRotation(prompt, false); // may throw again — handled below
       } else {

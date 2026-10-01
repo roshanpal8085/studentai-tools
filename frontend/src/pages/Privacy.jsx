@@ -1,5 +1,6 @@
-import { Helmet } from 'react-helmet-async';
+
 import { ShieldCheck, Mail, AlertCircle, Eye, Database, Cookie, Globe, Lock, FileText, UserCheck } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Section = ({ icon: Icon, title, children }) => (
   <div className="mb-10">
@@ -15,11 +16,8 @@ const Privacy = () => {
   const lastUpdated = 'April 24, 2026';
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
-      <Helmet>
-        <title>Privacy Policy — StudentAI Tools | Data, Cookies &amp; AdSense Disclosure</title>
-        <meta name="description" content="Read the full Privacy Policy of StudentAI Tools (studentaitools.in). Understand how we handle your data, our use of Google AdSense cookies, GDPR and India DPDP Act compliance, and your rights." />
-        <link rel="canonical" href="https://studentaitools.in/privacy-policy" />
-      </Helmet>
+      <SEO title="Privacy Policy" description="StudentAI Tools privacy policy. Learn how we protect your data and handle cookies." canonical="/privacy-policy" />
+
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">

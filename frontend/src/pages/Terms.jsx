@@ -1,5 +1,6 @@
-import { Helmet } from 'react-helmet-async';
+
 import { Scale, CheckCircle, FileText, AlertTriangle, CreditCard, BookOpen, ShieldAlert, Globe } from 'lucide-react';
+import SEO from '../components/SEO';
 
 const Section = ({ icon: Icon, title, children }) => (
   <div className="mb-10">
@@ -15,11 +16,8 @@ const Terms = () => {
   const lastUpdated = 'April 24, 2026';
   return (
     <div className="min-h-screen pt-24 pb-12 bg-slate-50 dark:bg-slate-900">
-      <Helmet>
-        <title>Terms of Service — StudentAI Tools | Usage Rules &amp; Legal Agreement</title>
-        <meta name="description" content="Read the Terms of Service for StudentAI Tools (studentaitools.in). Understand your rights, our AI output disclaimer, advertising disclosure, academic integrity clause, and governing law." />
-        <link rel="canonical" href="https://studentaitools.in/terms-conditions" />
-      </Helmet>
+      <SEO title="Terms & Conditions" description="Terms and conditions for using StudentAI Tools free AI study platform." canonical="/terms-conditions" />
+
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">

@@ -1,6 +1,7 @@
-import { Helmet } from 'react-helmet-async';
+
 import { GraduationCap, Heart, Zap, Globe, ShieldCheck, BookOpen, Users, Award, Target, TrendingUp, CheckCircle, Star, Lightbulb } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import SEO from '../components/SEO';
 
 const stats = [
   { value: '50+', label: 'Free AI & Utility Tools', icon: Zap },
@@ -44,11 +45,8 @@ const testimonials = [
 const About = () => {
   return (
     <div className="min-h-screen pt-24 pb-16 bg-slate-50 dark:bg-slate-900 relative overflow-hidden">
-      <Helmet>
-        <title>About Us — StudentAI Tools | Our Mission, Team &amp; Story</title>
-        <meta name="description" content="Learn about the team behind StudentAI Tools — a curated directory of free AI tools built exclusively for students. Discover our mission, values, and commitment to making AI education accessible to everyone." />
-        <link rel="canonical" href="https://studentaitools.in/about" />
-      </Helmet>
+      <SEO title="About Us" description="Learn about StudentAI Tools — a free AI-powered study assistant built for students worldwide." canonical="/about" />
+
 
       <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-indigo-500/10 rounded-full blur-[120px] pointer-events-none transform translate-x-1/3 -translate-y-1/3" />
       <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-sky-500/10 rounded-full blur-[100px] pointer-events-none transform -translate-x-1/3 translate-y-1/3" />

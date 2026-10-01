@@ -39,7 +39,6 @@
 
 .navbar-glass {
   backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   background: rgba(255, 255, 255, 0.75);
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -162,7 +161,6 @@
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
-  -webkit-text-fill-color: transparent;
   animation: text-shimmer 4s linear infinite;
 }
 
