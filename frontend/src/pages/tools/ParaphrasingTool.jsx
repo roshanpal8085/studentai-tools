@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import axios from 'axios';
 import SEO from '../../components/SEO';
 import { triggerDownloadAd } from '../../utils/adUtils';
+import AdSlot from '../../components/ads/AdSlot';
 import {
   Wand2, Loader2, Copy, Check, ClipboardPaste, Trash2, Download,
   RefreshCw, History, Eye, EyeOff, Sliders, ChevronDown, Sparkles,
@@ -482,9 +483,7 @@ const ParaphrasingTool = () => {
         )}
 
         {/* ── Ad placeholder ──────────────────────────────────────────── */}
-        <div className="w-full h-20 glass-card rounded-2xl flex items-center justify-center text-slate-400 text-sm mb-10 border border-dashed border-slate-300 dark:border-slate-700/50">
-          Ad Placement — AI Writing Tools Hub
-        </div>
+        <AdSlot type="responsive" label="Advertisement" className="mb-10" />
 
         {/* ── Features + FAQ ───────────────────────────────────────────── */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 mb-20 py-12 border-t border-slate-200 dark:border-slate-800">

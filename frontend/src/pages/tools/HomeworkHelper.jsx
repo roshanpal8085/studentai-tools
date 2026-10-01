@@ -1,7 +1,8 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import SEO from '../../components/SEO';
+import AdSlot from '../../components/ads/AdSlot';
 import { 
   Zap, Loader2, Send, BookOpen, HelpCircle, 
   CheckCircle, Sparkles, Brain, GraduationCap, Lightbulb 
@@ -171,9 +172,7 @@ const HomeworkHelper = () => {
         </div>
 
         {/* Ad Space Placement */}
-        <div className="w-full h-32 glass-card rounded-3xl flex items-center justify-center text-slate-400 text-sm mb-24 border border-dashed border-slate-300 dark:border-slate-700/50">
-          Ad Placement - Optimized for Student Traffic
-        </div>
+        <AdSlot type="responsive" label="Advertisement" className="mb-24" />
 
 
         {/* Informational Guidance (SEO Masterclass) */}

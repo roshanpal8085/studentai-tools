@@ -1,7 +1,8 @@
-﻿import { useState } from 'react';
+import { useState } from 'react';
 import { SpellCheck, Loader2, Sparkles, CheckCircle, HelpCircle, Zap, ShieldCheck, Search, Copy, Info } from 'lucide-react';
 import axios from 'axios';
 import SEO from '../../components/SEO';
+import AdSlot from '../../components/ads/AdSlot';
 
 const GrammarChecker = () => {
   const [text, setText] = useState('');
@@ -128,9 +129,7 @@ const GrammarChecker = () => {
         </div>
 
         {/* Ad Space Placement */}
-        <div className="w-full h-24 glass-card rounded-2xl flex items-center justify-center text-slate-400 text-sm mb-16 border border-dashed border-slate-300 dark:border-slate-700/50">
-          Ad Placement - Educational Tools Hub
-        </div>
+        <AdSlot type="responsive" label="Advertisement" className="mb-16" />
 
 
         {/* Informational Sections */}

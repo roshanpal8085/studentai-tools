@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import SEO from '../components/SEO';
+import AdSlot from '../components/ads/AdSlot';
 import { 
   UploadCloud, MessageSquare, Send, RefreshCw, Loader2, 
   Bot, User, FileText, Sparkles, Brain, Zap, HelpCircle, 
@@ -244,9 +245,7 @@ const ChatPdf = () => {
         </div>
 
         {/* Ad Space Placement */}
-        <div className="w-full h-32 glass-card rounded-3xl flex items-center justify-center text-slate-400 text-sm mb-24 border border-dashed border-slate-300 dark:border-slate-700/50">
-          Ad Placement - Academic Research Hubs
-        </div>
+        <AdSlot type="responsive" label="Advertisement" className="mb-24" />
 
         {/* Comprehensive SEO Content for AdSense E-E-A-T */}
         <div className="mt-16 pt-16 border-t border-slate-200 dark:border-slate-800">

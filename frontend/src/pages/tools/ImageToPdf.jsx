@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import SEO from '../../components/SEO';
 import { triggerDownloadAd } from '../../utils/adUtils';
+import AdSlot from '../../components/ads/AdSlot';
 import { FileImage, FileText, Download, Loader2, CheckCircle, HelpCircle, Shield, Zap, Layout, Plus, Trash2, GripVertical } from 'lucide-react';
 import { jsPDF } from 'jspdf';
 
@@ -232,9 +233,7 @@ const ImageToPdf = () => {
                 </div>
 
                 {/* Ad Space */}
-                <div className="w-full h-24 glass-card rounded-2xl flex items-center justify-center text-slate-400 text-sm mb-16 border border-dashed border-slate-300 dark:border-slate-700/50">
-                    Ad Placement - Document Tools Hub
-                </div>
+                <AdSlot type="responsive" label="Advertisement" className="mb-16" />
 
                 {/* ── E-E-A-T Content Section ─────────────────────────────────── */}
                 <div className="max-w-4xl mx-auto space-y-14 mb-20">

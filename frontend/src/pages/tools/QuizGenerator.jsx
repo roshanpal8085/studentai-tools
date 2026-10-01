@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
 import SEO from '../../components/SEO';
+import AdSlot from '../../components/ads/AdSlot';
 import { 
   HelpCircle, Loader2, Send, CheckCircle, ListTodo, 
   FileText, Sparkles, Brain, ClipboardCheck, Zap, Copy, Check 
@@ -173,9 +174,7 @@ const QuizGenerator = () => {
         </div>
 
         {/* Ad Space Placement */}
-        <div className="w-full h-32 glass-card rounded-3xl flex items-center justify-center text-slate-400 text-sm mb-24 border border-dashed border-slate-300 dark:border-slate-700/50">
-          Ad Placement - Educational Product Sponsorships
-        </div>
+        <AdSlot type="responsive" label="Advertisement" className="mb-24" />
 
         {/* Comprehensive SEO Content for AdSense E-E-A-T */}
         <div className="mt-16 pt-16 border-t border-slate-200 dark:border-slate-800">

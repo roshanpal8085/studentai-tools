@@ -1,6 +1,7 @@
 import { useState, useRef } from 'react';
 import SEO from '../../components/SEO';
 import { triggerDownloadAd } from '../../utils/adUtils';
+import AdSlot from '../../components/ads/AdSlot';
 import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
 import {
     FileText, Download, Loader2, Upload, CheckCircle,
@@ -433,9 +434,7 @@ const PdfFooterEditor = () => {
                 </div>
 
                 {/* Ad space */}
-                <div className="w-full h-24 glass-card rounded-2xl flex items-center justify-center text-slate-400 text-sm mb-16 border border-dashed border-slate-300 dark:border-slate-700/50">
-                    Ad Placement - PDF Tools Hub
-                </div>
+                <AdSlot type="responsive" label="Advertisement" className="mb-16" />
 
                 {/* ── Rich Content: How to Use ── */}
                 <div className="mb-20 py-12 border-t border-slate-200 dark:border-slate-800">
